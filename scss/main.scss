@@ -77,13 +77,6 @@
 
   // ---------------------------------------- Colours
   --theme-colour-black: #{ hexToRGB( map-get( $theme-colours, 'black' ) ) };
-  --theme-colour-charcoal: #{ hexToRGB( map-get( $theme-colours, 'charcoal' ) ) };
-  --theme-colour-fog: #{ hexToRGB( map-get( $theme-colours, 'fog' ) ) };
-  --theme-colour-gold: #{ hexToRGB( map-get( $theme-colours, 'gold' ) ) };
-  --theme-colour-navy: #{ hexToRGB( map-get( $theme-colours, 'navy' ) ) };
-  --theme-colour-red: #{ hexToRGB( map-get( $theme-colours, 'red' ) ) };
-  --theme-colour-silver: #{ hexToRGB( map-get( $theme-colours, 'silver' ) ) };
-  --theme-colour-terracotta: #{ hexToRGB( map-get( $theme-colours, 'terracotta' ) ) };
   --theme-colour-white: #{ hexToRGB( map-get( $theme-colours, 'white' ) ) };
 
   // ---------------------------------------- Container
@@ -101,12 +94,6 @@
   --theme-header-height--xl: #{ map-get( $theme-header-heights, 'xl' ) };
   --theme-header-height--xxl: #{ map-get( $theme-header-heights, 'xxl' ) };
 
-
-  --theme-container-max-offset-left: auto;
-
-  // ---------------------------------------- Icon
-  --theme-icon-size-social: 32px;
-
   // ---------------------------------------- Font Families
   --theme-font-family--sans-serif: sans-serif;
   --theme-font-family--serif: sans-serif;
@@ -118,24 +105,6 @@
   // ---------------------------------------- Transitions
   --theme-transition-duration: 280ms;
   --theme-transition-opacity: 0.3333;
-
-
-  // Rustica Light
-  // font-family: rustica, sans-serif;
-  // font-weight: 300;
-  // font-style: normal;
-  //
-  //
-  // Rustica Regular
-  // font-family: rustica, sans-serif;
-  // font-weight: 500;
-  // font-style: normal;
-  //
-  //
-  // Rustica Medium
-  // font-family: rustica, sans-serif;
-  // font-weight: 600;
-  // font-style: normal;
 
 }
 

@@ -1,0 +1,189 @@
+// If you want to include a CSS file from NPM, when you import the file, omit the '.css' portion of the file path
+
+//////////////////////////////////////////////////////////
+////  Variables & Mixins
+//////////////////////////////////////////////////////////
+
+@import './variables.scss';
+@import './mixins.scss';
+
+//////////////////////////////////////////////////////////
+////  Theme CSS Variables
+//////////////////////////////////////////////////////////
+
+:root {
+
+  //////////////////////////////////////////////////////////
+  ////  Bootstrap
+  //////////////////////////////////////////////////////////
+
+  // ---------------------------------------- Gutter Width
+  --bs-gutter-width: #{ $grid-gutter-width };
+  --bs-gutter-x: #{ $grid-gutter-width };
+
+  // ---------------------------------------- Container Breakpoints
+  --bs-container-breakpoint--sm: #{ map-get( $grid-breakpoints, sm ) };
+  --bs-container-breakpoint--md: #{ map-get( $grid-breakpoints, md ) };
+  --bs-container-breakpoint--lg: #{ map-get( $grid-breakpoints, lg ) };
+  --bs-container-breakpoint--xl: #{ map-get( $grid-breakpoints, xl ) };
+  --bs-container-breakpoint--xxl: #{ map-get( $grid-breakpoints, xxl ) };
+
+  // ---------------------------------------- Container Max Widths
+  --bs-container-width--sm: #{ map-get( $container-max-widths, sm ) };
+  --bs-container-width--md: #{ map-get( $container-max-widths, md ) };
+  --bs-container-width--lg: #{ map-get( $container-max-widths, lg ) };
+  --bs-container-width--xl: #{ map-get( $container-max-widths, xl ) };
+  --bs-container-width--xxl: #{ map-get( $container-max-widths, xxl ) };
+
+  //////////////////////////////////////////////////////////
+  ////  Theme
+  //////////////////////////////////////////////////////////
+
+  // ---------------------------------------- Body Copy
+  --theme-body-copy: #{ map-get( $theme-body-copy-sizes, 'base' ) };
+  --theme-body-copy--sm: #{ map-get( $theme-body-copy-sizes, 'sm' ) };
+  --theme-body-copy--md: #{ map-get( $theme-body-copy-sizes, 'md' ) };
+  --theme-body-copy--lg: #{ map-get( $theme-body-copy-sizes, 'lg' ) };
+  --theme-body-copy--xl: #{ map-get( $theme-body-copy-sizes, 'xl' ) };
+  --theme-body-copy--xxl: #{ map-get( $theme-body-copy-sizes, 'xxl' ) };
+
+  // ---------------------------------------- Border
+  --theme-border-radius: #{ map-get( $theme-border, 'radius' ) };
+  --theme-border-width: #{ map-get( $theme-border, 'width' ) };
+
+  // ---------------------------------------- Button | Font Size
+  --theme-button-font-size: #{ map-get( $theme-button-font-sizes, base ) };
+  --theme-button-font-size--sm: #{ map-get( $theme-button-font-sizes, sm ) };
+  --theme-button-font-size--md: #{ map-get( $theme-button-font-sizes, md ) };
+  --theme-button-font-size--lg: #{ map-get( $theme-button-font-sizes, lg ) };
+  --theme-button-font-size--xl: #{ map-get( $theme-button-font-sizes, xl ) };
+  --theme-button-font-size--xxl: #{ map-get( $theme-button-font-sizes, xxl ) };
+
+  // ---------------------------------------- Button | Height
+  --theme-button-min-height: #{ map-get( $theme-button-min-heights, base ) };
+  --theme-button-min-height--sm: #{ map-get( $theme-button-min-heights, sm ) };
+  --theme-button-min-height--md: #{ map-get( $theme-button-min-heights, md ) };
+  --theme-button-min-height--lg: #{ map-get( $theme-button-min-heights, lg ) };
+  --theme-button-min-height--xl: #{ map-get( $theme-button-min-heights, xl ) };
+  --theme-button-min-height--xxl: #{ map-get( $theme-button-min-heights, xxl ) };
+
+  // ---------------------------------------- Button | Height
+  --theme-button-min-width: #{ map-get( $theme-button-min-widths, base ) };
+  --theme-button-min-width--sm: #{ map-get( $theme-button-min-widths, sm ) };
+  --theme-button-min-width--md: #{ map-get( $theme-button-min-widths, md ) };
+  --theme-button-min-width--lg: #{ map-get( $theme-button-min-widths, lg ) };
+  --theme-button-min-width--xl: #{ map-get( $theme-button-min-widths, xl ) };
+  --theme-button-min-width--xxl: #{ map-get( $theme-button-min-widths, xxl ) };
+
+  // ---------------------------------------- Colours
+  --theme-colour-black: #{ hexToRGB( map-get( $theme-colours, 'black' ) ) };
+  --theme-colour-charcoal: #{ hexToRGB( map-get( $theme-colours, 'charcoal' ) ) };
+  --theme-colour-fog: #{ hexToRGB( map-get( $theme-colours, 'fog' ) ) };
+  --theme-colour-gold: #{ hexToRGB( map-get( $theme-colours, 'gold' ) ) };
+  --theme-colour-navy: #{ hexToRGB( map-get( $theme-colours, 'navy' ) ) };
+  --theme-colour-red: #{ hexToRGB( map-get( $theme-colours, 'red' ) ) };
+  --theme-colour-silver: #{ hexToRGB( map-get( $theme-colours, 'silver' ) ) };
+  --theme-colour-terracotta: #{ hexToRGB( map-get( $theme-colours, 'terracotta' ) ) };
+  --theme-colour-white: #{ hexToRGB( map-get( $theme-colours, 'white' ) ) };
+
+  // ---------------------------------------- Container
+  --theme-container--sm: #{ map-get( $container-max-widths, 'sm' ) };
+  --theme-container--md: #{ map-get( $container-max-widths, 'md' ) };
+  --theme-container--lg: #{ map-get( $container-max-widths, 'lg' ) };
+  --theme-container--xl: #{ map-get( $container-max-widths, 'xl' ) };
+  --theme-container--xxl: #{ map-get( $container-max-widths, 'xxl' ) };
+
+  // ---------------------------------------- Header
+  --theme-header-height: #{ map-get( $theme-header-heights, 'base' ) };
+  --theme-header-height--sm: #{ map-get( $theme-header-heights, 'sm' ) };
+  --theme-header-height--md: #{ map-get( $theme-header-heights, 'md' ) };
+  --theme-header-height--lg: #{ map-get( $theme-header-heights, 'lg' ) };
+  --theme-header-height--xl: #{ map-get( $theme-header-heights, 'xl' ) };
+  --theme-header-height--xxl: #{ map-get( $theme-header-heights, 'xxl' ) };
+
+
+  --theme-container-max-offset-left: auto;
+
+  // ---------------------------------------- Icon
+  --theme-icon-size-social: 32px;
+
+  // ---------------------------------------- Font Families
+  --theme-font-family--sans-serif: sans-serif;
+  --theme-font-family--serif: sans-serif;
+  --theme-font-family--display: serif;
+
+  --theme-font-family--sans-serif--primary: rustica, sans-serif;
+  --theme-font-family--serif--primary: serif;
+
+  // ---------------------------------------- Transitions
+  --theme-transition-duration: 280ms;
+  --theme-transition-opacity: 0.3333;
+
+
+  // Rustica Light
+  // font-family: rustica, sans-serif;
+  // font-weight: 300;
+  // font-style: normal;
+  //
+  //
+  // Rustica Regular
+  // font-family: rustica, sans-serif;
+  // font-weight: 500;
+  // font-style: normal;
+  //
+  //
+  // Rustica Medium
+  // font-family: rustica, sans-serif;
+  // font-weight: 600;
+  // font-style: normal;
+
+}
+
+//////////////////////////////////////////////////////////
+////  Vendors
+//////////////////////////////////////////////////////////
+
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/@glidejs/glide/dist/css/glide.core.min';
+// @import '../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
+@import '../node_modules/aos/dist/aos';
+
+//////////////////////////////////////////////////////////
+////  Component
+//////////////////////////////////////////////////////////
+
+@import './components/body-copy.scss';
+@import './components/button.scss';
+@import './components/card.scss';
+@import './components/collapsible.scss';
+@import './components/field.scss';
+@import './components/fifty-fifty-feature.scss';
+@import './components/form.scss';
+@import './components/full-width-feature.scss';
+@import './components/glide.scss';
+@import './components/heading.scss';
+@import './components/input.scss';
+@import './components/label.scss';
+@import './components/lazyload.scss';
+@import './components/link.scss';
+@import './components/navigation.scss';
+@import './components/pagination.scss';
+@import './components/section.scss';
+@import './components/select.scss';
+@import './components/textarea.scss';
+@import './components/title.scss';
+
+//////////////////////////////////////////////////////////
+////  Theme
+//////////////////////////////////////////////////////////
+
+@import './theme/404.scss';
+@import './theme/article.scss';
+@import './theme/blog.scss';
+@import './theme/body.scss';
+@import './theme/collection.scss';
+@import './theme/fonts.scss';
+@import './theme/footer.scss';
+@import './theme/header.scss';
+@import './theme/page.scss';
+@import './theme/product.scss';

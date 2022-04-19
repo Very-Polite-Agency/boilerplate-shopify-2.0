@@ -1,1 +1,1 @@
-# boilerplate-shopify-2.0
+## Shopify Boilerplate 2.0

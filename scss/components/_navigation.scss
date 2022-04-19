@@ -1,0 +1,16 @@
+.navigation {
+
+  display: inline-flex;
+
+  svg {
+    display: block;
+    height: 100%;
+    width: auto;
+    fill: currentColor;
+  }
+
+  &__item {}
+
+  &__link {}
+
+}

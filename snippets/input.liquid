@@ -1,0 +1,34 @@
+{% assign classes = classes | default: '' %}
+{% assign hidden = hidden | default: false %}
+{% assign name = name | default: '' %}
+{% assign placeholder = placeholder | default: '' %}
+{% assign readonly = readonly | default: false %}
+{% assign required = required | default: false %}
+{% assign type = type | default: 'text' %}
+{% assign value = value | default: '' %}
+
+{% if hidden %}
+  {% assign classes = classes | append: ' d-none' | strip %}
+{% endif %}
+{% if required %}
+ {% assign classes = classes | append: ' required' | strip %}
+{% endif %}
+
+{% if name != blank %}
+  <input
+    {% if classes != blank %}class="{{- classes -}}"{% endif %}
+    type="{{- type -}}"
+    name="{{- name -}}"
+    autocomplete="{{- type -}}"
+    {% if value != blank %}value="{{- value -}}"{% endif %}
+    {% if placeholder != blank %}placeholder="{{- placeholder -}}"{% endif %}
+    {% if readonly %}readonly{% endif %}
+    {% case type %}
+      {% when 'email' %}
+        spellcheck="false"
+        autocapitalize="off"
+      {% when 'tel' %}
+        pattern="[0-9\-]*"
+    {% endcase %}
+  >
+{% endif %}

@@ -1,0 +1,14 @@
+{% comment %}
+
+    Accepts:
+    - info: {Object} Liquid object
+
+    Usage:
+    {% render 'debug-this', item: article %}
+
+{% endcomment %}
+
+{% assign item = item | default: 'item not set!' %}
+
+<script>console.log( {{ item | json }} );</script>
+

@@ -1,19 +1,28 @@
 {% comment %}
 
-  Use snippet like so...
+    Accepts:
+    - alt_text: {String} Optionally povide alternative text for SEO
+    - background: {Boolean} Optionally display image as a background image element
+    - classes: {String} Optionally include custom classes
+    - delay: {Integer} Optionally, in multiples of 50, include a CSS transition delay in milliseconds
+    - duration: {Integer} Optionally, in multiples of 50, include a CSS transition duration in milliseconds
+    - image: {Object} Image Liquid object
+    - preload: {Boolean} Optionally set lazyload to preload image asset
+    - responsive: {Boolean} Optionally include source-set responsive image attributes
 
-  {%
-    render 'content--lazyload-image',
-    alt_text: 'Great Picture',
-    background: false,
-    classes: 'sample-class',
-    cloudinary: false,
-    delay: 50,
-    image: false,
-    preload: false,
-    responsive: false,
-    duration: 500,
-  %}
+    Usage:
+    {%
+      render 'lazyload-image',
+      alt_text: 'Great Picture',
+      background: false,
+      classes: 'sample-class',
+      cloudinary: false,
+      delay: 50,
+      image: false,
+      preload: false,
+      responsive: false,
+      duration: 500,
+    %}
 
 {% endcomment %}
 
@@ -59,12 +68,12 @@
     {% endif %}
 
     <div
-        class='{{ base_classes }}'
-        data-bg='{{ image_src }}'
-        data-transition-delay='{{ delay }}'
-        data-transition-duration='{{ duration }}'
-        style="background-url('{{ image_src_10x }}');"
-      ></div>
+      class='{{ base_classes }}'
+      data-bg='{{ image_src }}'
+      data-transition-delay='{{ delay }}'
+      data-transition-duration='{{ duration }}'
+      style="background-url('{{ image_src_10x }}');"
+    ></div>
 
   {% else %}
 
@@ -105,21 +114,21 @@
     {% endif %}
 
     <img
-        class='{{ base_classes }}'
-        src='{{ image_src_10x }}'
-        width='{{ image_width }}'
-        height='{{ image_height }}'
-        data-src='{{ image_src }}'
-        data-transition-delay='{{ delay }}'
-        data-transition-duration='{{ duration }}'
-        {% if responsive_sizes != '' %}
-          data-sizes='auto'
-          data-srcset='{{ responsive_sizes }}'
-        {% endif %}
-        {% if image_alt %}
-          alt='{{ image_alt }}'
-        {% endif %}
-      />
+      class='{{ base_classes }}'
+      src='{{ image_src_10x }}'
+      width='{{ image_width }}'
+      height='{{ image_height }}'
+      data-src='{{ image_src }}'
+      data-transition-delay='{{ delay }}'
+      data-transition-duration='{{ duration }}'
+      {% if responsive_sizes != '' %}
+        data-sizes='auto'
+        data-srcset='{{ responsive_sizes }}'
+      {% endif %}
+      {% if image_alt %}
+        alt='{{ image_alt }}'
+      {% endif %}
+    />
 
   {% endif %}
 {% endif %}

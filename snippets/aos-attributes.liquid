@@ -15,37 +15,58 @@
   */
 
   {%
-    render 'content--lazyload-image',
-    transition: 'fade-up',
-    aos_offset: 100,
+    render 'aos-attributes',
+    anchor: 'my-great-div-id-here',
+    anchor_placement: 'top-bottom',
     delay: 0,
     duration: 1000,
     easing: 'ease-in-out',
-    mirror: 'false',
+    offset: 175,
     once: 'false',
-    anchor: 'top-bottom',
+    transition: 'fade-up',
   %}
+
+  OR using Shopify's capture...
+
+  {% capture aos_attrs %}
+    {%
+      render 'aos-attributes',
+      anchor: 'some-unique-element-id-without-the-hash',
+      anchor_placement: 'top-bottom',
+      delay: 150,
+      duration: 1500,
+      easing: 'ease-in-out',
+      offset: 0,
+      once: 'true',
+      transition: 'fade-in',
+    %}
+  {% endcapture %}
+
+  <div class="my-div" {{ aos_attrs }}>Content to be animated</div>
 
 {% endcomment %}
 
 {% comment %} ## Default Values ## {% endcomment %}
+{%- assign anchor = anchor | default: '' -%}
+{%- assign anchor_placement = anchor_placement | default: 'top-bottom' -%}
+{%- assign delay = delay | default: 0 -%}
+{%- assign duration = duration | default: 650 -%}
+{%- assign easing = easing | default: 'ease-in-out' -%}
+{%- assign offset = offset | default: 175 -%}
+{%- assign once = once | default: 'true' -%}
 {%- assign transition = transition | default: 'fade-up' -%}
 
-{%- assign delay = delay | default: 0 -%}
-{%- assign duration = duration | default: 1000 -%}
-{%- assign easing = easing | default: 'ease-in-out' -%}
-{%- assign once = once | default: 'false' -%}
-{%- assign anchor = anchor | default: 'top-bottom' -%}
-{% comment %} {%- assign aos_offset = aos_offset | default: 150 -%} {% endcomment %}
-{% comment %} {%- assign mirror = mirror | default: 'true' -%} {% endcomment %}
-
+{% comment %} ## Build Attrs ## {% endcomment %}
 {%- assign html = 'data-aos="' | append: transition | append: '"' -%}
+{% if anchor != blank %}
+  {%- assign html = html | append: ' data-aos-anchor="#' | append: anchor | append: '"' -%}
+{% endif %}
+{%- assign html = html | append: ' data-aos-anchor-placement="' | append: anchor_placement | append: '"' -%}
 {%- assign html = html | append: ' data-aos-delay="' | append: delay | append: '"' -%}
 {%- assign html = html | append: ' data-aos-duration="' | append: duration | append: '"' -%}
 {%- assign html = html | append: ' data-aos-easing="' | append: easing | append: '"' -%}
+{%- assign html = html | append: ' data-aos-offset="' | append: offset | append: '"' -%}
 {%- assign html = html | append: ' data-aos-once="' | append: once | append: '"' -%}
-{%- assign html = html | append: ' data-aos-anchor-placement="' | append: anchor | append: '"' -%}
-{% comment %} {%- assign html = html | append: ' data-aos-offset="' | append: aos_offset | append: '"' -%} {% endcomment %}
-{% comment %} {%- assign html = html | append: ' data-aos-mirror="' | append: mirror | append: '"' -%} {% endcomment %}
 
+{% comment %} ## Return Attrs ## {% endcomment %}
 {{- html -}}

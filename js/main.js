@@ -1,7 +1,8 @@
-// @codekit-prepend quiet "../node_modules/validator/validator.min.js";
+// @codekit-prepend quiet "../node_modules/aos/dist/aos.js";
 // @codekit-prepend quiet "../node_modules/axios/dist/axios.min.js";
-// @codekit-prepend quiet "../node_modules/@glidejs/glide/dist/glide.min.js";
 // @codekit-prepend quiet "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js";
+// @codekit-prepend quiet "../node_modules/@glidejs/glide/dist/glide.min.js";
+// @codekit-prepend quiet "../node_modules/validator/validator.min.js";
 
 // @codekit-prepend "./modules/_credits.js";
 // @codekit-prepend "./modules/_breakpoints.js";
@@ -12,30 +13,18 @@
 // @codekit-prepend "./modules/_modals";
 // @codekit-prepend "./modules/_scrolling.js";
 // @codekit-prepend "./modules/_sizing.js";
-// @codekit-prepend "./modules/_theme.js";
 // @codekit-prepend "./modules/_tools.js";
 
 //////////////////////////////////////////////////////////////////////////////////////////
 ////  Execute Theme
 //////////////////////////////////////////////////////////////////////////////////////////
 
-let credits = new Credits();
-let forms = new Forms();
-let gliders = new Gliders();
-let instagramFeed = new InstagramFeed();
-let mobileMenu = new MobileMenu();
-let scrolling = new Scrolling();
-let sizing = new Sizing();
+let modules = [
+  new Scrolling(),
+  new Credits()
+];
 
-Theme.init([
-  forms,
-  gliders,
-  instagramFeed,
-  mobileMenu,
-  scrolling,
-  sizing,
-  credits,
-]);
+modules.forEach( module => module.init() );
 
 AOS.init({
   offset: 150,                // offset (in px) from the original trigger point

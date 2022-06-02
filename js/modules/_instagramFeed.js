@@ -6,45 +6,160 @@
 
 const InstagramFeed = (() => {
 
-  let debug = false;
+  let debug = true;
   let info = { name : 'Instagram Feed', version : '1.0' };
+
+  let vpcreds = {
+    pass: '21waterst',
+    user: 'verypoliteagency'
+  };
 
   let tools = new Tools();
 
   let targetElementElement = '.js--instagram-feed';
+  let blockName = 'instagram-feed';
   let feeds = {};
+  let instagramGlider = {
+    interval: null,
+    id: blockName,
+    glider: {},
+    count: 0
+  };
+
+  //////////////////////////////////////////////////////////
+  ////  Initialize Glider
+  //////////////////////////////////////////////////////////
+
+  const initializeGlider = () => {
+
+    instagramGlider.glider = new Glide( `#${instagramGlider.id}`, {
+      animationTimingFunc: 'ease-in-out',
+      animationDuration: 280,
+      autoplay: 3500,
+      breakpoints: {
+        9999: {
+          // up to 10000
+          focusAt: 0,
+          gap: 20,
+          peek: { before: 0, after: 64 },
+          perView: 5,
+        },
+        1399: {
+          // up to 1400
+          focusAt: 0,
+          gap: 20,
+          peek: { before: 0, after: 64 },
+          perView: 4,
+        },
+        991: {
+          // up to 992
+          focusAt: 0,
+          gap: 20,
+          peek: { before: 0, after: 64 },
+          perView: 3,
+        },
+        767: {
+          // up to 768
+          focusAt: 0,
+          gap: 20,
+          peek: { before: 0, after: 64 },
+          perView: 2,
+        }
+      },
+      gap: 20,
+      peek: 0,
+      hoverpause: true,
+      type: 'carousel',
+      rewind: true,
+      throttle: 50
+    });
+
+    instagramGlider.glider.on( 'mount.after', function(event) {
+      setTimeout( function() {
+        instagramGlider.glider.update();
+      }, 250 );
+    });
+
+    ( document.querySelectorAll(`[data-target="#${instagramGlider.id}"].next`) || [] ).forEach( button => {
+      button.addEventListener('click', function () {
+        instagramGlider.glider.go('>');
+      });
+    });
+
+    ( document.querySelectorAll(`[data-target="#${instagramGlider.id}"].prev`) || [] ).forEach( button => {
+      button.addEventListener('click', function () {
+        instagramGlider.glider.go('<');
+      });
+    });
+
+    instagramGlider.glider.mount();
+
+  };
+
+  //////////////////////////////////////////////////////////
+  ////  Render Feed Markup
+  //////////////////////////////////////////////////////////
+
+  const renderFeedMarkup = ( account = '', media = [] ) => {
+    if ( debug ) console.log( 'renderFeedMarkup ::', { account, media } );
+    instagramGlider.count = 0;
+    return `
+      <div class="glide" id="${instagramGlider.id}" data-glide-style="${blockName}">
+        <div class="glide__track" data-glide-el="track">
+          <ul class="glide__slides">
+            ${media.map( item =>
+              `${renderFeedCardMarkup( account, item )}`
+            ).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+  };
+
+  //////////////////////////////////////////////////////////
+  ////  Render Feed Card Markup
+  //////////////////////////////////////////////////////////
+
+  function renderFeedCardMarkup( account = '', item = {} ) {
+
+    if ( debug ) console.log( 'renderFeedCardMarkup ::', { account, item } );
+
+    let { id = '', media_type = '', media_url = '', permalink = '' } = item;
+    let template = '';
+
+    if ( ( "CAROUSEL_ALBUM" == media_type || "IMAGE" == media_type ) && instagramGlider.count < feeds[account].limit ) {
+      template = `
+        <li class="glide__slide">
+          <div class="${blockName}__item" id="${id}" data-count="${instagramGlider.count}">
+            <a class="${blockName}__item-link link" href="${permalink}" target="_blank">
+              <div class="${blockName}__item-image lazyload-item lazyload-item--image lazypreload lazyload-item--background lazyload" data-bg="${media_url}"></div>
+            </a>
+          </div>
+        </li>
+      `;
+      instagramGlider.count++;
+    }
+
+    return template;
+
+  };
 
   //////////////////////////////////////////////////////////
   ////  Print Media
   //////////////////////////////////////////////////////////
 
-  const printMedia = ( $media = [], $account = '' ) => {
+  const printMedia = ( account = '', media = [] ) => {
 
-    if ( debug ) console.log( '[ printMedia() ] Start' );
+    if ( debug ) console.log( 'printMedia ::', { account, media } );
 
-    if ( $media.length && $account ) {
-
-      let elements = document.querySelectorAll(`[data-instagram-feed-account-name='${$account}']`);
-
-      for ( let i = 0; i < elements.length; i++ ) {
-        let count = 1;
-        for ( let j = 0; j < $media.length; j++ ) {
-          let item = $media[j];
-          if ( debug ) console.log(item);
-          let isImage = ('IMAGE' == item.media_type) ? true : false;
-          let notAboveLimit = (count <= feeds[$account].limit ) ? true : false;
-          if ( notAboveLimit && isImage ) {
-            elements[i].querySelector(`[data-count='${count}'] .instagram-feed__link`).setAttribute( 'href', item.permalink );
-            elements[i].querySelector(`[data-count='${count}'] .instagram-feed__image`).setAttribute( 'data-bg', item.media_url );
-            elements[i].querySelector(`[data-count='${count}'] .instagram-feed__image`).classList.add( 'lazyload', 'lazypreload' );
-            count++;
-          }
-        }
-      }
-
+    if ( media.length && account ) {
+      ( document.querySelectorAll(`[data-instagram-feed-account='${account}']`) || [] ).forEach( element => {
+        element.innerHTML = renderFeedMarkup( account, media );
+        initializeGlider();
+      });
     }
 
-    if ( debug ) console.log( '[ printMedia() ] End' );
+    if ( debug ) console.log( 'printMedia :: Complete' );
 
   };
 
@@ -52,25 +167,26 @@ const InstagramFeed = (() => {
   ////  Get Media
   //////////////////////////////////////////////////////////
 
-  const getMedia = ( $account, $token ) => {
+  const getMedia = ( account = 'not-set', token = 'not-set' ) => {
 
-    let getURL = 'https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink&access_token=' + $token;
+    let fetchURL = `https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink&access_token=${token}`;
 
-    fetch( getURL )
-    .then(res => res.json())
-    .then(json => {
+    console.log( 'getMedia ::', { fetchURL } );
+
+    fetch( fetchURL )
+    .then( res => res.json())
+    .then( json => {
 
       if ( debug ) console.log('getMedia:', json );
 
       let localData = {
-        account: $account,
+        account: account,
         date: Date.now(),
         data: json.data
       };
 
-      tools.setLocalStorage( `very-polite-instagram-feed--${$account}`, JSON.stringify(localData) );
-
-      printMedia( json.data, $account );
+      tools.setLocalStorage( `very-polite-instagram-feed--${account}`, JSON.stringify(localData) );
+      printMedia( account, json.data );
 
     })
     .catch(err => console.log( 'getMedia( $account, $token ) Error', err ));
@@ -81,15 +197,19 @@ const InstagramFeed = (() => {
   ////  Get Token
   //////////////////////////////////////////////////////////
 
-  const getToken = ( $account ) => {
+  const getToken = ( account ) => {
 
-    fetch( 'https://very-polite-instagram-feed.herokuapp.com/token?userAccount=' + $account )
-    .then(res => res.json())
-    .then(json => {
-      if ( debug ) console.log('getToken( $account ) fired!', json );
-      getMedia( $account, json.token );
+    let fetchURL = `https://very-polite-instagram-feed.herokuapp.com/token?userAccount=${account}`;
+
+    console.log( 'getToken ::', { fetchURL } );
+
+    fetch( fetchURL )
+    .then( res => res.json() )
+    .then( json => {
+      if ( debug ) console.log('getToken( $account ) :: JSON', json );
+      getMedia( account, json.token );
     })
-    .catch(err => console.log(err));
+    .catch( err => console.log(err) );
 
   };
 
@@ -98,19 +218,14 @@ const InstagramFeed = (() => {
   //////////////////////////////////////////////////////////
 
   const getFeeds = () => {
-
-    let elements = document.getElementsByClassName('js--instagram-feed');
-
-    for ( let i = 0; i < elements.length; i++ ) {
-      let limit = parseInt( elements[i].getAttribute('data-instagram-feed-post-limit') ) || 6;
-      let account = elements[i].getAttribute('data-instagram-feed-account-name') || false;
-      if ( account && limit ) {
-        feeds[account] = { element: elements[i], limit: limit };
-      }
-    }
-
-    if ( debug ) console.log( 'getFeeds() complete', feeds );
-
+    ( document.querySelectorAll('.js--instagram-feed') || [] ).forEach( element => {
+       let limit = parseInt( element.dataset.instagramFeedLimit ) || 6;
+       let account = element.dataset.instagramFeedAccount || false;
+       console.log( 'getFeeds ::', { account, limit } );
+       if ( account && limit ) {
+        feeds[account] = { account, element, limit };
+       }
+    });
   };
 
   //////////////////////////////////////////////////////////
@@ -123,20 +238,24 @@ const InstagramFeed = (() => {
 
     for ( const account in feeds ) {
 
-      if ( tools.getLocalStorageValueByKey(`very-polite-instagram-feed--${account}`)) {
+      console.log( 'main ::', account );
+
+      if ( tools.getLocalStorageValueByKey(`very-polite-instagram-feed--${account}`) ) {
 
         let feedData = JSON.parse( tools.getLocalStorageValueByKey(`very-polite-instagram-feed--${account}`) );
         let millisecondsDifference = Date.now() - feedData.date;
         let minutesDifference = ( millisecondsDifference / 60000 ).toFixed(2);
 
         if ( minutesDifference > 30 ) {
+          console.log( 'GREATER than 30 minutes since last check, get new token' );
           getToken( account );
         } else {
-          if ( debug ) console.log( 'localStorage fired!' );
-          printMedia( feedData.data, account );
+          console.log( 'LESS than 30 minutes since last check, print from local storage' );
+          printMedia( account, feedData.data );
         }
 
       } else {
+        console.log( 'Local storage does not exist, get token and then print media.' );
         getToken( account );
       }
 
@@ -160,7 +279,8 @@ const InstagramFeed = (() => {
 
   return {
     info,
-    init
+    init,
+    feeds
   };
 
 });

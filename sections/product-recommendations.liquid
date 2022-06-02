@@ -1,243 +1,332 @@
-<link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="{{ 'section-product-recommendations.css' | asset_url }}" media="print" onload="this.media='all'">
+{% assign section_name = 'product-recommendations' %}
+{% assign section_id = section_name | append: '--' | append: section.id %}
 
-<noscript>{{ 'component-card.css' | asset_url | stylesheet_tag }}</noscript>
-<noscript>{{ 'component-price.css' | asset_url | stylesheet_tag }}</noscript>
-<noscript>{{ 'section-product-recommendations.css' | asset_url | stylesheet_tag }}</noscript>
+{% assign product_limit = section.settings.product_limit | default: 6 %}
+{% assign glider_id = section_id | append: '--glider' %}
+{% assign heading = section.settings.heading | default: '' %}
+{% assign heading_highlight = section.settings.heading_highlight | default: false %}
+{% assign is_glider = false %}
 
-{%- style -%}
-  .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
-  }
+{% if recommendations.products_count > 3 %}
+  {% assign is_glider = true %}
+{% endif %}
 
-  @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-{%- endstyle -%}
+<div class="{{ section_name }}" id="{{ section_id }}" data-colour-theme-dark data-section-padding>
 
-<div class="color-{{ section.settings.color_scheme }} gradient">
-  <product-recommendations class="product-recommendations page-width section-{{ section.id }}-padding isolate" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4">
-    {% if recommendations.performed and recommendations.products_count > 0 %}
-      <h2 class="product-recommendations__heading {{ section.settings.heading_size }}">{{ section.settings.heading | escape }}</h2>
-      <ul class="grid product-grid{% if section.settings.columns_desktop == 1 %} grid--full-width{% else %} grid--{{ section.settings.columns_desktop }}-col-desktop{% endif %} grid--{{ section.settings.columns_mobile }}-col-tablet-down" role="list">
-        {% for recommendation in recommendations.products %}
-          <li class="grid__item">
-            {% render 'card-product',
-              card_product: recommendation,
-              media_aspect_ratio: section.settings.image_ratio,
-              show_secondary_image: section.settings.show_secondary_image,
-              show_vendor: section.settings.show_vendor,
-              show_rating: section.settings.show_rating
-            %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-  </product-recommendations>
+  <div class="{{ section_name }}__intro intro" data-text-alignment-left>
+    {% render 'bs-container', state: 'open' %}
+      {%
+        render 'heading-highlight',
+        classes: 'product-recommendations__heading intro__heading heading--2',
+        heading: heading,
+        style: heading_highlight,
+        tag: 'h2'
+      %}
+    {% render 'bs-container', state: 'closed' %}
+  </div>
+
+  <div class="{{ section_name }}__main main" id="{{ section_name }}__main" data-product-limit="{{ product_limit }}">
+    <!-- Inject Ajax Recommended Products Here -->
+  </div>
+
+  <div class="{{ section_name }}__glider-controls glide__controls--technical">
+    <button class="glide__button button prev" data-target="#{{ glider_id }}">
+      <span class="button__icon">{% render 'svg', type: 'icon.arrow' %}</span>
+    </button>
+    <button class="glide__button button next" data-target="#{{ glider_id }}">
+      <span class="button__icon">{% render 'svg', type: 'icon.arrow' %}</span>
+    </button>
+  </div>
+
 </div>
 
-{% javascript %}
-  class ProductRecommendations extends HTMLElement {
-    constructor() {
-      super();
+<script>
 
-      const handleIntersection = (entries, observer) => {
-        if (!entries[0].isIntersecting) return;
-        observer.unobserve(this);
+  let sectionName = {{ section_name | json }};
+  let html, is_glider;
+  let productID = {{ product.id | json }};
+  let limit = {{ product_limit | json }};
+  let recommendedGlider = {
+    interval: null,
+    id: {{ glider_id | json }},
+    glider: {}
+  };
 
-        fetch(this.dataset.url)
-          .then(response => response.text())
-          .then(text => {
-            const html = document.createElement('div');
-            html.innerHTML = text;
-            const recommendations = html.querySelector('product-recommendations');
+  document.addEventListener('DOMContentLoaded', function() {
+    recommendedProducts();
+  }, false);
 
-            if (recommendations && recommendations.innerHTML.trim().length) {
-              this.innerHTML = recommendations.innerHTML;
-            }
+  function recommendedProducts() {
+    fetch(window.Shopify.routes.root + `recommendations/products.json?product_id=${productID}&limit=${limit}`)
+      .then(response => response.json())
+      .then(({ products }) => {
+        console.log( 'recommendedProducts ::', products );
+        if (products.length > 0) {
+          document.getElementById(`${sectionName}__main`).innerHTML = renderGliderMarkup(products);
+          initializeGlider();
+        }
+      }
+    );
+  };
 
-            if (html.querySelector('.grid__item')) {
-              this.classList.add('product-recommendations--loaded');
-            }
-          })
-          .catch(e => {
-            console.error(e);
+  function renderGliderMarkup( products = [] ) {
+    return `
+      <div class="glide" id="${recommendedGlider.id}" data-glide-style="recommended-products">
+        <div class="glide__track" data-glide-el="track">
+          <ul class="glide__slides">
+            ${products.map(product =>
+              `<li class="glide__slide">
+                <div class="${sectionName}__item">
+                  ${renderProductCardMarkup(product)}
+                </div>
+              </li>`
+            ).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+  };
+
+  function renderProductCardMarkup( product = {} ) {
+
+    let featuredImage = {
+      small: Theme.imgURLFilter(product.featured_image, 'icon'),
+      large: Theme.imgURLFilter(product.featured_image, 'large')
+    };
+    let handle = product.handle;
+    let title = product.title;
+
+    return `
+      <article class="card-product card-product--${sectionName} product">
+        <div class="card-product__featured-image product__featured-image">
+          <a class="card-product__featured-image-link link" href="/products/${handle}" title="${title}" target="_self">
+            <img class="lazyload-item lazyload-item--image lazypreload lazyload-item--inline inline lazyautosizes lazyload" src="${featuredImage.small}" data-src="${featuredImage.large}" alt="${title}" />
+          </a>
+        </div>
+        <div class="card-product__info">
+          <strong class="card-product__title caption--2">
+            <a class="card-product__title-link link" href="/products/${handle}" title="${title}" target="_self">${title}</a>
+          </strong>
+          <div class="card-product__price caption--2">${renderProductPrice(product)}</div>
+        </div>
+      </article>
+    `;
+
+  };
+
+  function renderProductPrice( product = {} ) {
+
+    let price = product.price || 0;
+    let price_compare = product.compare_at_price || 0;
+
+    return `
+      <div class="price${ price_compare ? ' with-sale-price' : '' }">
+        <span class="price__value"><span class="price__currency-symbol">$</span>${(price/100).toFixed(2)}</span>
+        <span class="price__value sale-price"><span class="price__currency-symbol">$</span>${(price_compare/100).toFixed(2)}</span>
+      </div>
+    `;
+
+  };
+
+  function initializeGlider() {
+
+    recommendedGlider.glider = new Glide( `#${recommendedGlider.id}`, {
+      animationTimingFunc: 'ease-in-out',
+      animationDuration: 280,
+      autoplay: 3200,
+      breakpoints: {
+        9999: {
+          // up to 1200
+          focusAt: 'center',
+          gap: 32,
+          peek: { before: 64, after: 64 },
+          perView: 4,
+        },
+        1399: {
+          // up to 992
+          focusAt: 'center',
+          gap: 32,
+          peek: { before: 64, after: 64 },
+          perView: 3,
+        },
+        991: {
+          // up to 992
+          focusAt: 'center',
+          gap: 32,
+          peek: { before: 64, after: 64 },
+          perView: 2,
+        },
+        767: {
+          // up to 576
+          focusAt: 'center',
+          gap: 32,
+          peek: { before: 64, after: 64 },
+          perView: 1,
+        },
+      },
+      gap: 32,
+      peek: 0,
+      hoverpause: true,
+      type: 'carousel',
+      rewind: true,
+      throttle: 50
+    });
+
+    recommendedGlider.glider.on( 'mount.after', function(event) {
+      setTimeout( function() {
+        recommendedGlider.glider.update();
+      }, 250 );
+    });
+
+    ( document.querySelectorAll(`[data-target="#${recommendedGlider.id}"].next`) || [] ).forEach( button => {
+      button.addEventListener('click', function () {
+        recommendedGlider.glider.go('>');
+      });
+    });
+
+    ( document.querySelectorAll(`[data-target="#${recommendedGlider.id}"].prev`) || [] ).forEach( button => {
+      button.addEventListener('click', function () {
+        recommendedGlider.glider.go('<');
+      });
+    });
+
+    recommendedGlider.glider.mount();
+
+  };
+
+  function initializeGliderWithInterval() {
+
+    console.log('initializeGliderWithInterval :: Initialized');
+
+    recommendedGlider.interval = setInterval( function() {
+
+      if ( document.getElementById(recommendedGlider.id) ) {
+
+        clearInterval(recommendedGlider.interval);
+
+        recommendedGlider.glider = new Glide( `#${recommendedGlider.id}`, {
+          animationTimingFunc: 'ease-in-out',
+          animationDuration: 280,
+          autoplay: 3200,
+          breakpoints: {
+            1199: {
+              // up to 1200
+              focusAt: 'center',
+              gap: 42,
+              peek: 0,
+              perView: 6,
+            },
+            991: {
+              // up to 992
+              focusAt: 'center',
+              gap: 32,
+              peek: 0,
+              perView: 5,
+            },
+            767: {
+              // up to 768
+              focusAt: 'center',
+              gap: 32,
+              peek: { before: 55, after: 55 },
+              perView: 4,
+            },
+            575: {
+              // up to 576
+              focusAt: 'center',
+              gap: 32,
+              peek: { before: 35, after: 35 },
+              perView: 3,
+            },
+            400: {
+              // up to 576
+              focusAt: 'center',
+              gap: 32,
+              peek: { before: 15, after: 15 },
+              perView: 1,
+            },
+          },
+          gap: 32,
+          peek: 0,
+          hoverpause: true,
+          type: 'carousel',
+          rewind: true,
+          throttle: 50
+        });
+
+        recommendedGlider.glider.on( 'mount.after', function(event) {
+          setTimeout( function() {
+            recommendedGlider.glider.update();
+          }, 250 );
+        });
+
+        ( document.querySelectorAll(`[data-target="#${recommendedGlider.id}"].next`) || [] ).forEach( button => {
+          button.addEventListener('click', function () {
+            recommendedGlider.glider.go('>');
           });
+        });
+
+        ( document.querySelectorAll(`[data-target="#${recommendedGlider.id}"].prev`) || [] ).forEach( button => {
+          button.addEventListener('click', function () {
+            recommendedGlider.glider.go('<');
+          });
+        });
+
+        recommendedGlider.glider.mount();
+
       }
 
-      new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 200px 0px'}).observe(this);
-    }
-  }
+    }, 100);
 
-  customElements.define('product-recommendations', ProductRecommendations);
-{% endjavascript %}
+    console.log('initializeGliderWithInterval :: Finished');
+
+  };
+
+</script>
 
 {% schema %}
-{
-  "name": "t:sections.product-recommendations.name",
-  "tag": "section",
-  "class": "section",
-  "settings": [
-    {
-      "type": "paragraph",
-      "content": "t:sections.product-recommendations.settings.paragraph__1.content"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "default": "You may also like",
-      "label": "t:sections.product-recommendations.settings.heading.label"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "options": [
-        {
-          "value": "h2",
-          "label": "t:sections.all.heading_size.options__1.label"
-        },
-        {
-          "value": "h1",
-          "label": "t:sections.all.heading_size.options__2.label"
-        },
-        {
-          "value": "h0",
-          "label": "t:sections.all.heading_size.options__3.label"
-        }
-      ],
-      "default": "h1",
-      "label": "t:sections.all.heading_size.label"
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 4,
-      "step": 1,
-      "default": 4,
-      "label": "t:sections.product-recommendations.settings.columns_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "color_scheme",
-      "options": [
-        {
-          "value": "accent-1",
-          "label": "t:sections.all.colors.accent_1.label"
-        },
-        {
-          "value": "accent-2",
-          "label": "t:sections.all.colors.accent_2.label"
-        },
-        {
-          "value": "background-1",
-          "label": "t:sections.all.colors.background_1.label"
-        },
-        {
-          "value": "background-2",
-          "label": "t:sections.all.colors.background_2.label"
-        },
-        {
-          "value": "inverse",
-          "label": "t:sections.all.colors.inverse.label"
-        }
-      ],
-      "default": "background-1",
-      "label": "t:sections.all.colors.label",
-      "info": "t:sections.all.colors.has_cards_info"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.product-recommendations.settings.header__2.content"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.product-recommendations.settings.image_ratio.options__1.label"
-        },
-        {
-          "value": "portrait",
-          "label": "t:sections.product-recommendations.settings.image_ratio.options__2.label"
-        },
-        {
-          "value": "square",
-          "label": "t:sections.product-recommendations.settings.image_ratio.options__3.label"
-        }
-      ],
-      "default": "adapt",
-      "label": "t:sections.product-recommendations.settings.image_ratio.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_secondary_image",
-      "default": false,
-      "label": "t:sections.product-recommendations.settings.show_secondary_image.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "default": false,
-      "label": "t:sections.product-recommendations.settings.show_vendor.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_rating",
-      "default": false,
-      "label": "t:sections.product-recommendations.settings.show_rating.label",
-      "info": "t:sections.product-recommendations.settings.show_rating.info"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.product-recommendations.settings.header_mobile.content"
-    },
-    {
-      "type": "select",
-      "id": "columns_mobile",
-      "default": "2",
-      "label": "t:sections.product-recommendations.settings.columns_mobile.label",
-      "options": [
-        {
-          "value": "1",
-          "label": "t:sections.product-recommendations.settings.columns_mobile.options__1.label"
-        },
-        {
-          "value": "2",
-          "label": "t:sections.product-recommendations.settings.columns_mobile.options__2.label"
-        }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
-    }
-  ]
-}
+  {
+    "name": "Product Recommendations",
+    "class": "section section--product-recommendations",
+    "settings": [
+      {
+        "content": "Content",
+        "type": "header"
+      },
+      {
+        "label": "Heading",
+        "type": "richtext",
+        "id": "heading"
+      },
+      {
+        "label": "Heading Highlight",
+        "type": "select",
+        "options": [
+          { "value": "standard", "label": "Standard" },
+          { "value": "stroke", "label": "Stroke" },
+          { "value": "circle", "label": "Circle" }
+        ],
+        "default": "standard",
+        "id": "heading_highlight"
+      },
+      {
+        "content": "Settings",
+        "type": "header"
+      },
+      {
+        "label": "Max number of recommended products",
+        "type": "range",
+        "min": 3,
+        "max": 9,
+        "step": 1,
+        "default": 4,
+        "id": "product_limit"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Product Recommendations"
+      }
+    ],
+    "templates": [ "product" ]
+  }
 {% endschema %}

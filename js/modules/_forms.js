@@ -5,13 +5,11 @@
 const Forms = (() => {
 
   let debug = false;
-  let info = { name : 'Forms', version : '2.1' };
+  let info = { name : 'Forms', version : '2.2.3' };
 
   let tools = new Tools();
   let maxMB = 25.0;
-  let maxFiles = 4.0;
   let formFiles = [];
-  let totalMD = 0.0;
   let messages = {
     error: {
       429: "Too many attempts to recover password. Please try again later.",
@@ -23,65 +21,83 @@ const Forms = (() => {
   };
 
   //////////////////////////////////////////////////////////
+  ////  On Focus
+  //////////////////////////////////////////////////////////
+
+  const onFormFocus = () => {
+
+    ( document.querySelectorAll('form') || [] ).forEach( form => {
+
+      form.addEventListener('focusin', (e) => {
+        if ( e.target.closest('.form__field') ) {
+          e.target.closest('.form__field').classList.add("in-focus");
+        }
+      });
+
+      form.addEventListener('focusout', (e) => {
+        if ( e.target.closest('.form__field') && !e.target.value ) {
+          e.target.closest('.form__field').classList.remove("in-focus");
+        }
+      });
+
+    });
+
+  };
+
+  //////////////////////////////////////////////////////////
   ////  Check if Field is Valid
   //////////////////////////////////////////////////////////
 
   const isFieldValid = ( $field = false ) => {
 
-    let value = $field.value || 'error';
+    console.log( 'isFieldValid() start' );
+
+    let value = '';
     let isValid = false;
     let name = $field.name || 'no-name';
     let type = $field.type || 'no-type';
     let nodeName = $field.nodeName || 'no-node-name';
 
     switch ( nodeName ) {
-
       case 'INPUT':
         switch ( type ) {
 
           case 'checkbox':
-            if ( $field.checked ) {
+            isValid = $field.checked;
+            break;
+
+          case 'email':
+            if ( validator.isEmail( $field.value.trim() ) ) {
               isValid = true;
             }
             break;
 
-          case 'email':
-            if ( validator.isEmail( $field.value ) ) {
-              isValid = true;
-            }
+          case 'file':
             break;
 
           case 'radio':
             break;
 
           case 'tel':
-            if ( validator.isMobilePhone( $field.value ) ) {
+            if ( validator.isMobilePhone( $field.value.trim() ) ) {
               isValid = true;
             }
             break;
 
           case 'password':
           case 'text':
-            if ( ! validator.isEmpty( $field.value ) ) {
+            if ( ! validator.isEmpty( $field.value.trim() ) ) {
               isValid = true;
             }
             break;
 
         }
         break;
-
-      case 'SELECT':
-        if ( $field.value ) {
-          isValid = true;
-        }
-        break;
-
       case 'TEXTAREA':
-        if ( ! validator.isEmpty( $field.value ) ) {
+        if ( ! validator.isEmpty( $field.value.trim() ) ) {
           isValid = true;
         }
         break;
-
     }
 
     if ( isValid ) {
@@ -90,8 +106,8 @@ const Forms = (() => {
       tools.addClass( 'error', [ $field.closest('.form__field') ] );
     }
 
-    if ( debug ) console.log( { type, name, nodeName, isValid, value } );
-    if ( debug ) console.log( 'isFieldValid() finish' );
+    console.log( { type, name, nodeName, isValid } );
+    console.log( 'isFieldValid() finish' );
 
     return isValid;
 
@@ -123,35 +139,37 @@ const Forms = (() => {
 
   const hasSpam = ( $form = false ) => {
 
-    let elements = $form.querySelectorAll('input.rude') || [];
+    let inputs = $form.querySelectorAll('input.rude') || [];
 
-    for ( let i = 0; i < elements.length; i++ ) {
-      if ( elements[i].value ) {
+    for ( let i = 0; i < inputs.length; i++ ) {
+      if ( inputs[i].value ) {
+        // yes spam, stop loop and exit
         return true;
       }
     }
 
+    // no spam!
     return false;
 
   };
 
   //////////////////////////////////////////////////////////
-  ////  Check Form Files Under Size Limit
+  ////  Check if form has files
   //////////////////////////////////////////////////////////
 
   const underFileSizeLimit = ( $form = false ) => {
 
-    if ( debug ) console.log( 'underFileSizeLimit() start' );
+    console.log( 'hasFiles start' );
 
+    let totalMB = 0;
     let inputs = $form.querySelectorAll('input[type="file"]') || [];
     formFiles.length = 0;
-    totalMB = 0;
 
     for ( let i = 0; i < inputs.length; i++ ) {
 
       let input = inputs[i];
       let field = input.closest('.field');
-      let fieldErrorMessage = field.querySelector('.field__error-message') || false;
+      let fieldErrorMessage = field.querySelector('.form__error-message') || false;
       let files = input.files || {};
       let message = '';
       for ( let key in files ) {
@@ -160,11 +178,9 @@ const Forms = (() => {
           formFiles.push( files[key] );
         }
       }
-
       totalMB = totalMB/1024/1024;
-
       if ( totalMB > maxMB ) {
-        message = `The current total file size (${totalMB.toFixed(1)}MB) is larger than the ${maxMB}.0MB limit`;
+        message = `The total file size (${totalMB.toFixed(1)}MB) is larger than ${maxMB}.0MB`;
         field.classList.add( 'error' );
         if ( fieldErrorMessage ) fieldErrorMessage.innerHTML = message;
         return false;
@@ -172,72 +188,64 @@ const Forms = (() => {
         if ( fieldErrorMessage ) fieldErrorMessage.innerHTML = message;
         field.classList.remove( 'error' );
       }
-
     }
 
-    if ( debug ) console.log( 'underFileSizeLimit() end', { totalMB, maxMB });
+    console.log( 'hasFiles end', {
+      totalMB,
+      maxMB
+    });
 
     return true;
 
   };
 
   //////////////////////////////////////////////////////////
-  ////  Check Form Files Under Count Limit
-  //////////////////////////////////////////////////////////
-
-  const underFileCountLimit = ( $form = false ) => {
-
-    let totalFiles = 0;
-    let inputs = $form.querySelectorAll('input[type="file"]') || [];
-
-    for ( let i = 0; i < inputs.length; i++ ) {
-
-      let files = inputs[i].files || {};
-      totalFiles += files.length;
-
-      if ( totalFiles > maxFiles ) {
-        if ( debug ) console.log({ totalFiles });
-        inputs[i].value = '';
-        alert(`Too many files selected. The limit is ${maxFiles}.`);  // display string message
-        return false;
-      }
-
-    }
-
-    if ( debug ) console.log({ totalFiles });
-    return true;
-
-  }
-
-  //////////////////////////////////////////////////////////
   ////  Submit Form via Axios
   //////////////////////////////////////////////////////////
 
-  const submitForm = ( $form = false ) => {
+  const submitForm = ( formElement = false ) => {
 
-    let formAction = $form.action || false;
-    let formData = new FormData( $form );
-    let redirectURL = $form.dataset.redirectUrl || false;
+    let formAction = formElement.action || false;
+    let formData = new FormData( formElement );
+    let redirectURL = formElement.dataset.redirectUrl || false;
+    let formType = formElement.dataset.formType || 'default';
+    let formObject = {};
 
-    formFiles.forEach( ( file, index ) => {
-      formData.append( 'additional_docs' , file );
-    });
+    if ( formFiles.length ) {
+      formFiles.forEach( ( file, index ) => {
+        formData.append( 'files' , file );
+      });
+    }
 
-    $form.classList.add('posting');
+    formData.forEach((value, key) => formObject[key] = value);
+    document.body.classList.add('form-posting');
+
+    console.log( formObject );
 
     axios.post( formAction, formData )
-      .then(( data ) => {
-        if ( debug ) console.log( 'then() data :: ', data );
-        if ( redirectURL ) {
-          window.location.replace( redirectURL );
+    .then( data => {
+      if ( debug ) console.log( data );
+      switch ( formType ) {
+        case 'lead-generation': {
+          formElement.reset();
+          setTimeout(() => {
+            formElement.classList.remove('posting');
+            alert(`Thanks ${formObject['First Name']}!`);
+          }, 750 );
+          break;
         }
-      })
-      .catch(( data ) => {
-        console.log( 'catch() data :: ', data );
-      }).finally(() => {
-        $form.reset();
-        $form.classList.remove('posting');
-      });
+        case 'redirect': {
+          if ( redirectURL ) window.location.replace( redirectURL );
+          break;
+        }
+        default: {
+          window.location.replace( '/pages/thank-you' );
+        }
+      }
+    })
+    .catch( data => {
+      console.log( 'catch() data :: ', data );
+    });
 
   };
 
@@ -247,6 +255,8 @@ const Forms = (() => {
 
   const init = () => {
     if ( debug ) console.log( `${info.name}.init() v.${info.version} Started` );
+
+      onFormFocus();
 
       document.querySelectorAll('.js--validate-me [type="submit"]').forEach( button => {
 
@@ -259,13 +269,11 @@ const Forms = (() => {
           let formValid = isFormValid( form );
           let formHasSpam = hasSpam( form );
           let formUnderFileSizeLimit = underFileSizeLimit( form );
-          let formUnderFileCountLimit = underFileCountLimit( form );
-          let formReadyForSubmission = ( formValid && !formHasSpam && formUnderFileSizeLimit && formUnderFileCountLimit ) ? true : false;
 
-          if ( debug ) console.log( `${info.name}.init()`, { formValid, formHasSpam, formUnderFileSizeLimit, formUnderFileCountLimit, formReadyForSubmission } );
+          if ( debug ) console.log( `${info.name}.init()`, { formValid, formHasSpam, formUnderFileSizeLimit } );
 
-          if ( formReadyForSubmission ) {
-            submitForm( form, formRedirectURL );
+          if ( formValid && !formHasSpam && formUnderFileSizeLimit ) {
+            submitForm( form );
           }
 
         });
@@ -281,7 +289,7 @@ const Forms = (() => {
 
   return {
     info,
-    init
+    init,
   };
 
 });

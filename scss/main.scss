@@ -14,12 +14,22 @@
 :root {
 
   //////////////////////////////////////////////////////////
+  ////  Animate on Scroll (AOS)
+  //////////////////////////////////////////////////////////
+
+  --aos-travel: 12px;
+
+  //////////////////////////////////////////////////////////
   ////  Bootstrap
   //////////////////////////////////////////////////////////
+
 
   // ---------------------------------------- Gutter Width
   --bs-gutter-width: #{ $grid-gutter-width };
   --bs-gutter-x: #{ $grid-gutter-width };
+
+  // ---------------------------------------- Container Fluid Padding
+  --bs-container-fluid-padding: 28px;
 
   // ---------------------------------------- Container Breakpoints
   --bs-container-breakpoint--sm: #{ map-get( $grid-breakpoints, sm ) };
@@ -151,6 +161,7 @@
 @import './theme/blog.scss';
 @import './theme/body.scss';
 @import './theme/collection.scss';
+@import './theme/container.scss';
 @import './theme/fonts.scss';
 @import './theme/footer.scss';
 @import './theme/header.scss';

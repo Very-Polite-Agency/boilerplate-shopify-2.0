@@ -25,7 +25,7 @@
   {%- assign show_symbol = show_symbol | default: false -%}
   {%- assign symbol = shop.currency.symbol | default: '$' -%}
 
-  <div class="{{ snippet_classes }} with-currency-symbol{% endif %}">
+  <div class="{{ snippet_classes }}{% if show_symbol %} with-currency-symbol{% endif %}">
     <span class="{{ snippet_name }}__amount">
       {% if show_symbol %}<span class="{{ snippet_name }}__currency-symbol">{{- symbol -}}</span>{% endif %}
       {{- price | money_without_currency -}}

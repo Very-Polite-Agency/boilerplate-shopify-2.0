@@ -16,7 +16,7 @@
 {%- endcase -%}
 
 <div class="{{ section_name }}" id="{{ section_id }}">
-  {% render 'layout--container', state: 'open', col: columns %}
+  {% render 'bs-container', state: 'open', col: columns %}
     <div class="{{ section_name }}__content">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
@@ -55,7 +55,7 @@
         {%- endcase -%}
       {%- endfor -%}
     </div>
-  {% render 'layout--container', state: 'closed' %}
+  {% render 'bs-container', state: 'closed' %}
 </div>
 
 {% schema %}

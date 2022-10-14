@@ -15,12 +15,16 @@
 
 {% endcomment %}
 
-{% assign state = state | default: 'open' %}
-{% assign container = container | default: 'container' %}
-{% assign col = col | default: 'col-12' %}
+{%- liquid
+  assign state = state | default: 'open'
+  assign container = container | default: 'container'
+  assign col = col | default: 'col-12'
+-%}
 
-{%- if state == 'open' -%}
-  <div class="{{ container }}"><div class="row"><div class="{{ col }}">
-{%- else -%}
-  </div></div></div>
-{%- endif -%}
+{%- unless container == 'full-width' -%}
+  {%- if state == 'open' -%}
+    <div class="{{ container }}"><div class="row"><div class="{{ col }}">
+  {%- else -%}
+    </div></div></div>
+  {%- endif -%}
+{%- endunless -%}

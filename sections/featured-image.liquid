@@ -1,0 +1,345 @@
+{%- liquid
+
+  assign section_name = 'featured-image'
+  assign section_classes = section_name | append: ' section-' | append: section.id | append: '-padding'
+  assign section_id = section_name | append: '--' | append: section.id
+
+  assign aos_id = section_id | append: '--aos'
+  assign aos_delay = 250
+  assign aos_delay_increment = 250
+
+  assign background_colour = section.settings.background | default: 'white'
+  assign container = section.settings.container | default: 'container'
+  assign content_placement_horizontal = section.settings.content_placement_horizontal | default: ''
+  assign content_placement_vertical = section.settings.content_placement_vertical | default: ''
+  assign content_stack_mobile = section.settings.content_stack_mobile | default: false
+  assign image = section.settings.image | default: false
+  assign image_height_desktop = section.settings.image_height_desktop | default: 'adapt'
+  assign image_height_mobile = section.settings.image_height_mobile | default: 'adapt'
+
+  if section.settings.anchor_id != blank
+    assign section_id = section.settings.anchor_id
+  endif
+
+-%}
+
+{%- style -%}
+
+  {% if background_colour != blank %}
+    #shopify-section-{{ section.id }} {
+      background: rgba(var(--theme-colour-{{ background_colour }}), 1);
+      {% case background_colour %}
+        {% when 'white' %}
+          color: rgba(var(--theme-colour-black), 1);
+        {% else %}
+          color: rgba(var(--theme-colour-white), 1);
+      {% endcase %}
+    }
+  {% endif %}
+
+  .section-{{ section.id }}-padding {
+    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+  }
+
+  @media screen and (min-width: 992px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+{%- endstyle -%}
+
+<link rel="stylesheet" href="{{ 'section-featured-image.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'section-featured-image.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="{{ section_classes }}" id="{{ section_id }}">
+  {% render 'bs-container', state: 'open', col: 'col-12 col-lg-10 offset-lg-1', container: container %}
+    <div class="{{ section_name }}__layout" id="{{ aos_id }}">
+
+      {% if image %}
+        <div class="{{ section_name }}__media media media--mobile-{{ image_height_mobile }} media--desktop-{{ image_height_desktop }}">
+          {%
+            render 'lazyload-image',
+            classes: 'featured-image__image',
+            image: image,
+          %}
+        </div>
+      {% endif %}
+
+      <div class="{{ section_name }}__content content {% if content_stack_mobile %}content--stack-mobile{% endif %} content--x-{{ content_placement_horizontal }} content--y-{{ content_placement_vertical }}">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'heading' -%}
+
+              {% assign heading = block.settings.heading | default: '' %}
+              {% assign heading_size = block.settings.size | default: '1' %}
+              {% assign heading_style = block.settings.style | default: 'primary' %}
+
+              {% if heading != blank %}
+                <h{{ heading_size }} class="{{ section_name }}__heading heading--{{ heading_size }} heading--{{ heading_style }}">{{ heading | escape }}</h{{ heading_size }}>
+              {% endif %}
+
+            {%- when 'message' -%}
+
+              {% assign message = block.settings.message | default: '' %}
+
+              {% if message != blank %}
+                <div class="{{ section_name }}__message body-copy--1">{{ message }}</div>
+              {% endif %}
+
+            {%- when 'button' -%}
+
+              {% assign alignment = block.settings.alignment | default: 'left' %}
+              {% assign link = block.settings.link | default: '' %}
+              {% assign style = block.settings.style | default: 'primary' %}
+              {% assign style = style | prepend: 'button-' %}
+              {% assign title = block.settings.title | default: '' %}
+
+              {% if link != blank and title != blank %}
+                <div class="{{ section_name }}__button">
+                  {%
+                    render 'link',
+                    classes: 'featured-image__button-link',
+                    link: link,
+                    style: style,
+                    title: title
+                  %}
+                </div>
+              {% endif %}
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+
+    </div>
+  {% render 'bs-container', state: 'closed', container: container %}
+</div>
+
+{% schema %}
+{
+  "name": "Featured Image",
+  "tag": "section",
+  "class": "section section--featured-image",
+  "settings": [
+    {
+			"content": "Content",
+			"type": "header"
+		},
+    {
+			"content": "Media",
+			"type": "paragraph"
+		},
+    {
+      "label": "Image",
+      "type": "image_picker",
+      "id": "image"
+    },
+    {
+      "label": "Image Height (Desktop)",
+      "type": "select",
+      "options": [
+        { "label": "Adapt to image", "value": "adapt" },
+        { "label": "750px", "value": "750px" },
+        { "label": "650px", "value": "650px" },
+        { "label": "550px", "value": "550px" },
+        { "label": "450px", "value": "450px" }
+      ],
+      "default": "adapt",
+      "id": "image_height_desktop"
+    },
+    {
+      "label": "Image Height (Mobile)",
+      "type": "select",
+      "options": [
+        { "label": "Adapt to image", "value": "adapt" },
+        { "label": "650px", "value": "650px" },
+        { "label": "550px", "value": "550px" },
+        { "label": "450px", "value": "450px" },
+        { "label": "350px", "value": "350px" }
+      ],
+      "default": "adapt",
+      "id": "image_height_mobile"
+    },
+    {
+			"content": "Content",
+			"type": "paragraph"
+		},
+    {
+      "label": "Placement (Horizontal)",
+      "type": "select",
+      "options": [
+        { "label": "Left", "value": "left" },
+        { "label": "Center", "value": "center" },
+        { "label": "Right", "value": "right" }
+      ],
+      "default": "center",
+      "id": "content_placement_horizontal"
+    },
+    {
+      "label": "Placement (Vertical)",
+      "type": "select",
+      "options": [
+        { "label": "Top", "value": "top" },
+        { "label": "Center", "value": "center" },
+        { "label": "Bottom", "value": "bottom" }
+      ],
+      "default": "center",
+      "id": "content_placement_vertical"
+    },
+    {
+      "label": "Stack Content",
+      "info": "On mobile, stack content below image",
+      "type": "checkbox",
+      "default": false,
+      "id": "content_stack_mobile"
+    },
+    {
+      "content": "Settings",
+      "type": "header"
+    },
+    {
+		  "label": "Background",
+		  "type": "select",
+		  "options": [
+        { "label": "Black", "value": "black" },
+			  { "label": "White", "value": "white" }
+		  ],
+		  "default": "white",
+		  "id": "background"
+		},
+    {
+      "label": "Container",
+      "type": "select",
+      "options": [
+        { "label": "Static", "value": "container" },
+        { "label": "Fluid", "value": "container-fluid" },
+        { "label": "Full Width", "value": "full-width" }
+      ],
+      "default": "container",
+      "id": "container"
+    },
+		{
+			"label": "Top Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_top"
+		},
+		{
+			"label": "Bottom Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_bottom"
+		},
+    {
+			"content": "Anchor",
+			"type": "header"
+		},
+    {
+      "label": "Anchor ID",
+      "info": "Optionally include a unique ID so that sections within the page can be linked to. Anchor IDs must be all lowercase, unique and replaced empty spaces with hyphens. For example: my-great-section-anchor",
+      "type": "text",
+      "id": "anchor_id"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Heading",
+      "type": "heading",
+      "limit": 1,
+      "settings": [
+        {
+          "label": "Heading",
+          "type": "text",
+          "id": "heading"
+        },
+        {
+          "label": "Size",
+          "type": "select",
+          "options": [
+            { "label": "H1", "value": "1" },
+            { "label": "H2", "value": "2" },
+            { "label": "H3", "value": "3" }
+          ],
+          "default": "1",
+          "id": "size"
+        },
+        {
+          "label": "Style",
+          "type": "select",
+          "options": [
+            { "label": "Primary", "value": "primary" },
+            { "label": "Secondary", "value": "secondary" }
+          ],
+          "default": "primary",
+          "id": "style"
+        }
+      ]
+    },
+    {
+      "name": "Message",
+      "type": "message",
+      "limit": 1,
+      "settings": [
+        {
+          "label": "Message",
+          "type": "richtext",
+          "id": "message"
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "button",
+      "limit": 1,
+      "settings": [
+        {
+          "label": "Title",
+          "type": "text",
+          "id": "title"
+        },
+        {
+          "label": "Link",
+          "type": "url",
+          "id": "link"
+        },
+        {
+          "label": "Style",
+          "type": "select",
+          "options": [
+            { "label": "Primary", "value": "primary" },
+            { "label": "Secondary", "value": "secondary" }
+          ],
+          "default": "primary",
+          "id": "style"
+        },
+        {
+          "label": "Alignment",
+          "type": "select",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left",
+          "id": "alignment"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Image"
+    }
+  ]
+}
+{% endschema %}

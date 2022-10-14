@@ -1,19 +1,20 @@
 {% comment %}
 
     Accepts:
-    - collection: {Object} Collection Liquid object
+    - card_collection: {Object} Collection Liquid object
+    - classes: {String} Optionally include custom classes for snippet
     - style: {String} Optionally load different card types by passing style option
 
     Usage:
-    {% render 'card-collection', collection: collection, style: 'anything-but-default' %}
+    {% render 'card-collection', card_collection: collection, style: 'anything-but-default' %}
 
 {% endcomment %}
 
-{%- if collection and collection != blank -%}
+{%- if card_collection and card_collection != blank -%}
 
   {% assign snippet_name = 'card-collection' %}
   {% assign snippet_classes = snippet_name | append: ' collection' %}
-  {% assign snippet_id = snippet_name | append: '--' | append: article.id -%}
+  {% assign snippet_id = snippet_name | append: '--' | append: card_collection.id -%}
   {% assign style = style | default: 'not-set' %}
 
   {% if classes and classes != empty %}
@@ -24,11 +25,11 @@
   {% assign aos_delay = 250 %}
   {% assign aos_delay_increment = 250 %}
 
-  {% assign date_published = collection.published_at %}
-  {% assign desciption = collection.description | default: '' %}
-  {% assign image = collection.image | default: false %}
-  {% assign title = collection.title | default: '' %}
-  {% assign url = collection.url | default: '' %}
+  {% assign date_published = card_collection.published_at %}
+  {% assign desciption = card_collection.description | default: '' %}
+  {% assign image = card_collection.image | default: false %}
+  {% assign title = card_collection.title | default: '' %}
+  {% assign url = card_collection.url | default: '' %}
 
   <article class="{{ snippet_classes }}" id="{{ snippet_id }}" data-published-at="{{ date_published | date: "%Y-%m-%d %H:%M:%S" }}" data-style="{{ style }}">
     <div class="{{ snippet_classes }}__layout" id="{{ aos_id }}">

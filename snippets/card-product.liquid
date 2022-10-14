@@ -1,7 +1,8 @@
 {% comment %}
 
     Accepts:
-    - product: {Object} Product Liquid object
+    - card_product: {Object} Product Liquid object
+    - classes: {String} Optionally include custom classes for snippet
     - style: {String} Optionally load different card types by passing style option
 
     Usage:
@@ -9,11 +10,11 @@
 
 {% endcomment %}
 
-{%- if product and product != blank -%}
+{%- if card_product and card_product != blank -%}
 
   {% assign snippet_name = 'card-product' %}
   {% assign snippet_classes = snippet_name | append: ' product' %}
-  {% assign snippet_id = snippet_name | append: '--' | append: article.id -%}
+  {% assign snippet_id = snippet_name | append: '--' | append: card_product.id -%}
   {% assign style = style | default: 'not-set' %}
 
   {% if classes and classes != empty %}
@@ -24,15 +25,15 @@
   {% assign aos_delay = 250 %}
   {% assign aos_delay_increment = 250 %}
 
-  {% assign available = product.available | default: false %}
-  {% assign date_published = product.published_at %}
-  {% assign featured_image = product.featured_image | default: false %}
-  {% assign price = product.price %}
-  {% assign price_compare = product.compare_at_price %}
-  {% assign selected_variant = product.selected_or_first_available_variant | default: false %}
-  {% assign title = product.title | default: '' %}
-  {% assign type = product.type | default: '' %}
-  {% assign url = product.url | default: '' %}
+  {% assign available = card_product.available | default: false %}
+  {% assign date_published = card_product.published_at %}
+  {% assign featured_image = card_product.featured_image | default: false %}
+  {% assign price = card_product.price %}
+  {% assign price_compare = card_product.compare_at_price %}
+  {% assign selected_variant = card_product.selected_or_first_available_variant | default: false %}
+  {% assign title = card_product.title | default: '' %}
+  {% assign type = card_product.type | default: '' %}
+  {% assign url = card_product.url | default: '' %}
 
   <article class="{{ snippet_classes }}" id="{{ snippet_id }}" data-published-at="{{ date_published | date: "%Y-%m-%d %H:%M:%S" }}" data-style="{{ style }}" {% unless available %}data-unavailable{% endunless %}>
     <div class="{{ snippet_classes }}__layout" id="{{ aos_id }}">
@@ -50,7 +51,7 @@
             <strong class="{{ snippet_name }}__title">
               <a class="{{ snippet_name }}__title-link" href="{{ url }}" title="{{ title }}" target="_self">{{ title }}</a>
             </strong>
-            {% render 'price', product: product, show_symbol: true %}
+            {% render 'price', product: card_product, show_symbol: true %}
             {% render 'button-add-to-cart', button_title: 'Add to Bag', variant_id: selected_variant.id %}
           </div>
 

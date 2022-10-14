@@ -47,7 +47,7 @@
   		<meta name="robots" content="noindex, nofollow">
     {% endif %}
 
-    <script src="{{ 'vendors.min.js' | asset_url }}" async></script>
+    <script src="{{ 'vendors.min.js' | asset_url }}" defer="defer"></script>
     <link src="{{ 'main.css' | asset_url }}" rel="stylesheet">
 
     <script>
@@ -70,7 +70,7 @@
 
     {% section 'footer' %}
 
-    <script src="{{ 'main.min.js' | asset_url }}" defer></script>
+    <script src="{{ 'main.min.js' | asset_url }}" defer="defer"></script>
 
   </body>
 </html>

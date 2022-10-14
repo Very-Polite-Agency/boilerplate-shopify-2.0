@@ -1,14 +1,14 @@
 {% comment %}
 
-    Accepts:
-    - info: {Object} Liquid object
+  Use snippet like so...
 
-    Usage:
-    {% render 'debug-this', item: article %}
+  {% render 'debug-this', item: shopify_object %}
 
 {% endcomment %}
 
-{% assign item = item | default: 'item not set!' %}
-
-<script>console.log( {{ item | json }} );</script>
-
+<script>
+  console.log({
+    item: {{ item | json }},
+    item_type: typeof {{ item | json }},
+  });
+</script>

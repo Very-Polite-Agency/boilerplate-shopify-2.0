@@ -1,0 +1,149 @@
+{%- liquid
+
+  assign section_name = 'policy-terms-of-service'
+  assign section_id = section_name | append: '--' | append: section.id
+  assign section_key = 'terms_of_service'
+
+  assign aos_id = section_id | append: '--aos'
+  assign aos_delay = 250
+  assign aos_delay_increment = 250
+
+  assign background_colour = section.settings.background | default: 'white'
+  assign columns = 'col-12'
+  assign container = section.settings.container | default: 'container'
+  assign policy_content = shop[section_key].body | default: ''
+  assign policy_title = shop[section_key].title | default: ''
+  assign width =  section.settings.width | default: 'container'
+
+  case width
+    when 'compact'
+      assign columns = columns | append: ' col-lg-8 offset-lg-2'
+    when 'standard'
+      assign columns = columns | append: ' col-lg-10 offset-lg-1'
+  endcase
+
+  if section.settings.anchor_id != blank
+    assign section_id = section.settings.anchor_id
+  endif
+
+-%}
+
+{%- style -%}
+
+  {% if background_colour != blank %}
+    #shopify-section-{{ section.id }} {
+      background: rgba(var(--theme-colour-{{ background_colour }}), 1);
+      {% case background_colour %}
+        {% when 'white' %}
+          color: rgba(var(--theme-colour-black), 1);
+        {% else %}
+          color: rgba(var(--theme-colour-white), 1);
+      {% endcase %}
+    }
+  {% endif %}
+
+  .section-{{ section.id }}-padding {
+    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+  }
+
+  @media screen and (min-width: 992px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+{%- endstyle -%}
+
+<div class="{{ section_classes }}" id="{{ section_id }}">
+  {% render 'bs-container', state: 'open', col: columns, container: container %}
+    <div class="{{ section_name }}__layout" id="{{ aos_id }}">
+
+      <h1>{{ policy_title }}</h1>
+      <div>{{ policy_content }}</div>
+
+    </div>
+  {% render 'bs-container', state: 'closed', col: columns, container: container %}
+</div>
+
+{% schema %}
+  {
+    "name": "Terms of Service Policy",
+    "tag": "section",
+    "class": "section section--terms-of-service policy policy--terms-of-service",
+    "settings": [
+      {
+			  "content": "Content",
+			  "type": "header"
+		  },
+      {
+        "label": "Width",
+        "type": "select",
+        "options": [
+          { "label": "Full", "value": "full" },
+          { "label": "Standard", "value": "standard" },
+          { "label": "Compact", "value": "compact" }
+        ],
+        "default": "full",
+        "id": "width"
+      },
+      {
+        "content": "Settings",
+        "type": "header"
+      },
+      {
+		    "label": "Background",
+		    "type": "select",
+		    "options": [
+          { "label": "Black", "value": "black" },
+			    { "label": "White", "value": "white" }
+		    ],
+		    "default": "white",
+		    "id": "background"
+		  },
+      {
+        "label": "Container",
+        "type": "select",
+        "options": [
+          { "label": "Static", "value": "container" },
+          { "label": "Fluid", "value": "container-fluid" },
+          { "label": "Full Width", "value": "full-width" }
+        ],
+        "default": "container",
+        "id": "container"
+      },
+		  {
+			  "label": "Top Padding",
+			  "type": "range",
+			  "min": 0,
+			  "max": 120,
+			  "step": 4,
+			  "unit": "px",
+			  "default": 36,
+        "id": "padding_top"
+		  },
+		  {
+			  "label": "Bottom Padding",
+			  "type": "range",
+			  "min": 0,
+			  "max": 120,
+			  "step": 4,
+			  "unit": "px",
+			  "default": 36,
+        "id": "padding_bottom"
+		  },
+      {
+			  "content": "Anchor",
+			  "type": "header"
+		  },
+      {
+        "label": "Anchor ID",
+        "info": "Optionally include a unique ID so that sections within the page can be linked to. Anchor IDs must be all lowercase, unique and replaced empty spaces with hyphens. For example: my-great-section-anchor",
+        "type": "text",
+        "id": "anchor_id"
+      }
+    ],
+	  "blocks": []
+  }
+{% endschema %}

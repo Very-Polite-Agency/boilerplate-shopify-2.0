@@ -1,92 +1,204 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
-{{ 'section-collection-list.css' | asset_url | stylesheet_tag }}
+{%- liquid
 
-<div class="page-width">
-  <h1 class="title title--primary">{{ section.settings.title | escape }}</h1>
-  {%- liquid
-    case section.settings.sort
-      when 'products_high' or 'products_low'
-        assign collections = collections | sort: 'all_products_count'
-      when 'date' or 'date_reversed'
-        assign collections = collections | sort: 'published_at'
-    endcase
+  assign section_name = 'list-collections'
+  assign section_id = section_name | append: '--' | append: section.id
+  assign section_classes = section_name
 
-    if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
-      assign collections = collections | reverse
-    endif
-  -%}
-  <ul class="collection-list grid grid--1-col grid--3-col-tablet" role="list">
-    {%- for collection in collections -%}
-      <li class="collection-list__item grid__item">
-        {% render 'card-collection', card_collection: collection, media_aspect_ratio: section.settings.image_ratio, columns: 3 %}
-      </li>
-    {%- endfor -%}
-  </ul>
+  assign aos_id = section_id | append: '--aos'
+  assign aos_delay = 250
+  assign aos_delay_increment = 250
+
+  assign background_colour = section.settings.background | default: 'white'
+  assign container = section.settings.container | default: 'container'
+  assign grid_gutter = section.settings.grid_gutter | default: 20
+  assign grid_layout = section.settings.grid_layout | default: '2'
+  assign title = section.settings.title | default: 'Collections'
+
+  if section.settings.anchor_id != blank
+    assign section_id = section.settings.anchor_id
+  endif
+
+  case section.settings.sort
+    when 'products_high' or 'products_low'
+      assign collections = collections | sort: 'all_products_count'
+    when 'date' or 'date_reversed'
+      assign collections = collections | sort: 'published_at'
+  endcase
+
+  if section.settings.sort == 'products_high' or section.settings.sort == 'date_reversed' or section.settings.sort == 'alphabetical_reversed'
+    assign collections = collections | reverse
+  endif
+
+-%}
+
+{%- style -%}
+
+  {% if background_colour != blank %}
+    #shopify-section-{{ section.id }} {
+      background: rgba(var(--theme-colour-{{ background_colour }}), 1);
+      {% case background_colour %}
+        {% when 'white' %}
+          color: rgba(var(--theme-colour-black), 1);
+        {% else %}
+          color: rgba(var(--theme-colour-white), 1);
+      {% endcase %}
+    }
+  {% endif %}
+
+  .section-{{ section.id }}-padding {
+    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+  }
+
+  @media screen and (min-width: 992px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+{%- endstyle -%}
+
+<div class="{{ section_classes }}" id="{{ section_id }}">
+  {% render 'bs-container', state: 'open', col: 'col-12 col-lg-10 offset-lg-1', container: container %}
+
+    <h1 class="{{ section_name }}__heading heading--1">{{ title | escape }}</h1>
+
+    <div class="{{ section_name }}__list grid grid--{{ grid_layout }}" id="{{ aos_id }}" data-grid-gutter="{{ grid_gutter }}" role="list">
+      {%- for item in collections -%}
+        <div class="{{ section_name }}__item grid__item" data-index="{{ forloop.index }}">
+          {% render 'card-collection', card_collection: item %}
+        </div>
+      {%- endfor -%}
+    </div>
+
+ {% render 'bs-container', state: 'closed', container: container %}
 </div>
+
 
 {% schema %}
 {
-  "name": "t:sections.main-list-collections.name",
-  "class": "section",
+  "name": "List Collections",
+  "tag": "section",
+  "class": "section section--list-collections",
   "settings": [
     {
+			"content": "Content",
+			"type": "header"
+		},
+    {
+      "label": "Title",
       "type": "text",
-      "id": "title",
-      "label": "t:sections.main-list-collections.settings.title.label",
-      "default": "Collections"
+      "default": "Collections",
+      "id": "title"
     },
     {
+      "label": "Sort",
       "type": "select",
-      "id": "sort",
       "options": [
         {
-          "value": "alphabetical",
-          "label": "t:sections.main-list-collections.settings.sort.options__1.label"
+          "label": "Alphabetically, A-Z",
+          "value": "alphabetical"
         },
         {
-          "value": "alphabetical_reversed",
-          "label": "t:sections.main-list-collections.settings.sort.options__2.label"
+          "label": "Alphabetically, Z-A",
+          "value": "alphabetical_reversed"
         },
         {
-          "value": "date_reversed",
-          "label": "t:sections.main-list-collections.settings.sort.options__3.label"
+          "label": "Date, new to old",
+          "value": "date_reversed"
         },
         {
-          "value": "date",
-          "label": "t:sections.main-list-collections.settings.sort.options__4.label"
+          "label": "Date, old to new",
+          "value": "date"
         },
         {
-          "value": "products_high",
-          "label": "t:sections.main-list-collections.settings.sort.options__5.label"
+          "label": "Product count, high to low",
+          "value": "products_high"
         },
         {
-          "value": "products_low",
-          "label": "t:sections.main-list-collections.settings.sort.options__6.label"
+          "label": "Product count, low to high",
+          "value": "products_low"
         }
       ],
       "default": "alphabetical",
-      "label": "t:sections.main-list-collections.settings.sort.label"
+      "id": "sort"
     },
     {
+      "label": "Grid Layout",
       "type": "select",
-      "id": "image_ratio",
       "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.main-list-collections.settings.image_ratio.options__1.label"
-        },
-        {
-          "value": "portrait",
-          "label": "t:sections.main-list-collections.settings.image_ratio.options__2.label"
-        },
-        {
-          "value": "square",
-          "label": "t:sections.main-list-collections.settings.image_ratio.options__3.label"
-        }
+        { "label": "Two Column", "value": "2" },
+        { "label": "Three Column", "value": "3" }
       ],
-      "default": "adapt",
-      "label": "t:sections.main-list-collections.settings.image_ratio.label",
-      "info": "t:sections.main-list-collections.settings.image_ratio.info"
+      "default": "2",
+      "id": "grid_layout"
+    },
+    {
+      "label": "Grid Gutter",
+      "type": "range",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "default": 20,
+      "id": "grid_gutter"
+    },
+    {
+      "content": "Settings",
+      "type": "header"
+    },
+    {
+		  "label": "Background",
+		  "type": "select",
+		  "options": [
+        { "label": "Black", "value": "black" },
+        { "label": "Silver", "value": "silver" },
+        { "label": "Light Silver", "value": "light-silver" },
+			  { "label": "White", "value": "white" }
+		  ],
+		  "default": "white",
+		  "id": "background"
+		},
+    {
+      "label": "Container",
+      "type": "select",
+      "options": [
+        { "label": "Static", "value": "container" },
+        { "label": "Fluid", "value": "container-fluid" },
+        { "label": "Full Width", "value": "full-width" }
+      ],
+      "default": "container",
+      "id": "container"
+    },
+		{
+			"label": "Top Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_top"
+		},
+		{
+			"label": "Bottom Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_bottom"
+		},
+    {
+			"content": "Anchor",
+			"type": "header"
+		},
+    {
+      "label": "Anchor ID",
+      "info": "Optionally include a unique ID so that sections within the page can be linked to. Anchor IDs must be all lowercase, unique and replaced empty spaces with hyphens. For example: my-great-section-anchor",
+      "type": "text",
+      "id": "anchor_id"
     }
   ]
 }

@@ -1,0 +1,276 @@
+{%- liquid
+
+  assign section_name = 'featured-text'
+  assign section_classes = section_name | append: ' section-' | append: section.id | append: '-padding'
+  assign section_id = section_name | append: '--' | append: section.id
+
+  assign aos_id = section_id | append: '--aos'
+  assign aos_delay = 250
+  assign aos_delay_increment = 250
+
+  assign background_colour = section.settings.background | default: 'white'
+  assign columns = 'col-12'
+  assign container = section.settings.container | default: 'container'
+  assign width =  section.settings.width | default: 'container'
+
+  case width
+    when 'compact'
+      assign columns = columns | append: ' col-lg-8 offset-lg-2'
+    when 'standard'
+      assign columns = columns | append: ' col-lg-10 offset-lg-1'
+  endcase
+
+  if section.settings.anchor_id != blank
+    assign section_id = section.settings.anchor_id
+  endif
+
+-%}
+
+{%- style -%}
+
+  {% if background_colour != blank %}
+    #shopify-section-{{ section.id }} {
+      background: rgba(var(--theme-colour-{{ background_colour }}), 1);
+      {% case background_colour %}
+        {% when 'white' %}
+          color: rgba(var(--theme-colour-black), 1);
+        {% else %}
+          color: rgba(var(--theme-colour-white), 1);
+      {% endcase %}
+    }
+  {% endif %}
+
+  .section-{{ section.id }}-padding {
+    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+  }
+
+  @media screen and (min-width: 992px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+{%- endstyle -%}
+
+<link rel="stylesheet" href="{{ 'section-featured-text.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript>{{ 'section-featured-text.css' | asset_url | stylesheet_tag }}</noscript>
+
+<div class="{{ section_classes }}" id="{{ section_id }}">
+  {% render 'bs-container', state: 'open', col: columns, container: container %}
+    <div class="{{ section_name }}__layout" id="{{ aos_id }}">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+
+            {% assign heading = block.settings.heading | default: '' %}
+            {% assign heading_size = block.settings.size | default: '1' %}
+            {% assign heading_style = block.settings.style | default: 'primary' %}
+
+            {% if heading != blank %}
+              <h{{ heading_size }} class="{{ section_name }}__heading heading--{{ heading_size }} heading--{{ heading_style }}">{{ heading | escape }}</h{{ heading_size }}>
+            {% endif %}
+
+          {%- when 'message' -%}
+
+            {% assign message = block.settings.message | default: '' %}
+
+            {% if message != blank %}
+              <div class="{{ section_name }}__message body-copy--1">{{ message }}</div>
+            {% endif %}
+
+          {%- when 'button' -%}
+
+            {% assign alignment = block.settings.alignment | default: 'left' %}
+            {% assign link = block.settings.link | default: '' %}
+            {% assign style = block.settings.style | default: 'primary' %}
+            {% assign title = block.settings.title | default: '' %}
+
+            {% if link != blank and title != blank %}
+              <div class="{{ section_name }}__cta" data-alignment="{{ alignment }}">
+                {%
+                  render 'link',
+                  classes: 'featured-text__cta-link',
+                  link: link,
+                  style: style,
+                  title: title
+                %}
+              </div>
+            {% endif %}
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  {% render 'bs-container', state: 'closed', col: columns, container: container %}
+</div>
+
+{% schema %}
+{
+  "name": "Featured Text",
+  "tag": "section",
+  "class": "section section--featured-text",
+  "settings": [
+    {
+			"content": "Content",
+			"type": "header"
+		},
+    {
+      "label": "Width",
+      "type": "select",
+      "options": [
+        { "label": "Full", "value": "full" },
+        { "label": "Standard", "value": "standard" },
+        { "label": "Compact", "value": "compact" }
+      ],
+      "default": "full",
+      "id": "width"
+    },
+    {
+      "content": "Settings",
+      "type": "header"
+    },
+    {
+		  "label": "Background",
+		  "type": "select",
+		  "options": [
+        { "label": "Black", "value": "black" },
+			  { "label": "White", "value": "white" }
+		  ],
+		  "default": "white",
+		  "id": "background"
+		},
+    {
+      "label": "Container",
+      "type": "select",
+      "options": [
+        { "label": "Static", "value": "container" },
+        { "label": "Fluid", "value": "container-fluid" },
+        { "label": "Full Width", "value": "full-width" }
+      ],
+      "default": "container",
+      "id": "container"
+    },
+		{
+			"label": "Top Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_top"
+		},
+		{
+			"label": "Bottom Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_bottom"
+		},
+    {
+			"content": "Anchor",
+			"type": "header"
+		},
+    {
+      "label": "Anchor ID",
+      "info": "Optionally include a unique ID so that sections within the page can be linked to. Anchor IDs must be all lowercase, unique and replaced empty spaces with hyphens. For example: my-great-section-anchor",
+      "type": "text",
+      "id": "anchor_id"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Heading",
+      "type": "heading",
+      "limit": 1,
+      "settings": [
+        {
+          "label": "Heading",
+          "type": "text",
+          "id": "heading"
+        },
+        {
+          "label": "Size",
+          "type": "select",
+          "options": [
+            { "label": "H1", "value": "1" },
+            { "label": "H2", "value": "2" },
+            { "label": "H3", "value": "3" }
+          ],
+          "default": "1",
+          "id": "size"
+        },
+        {
+          "label": "Style",
+          "type": "select",
+          "options": [
+            { "label": "Primary", "value": "primary" },
+            { "label": "Secondary", "value": "secondary" }
+          ],
+          "default": "primary",
+          "id": "style"
+        }
+      ]
+    },
+    {
+      "name": "Message",
+      "type": "message",
+      "limit": 1,
+      "settings": [
+        {
+          "label": "Message",
+          "type": "richtext",
+          "id": "message"
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "type": "button",
+      "limit": 1,
+      "settings": [
+        {
+          "label": "Title",
+          "type": "text",
+          "id": "title"
+        },
+        {
+          "label": "Link",
+          "type": "url",
+          "id": "link"
+        },
+        {
+          "label": "Style",
+          "type": "select",
+          "options": [
+            { "label": "Primary", "value": "primary" },
+            { "label": "Secondary", "value": "secondary" }
+          ],
+          "default": "primary",
+          "id": "style"
+        },
+        {
+          "label": "Alignment",
+          "type": "select",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left",
+          "id": "alignment"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Text"
+    }
+  ]
+}
+{% endschema %}

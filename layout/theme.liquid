@@ -47,7 +47,7 @@
   		<meta name="robots" content="noindex, nofollow">
     {% endif %}
 
-    <script src="{{ 'vendors.min.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'vendors.min.js' | asset_url }}" defer></script>
     <link src="{{ 'main.css' | asset_url }}" rel="stylesheet">
 
     <script>
@@ -61,16 +61,59 @@
 
   <body class="{% render 'theme--classes' %}">
 
-    {% section 'announcements' %}
     {% section 'header' %}
 
     <main class="{% render 'theme--classes' %} content-for-layout focus-none" role="main" tabindex="-1">
-      {{ content_for_layout }}
+      {% case request.path %}
+        {% when '/policies/privacy-policy' %}
+          {% section 'policy-privacy' %}
+        {% when '/policies/refund-policy' %}
+          {% section 'policy-refund' %}
+        {% when '/policies/shipping-policy' %}
+          {% section 'policy-shipping' %}
+        {% when '/policies/subscription-policy' %}
+          {% section 'policy-subscription' %}
+        {% when '/policies/terms-of-service' %}
+          {% section 'policy-terms-of-service' %}
+        {% else %}
+          {{ content_for_layout }}
+      {% endcase %}
     </main>
 
     {% section 'footer' %}
+    {% section 'popup' %}
+    {% section 'cookie-banner' %}
+    {% section 'notification-cart' %}
 
-    <script src="{{ 'main.min.js' | asset_url }}" defer="defer"></script>
+    <script>
+      var Theme = Theme || {};
+      Theme.cart = {{ cart | json }};
+      Theme.collection = {{ collection | json }} || {};
+      Theme.currency = {{ shop.currency | json }};
+      Theme.customer = {{ customer | json }} || {};
+      Theme.moneyFormat = {{ shop.money_format | json }};
+      Theme.orders = [];
+      Theme.product = {{ product | json }} || {};
+      Theme.routes = {
+        root_url: '{{ routes.root_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      };
+      Theme.tools = {
+        imgURLFilter: function(src, size) {
+          return src
+            .replace(/_(pico|icon|thumb|small|compact|medium|large|grande|original|1024x1024|2048x2048|master)+\./g, '.')
+            .replace(/\.jpg|\.png|\.gif|\.jpeg/g, function(match) {
+              return '_'+size+match;
+            });
+        }
+      };
+    </script>
+
+    <script src="{{ 'main.min.js' | asset_url }}" defer></script>
 
   </body>
 </html>

@@ -1,6 +1,7 @@
 {%- liquid
 
   assign section_name = 'policy-subscription'
+  assign section_classes = section_name | append: ' section-' | append: section.id | append: '-padding'
   assign section_id = section_name | append: '--' | append: section.id
   assign section_key = 'subscription_policy'
 

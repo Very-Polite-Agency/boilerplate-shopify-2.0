@@ -8,7 +8,15 @@
   assign aos_delay = 250
   assign aos_delay_increment = 250
 
+  assign columns = 'col-12'
   assign container = section.settings.container | default: 'container'
+
+  case section.settings.width
+    when "compact"
+      assign columns = columns | append: ' col-lg-8 offset-lg-2'
+    when "standard"
+      assign columns = columns | append: ' col-lg-10 offset-lg-1'
+  endcase
 
   if section.settings.anchor_id != blank
     assign section_id = section.settings.anchor_id
@@ -29,7 +37,7 @@
 
 <div class="{{ section_classes }}" id="{{ section_id }}">
   {% render 'bs-container', state: 'open', col: columns, container: container %}
-    <div class="{{ section_name }}__layout" id="{{ aos_id }}">
+    <div class="{{ section_name }}__main" id="{{ aos_id }}">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when 'heading' -%}
@@ -90,7 +98,8 @@
       "type": "select",
       "options": [
         { "label": "Full", "value": "full" },
-        { "label": "Inset", "value": "inset" }
+        { "label": "Standard", "value": "standard" },
+        { "label": "Compact", "value": "compact" }
       ],
       "default": "full",
       "id": "width"

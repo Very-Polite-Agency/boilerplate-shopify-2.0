@@ -1,61 +1,27 @@
-//////////////////////////////////////////////////////////
-////  Lazy Loader | Vars
-//////////////////////////////////////////////////////////
+.lazyload {
 
-//////////////////////////////////////////////////////////
-////  Lazy Loader | Styles
-//////////////////////////////////////////////////////////
+  $count: 25;
 
-.lazyload-item {
+  &-item {
 
-  transition-property: opacity;
-	opacity: 0;
-	display: block;
+    display: block;
+    transition-property: opacity;
+    opacity: 0;
 
-	&--inline {
-  	height: auto;
-  	width: 100%;
-	}
-
-  &--background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    &.lazyload-item--image {
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-    &.lazyload-item--video {
-      object-position: center center;
-      object-fit: cover;
-    }
-  }
-
-  &--image {}
-
-  &--video {}
-
-	&.lazyloaded {
-    opacity: 1;
-	}
-
-	$base: 50;
-	$step: 50;
-  @while $base < 4000 {
-
-    &[data-transition-duration='#{$base}'] {
-      transition-duration: $base * 1ms
+    &.lazyloaded {
+      opacity: 1;
     }
 
-    &[data-transition-delay='#{$base}'] {
-      transition-delay: $base * 1ms
+    @while $count < 3500 {
+      &[data-transition-duration="#{$count}"] {
+        transition-duration: $count + ms;
+      }
+      &[data-transition-delay="#{$count}"] {
+        transition-delay: $count + ms;
+      }
+      $count: $count + 25;
     }
-
-    $base: $base + $step;
 
   }
 
-} // .lazyload-item
+}

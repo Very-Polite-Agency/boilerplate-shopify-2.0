@@ -1,4 +1,21 @@
+@use '../utils/mixins/heading' as *;
+
 .heading {
-  margin: 0;
-  padding: 0;
+
+  &--1 {
+    @include heading(1);
+  }
+
+  &--2 {
+    @include heading(2);
+  }
+
+  &--3 {
+    @include heading(3);
+  }
+
+  &--page-title {
+    @include heading(1);
+  }
+
 }

@@ -1,0 +1,65 @@
+@use "general" as *;
+
+@mixin heading($style:1) {
+
+  font-family: 'Sorry Sans', sans-serif;
+  display: block;
+  font-style: normal;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  text-transform: none;
+
+  // ---------------------------------------- Primary / 1
+  @if $style == 1 {
+
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1.05;
+
+    @include breakpoint(sm) {
+      font-size: 32px;
+    }
+
+    @include breakpoint(md) {
+      font-size: 40px;
+    }
+
+    @include breakpoint(lg) {
+      font-size: 21px;
+    }
+
+    @include breakpoint(xl) {
+      font-size: 25px;
+    }
+
+    @include breakpoint(xxl) {
+      font-size: 28px;
+    }
+
+  }
+
+  // ---------------------------------------- Secondary / 2
+  @if $style == 2 {
+
+    font-family: 'PP Neue Montreal Bold', sans-serif;
+    font-size: 35px;
+    line-height: 1.1;
+    font-weight: 400;
+    letter-spacing: -.02em;
+
+    @include breakpoint(md) {
+      font-size: 34px;
+    }
+
+    @include breakpoint(lg) {
+      font-size: 40px;
+    }
+
+    @include breakpoint(xl) {
+      font-size: 50px;
+    }
+
+  }
+
+}

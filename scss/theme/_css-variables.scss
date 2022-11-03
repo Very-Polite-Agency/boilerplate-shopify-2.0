@@ -1,36 +1,5 @@
-// If you want to include a CSS file from NPM, when you import the file, omit the '.css' portion of the file path
-
-//////////////////////////////////////////////////////////
-////  SCSS Modules
-//////////////////////////////////////////////////////////
-
-@use "sass:color";
-@use "sass:math";
-@use "sass:map";
-
-@import 'bourbon';
-
-//////////////////////////////////////////////////////////
-////  Variables
-//////////////////////////////////////////////////////////
-
-@import './variables.scss';
-
-//////////////////////////////////////////////////////////
-////  Functions
-//////////////////////////////////////////////////////////
-
-@import './functions/general.scss';
-
-//////////////////////////////////////////////////////////
-////  Mixins
-//////////////////////////////////////////////////////////
-
-@import './mixins/general.scss';
-
-//////////////////////////////////////////////////////////
-////  CSS Variables
-//////////////////////////////////////////////////////////
+@use "../utils/variables" as *;
+@use "../utils/functions/general" as *;
 
 :root {
 
@@ -107,7 +76,10 @@
 
   // ---------------------------------------- Colours
   --theme-colour-black: #{ hexToRGB( map-get( $theme-colours, 'black' ) ) };
+  --theme-colour-blue: #{ hexToRGB( map-get( $theme-colours, 'blue' ) ) };
+  --theme-colour-red: #{ hexToRGB( map-get( $theme-colours, 'red' ) ) };
   --theme-colour-white: #{ hexToRGB( map-get( $theme-colours, 'white' ) ) };
+  --theme-colour-yellow: #{ hexToRGB( map-get( $theme-colours, 'yellow' ) ) };
 
   // ---------------------------------------- Container
   --theme-container--sm: #{ map-get( $container-max-widths, 'sm' ) };
@@ -132,58 +104,13 @@
   --theme-font-family--sans-serif--primary: rustica, sans-serif;
   --theme-font-family--serif--primary: serif;
 
+  // ---------------------------------------- Radio
+  --theme-radio-size: 42px;
+  --theme-radio-size--lg: 52px;
+  --theme-radio-size--xxl: 62px;
+
   // ---------------------------------------- Transitions
   --theme-transition-duration: 280ms;
   --theme-transition-opacity: 0.3333;
 
 }
-
-//////////////////////////////////////////////////////////
-////  Vendors
-//////////////////////////////////////////////////////////
-
-@import '../node_modules/bootstrap/scss/bootstrap';
-@import '../node_modules/@glidejs/glide/dist/css/glide.core.min';
-// @import '../node_modules/hamburgers/_sass/hamburgers/hamburgers.scss';
-@import '../node_modules/aos/dist/aos';
-
-//////////////////////////////////////////////////////////
-////  Component
-//////////////////////////////////////////////////////////
-
-@import './components/body-copy.scss';
-@import './components/button.scss';
-@import './components/card.scss';
-@import './components/collapsible.scss';
-@import './components/field.scss';
-@import './components/fifty-fifty-feature.scss';
-@import './components/form.scss';
-@import './components/full-width-feature.scss';
-@import './components/glide.scss';
-@import './components/heading.scss';
-@import './components/input.scss';
-@import './components/label.scss';
-@import './components/lazyload.scss';
-@import './components/link.scss';
-@import './components/navigation.scss';
-@import './components/pagination.scss';
-@import './components/section.scss';
-@import './components/select.scss';
-@import './components/textarea.scss';
-@import './components/title.scss';
-
-//////////////////////////////////////////////////////////
-////  Theme
-//////////////////////////////////////////////////////////
-
-@import './theme/404.scss';
-@import './theme/article.scss';
-@import './theme/blog.scss';
-@import './theme/body.scss';
-@import './theme/collection.scss';
-@import './theme/container.scss';
-@import './theme/fonts.scss';
-@import './theme/footer.scss';
-@import './theme/header.scss';
-@import './theme/page.scss';
-@import './theme/product.scss';

@@ -1,27 +1,24 @@
-{% comment %}
+{%- liquid
 
+  comment
     Accepts:
     - col: {String} Optionally set column sizes using Bootstrap's column system
     - container: {String} Optionally set container to fluid using Bootstrap's container system
     - state: {String} Declare container state, whether it's open or closed
-
     Usage:
-    {%
       render 'bs-container',
       state: 'open',
       col: 'col-12 col-lg-8 offset-lg-2',
       container: 'container-fluid'
-    %}
+  endcomment
 
-{% endcomment %}
-
-{%- liquid
   assign state = state | default: 'open'
   assign container = container | default: 'container'
   assign col = col | default: 'col-12'
+
 -%}
 
-{%- unless container == 'full-width' -%}
+{%- unless 'full-width' == container -%}
   {%- if state == 'open' -%}
     <div class="{{ container }}"><div class="row"><div class="{{ col }}">
   {%- else -%}

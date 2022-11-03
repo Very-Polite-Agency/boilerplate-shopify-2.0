@@ -1,0 +1,42 @@
+@mixin colour-theme($style:'yellow') {
+
+  @if $style == 'blue' {
+    background: rgba(var(--theme-colour-blue), 1);
+    color: rgba(var(--theme-colour-white), 1);
+  }
+
+  @if $style == 'blue-hover' {
+    &:focus,
+    &:hover {
+      background: rgba(var(--theme-colour-black), 1);
+      color: rgba(var(--theme-colour-white), 1);
+    }
+  }
+
+  @if $style == 'red' {
+    background: rgba(var(--theme-colour-red), 1);
+    color: rgba(var(--theme-colour-white), 1);
+  }
+
+  @if $style == 'red-hover' {
+    &:focus,
+    &:hover {
+      background: rgba(var(--theme-colour-black), 1);
+      color: rgba(var(--theme-colour-white), 1);
+    }
+  }
+
+  @if $style == 'yellow' {
+    background: rgba(var(--theme-colour-yellow), 1);
+    color: rgba(var(--theme-colour-black), 1);
+  }
+
+  @if $style == 'yellow-hover' {
+    &:focus,
+    &:hover {
+      background: rgba(var(--theme-colour-black), 1);
+      color: rgba(var(--theme-colour-white), 1);
+    }
+  }
+
+}

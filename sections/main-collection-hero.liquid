@@ -1,0 +1,156 @@
+{%- liquid
+
+  assign section_name = 'collection-hero'
+  assign section_classes = section_name | append: ' section-' | append: section.id | append: '-padding'
+  assign section_id = section_name | append: '--' | append: section.id
+
+  assign aos_id = section_id | append: '--aos'
+  assign aos_delay = 250
+  assign aos_delay_increment = 250
+
+  assign container = section.settings.container | default: 'container'
+  assign description = collection.description | default: ''
+  assign featured_image = collection.featured_image | default: false
+  assign featured_image_show = section.settings.show_featured_image | default: false
+  assign image_height_desktop = section.settings.image_height_desktop | default: 'adapt'
+  assign image_height_mobile = section.settings.image_height_mobile | default: 'adapt'
+  assign grid_gutter = section.settings.grid_gutter | default: 20
+  assign grid_layout = section.settings.grid_layout | default: 'two-column'
+  assign title = collection.title | default: ''
+
+  if section.settings.anchor_id != blank
+    assign section_id = section.settings.anchor_id
+  endif
+
+-%}
+
+{%
+  render 'section-styles',
+  background: section.settings.background,
+  id: section.id,
+  padding_bottom: section.settings.padding_bottom
+  padding_top: section.settings.padding_top,
+%}
+
+<div class="{{ section_classes }}" id="{{ section_id }}">
+  {% render 'bs-container', state: 'open', col: 'col-12 col-lg-10 offset-lg-1', container: container %}
+    <div class="{{ section_name }}__main">
+      <div class="{{ section_name }}__content">
+        <h1 class="{{ section_name }}__heading heading--page-title">{{ title }}</h1>
+      </div>
+      {% if featured_image and featured_image_show %}
+        <div class="{{ section_name }}__media media media--mobile-{{ image_height_mobile }} media--desktop-{{ image_height_desktop }}">
+          {% render 'lazyload-image', image: featured_image %}
+        </div>
+      {% endif %}
+    </div>
+  {% render 'bs-container', state: 'closed' %}
+</div>
+
+{% schema %}
+{
+  "name": "Collection Hero",
+  "tag": "section",
+  "class": "section section--collection-hero",
+  "templates": [ "collection" ],
+  "settings": [
+    {
+			"content": "Media",
+			"type": "header"
+		},
+    {
+      "label": "Show Featured Image",
+			"type": "checkbox",
+      "default": true,
+      "id": "show_featured_image"
+		},
+     {
+      "label": "Image Height (Desktop)",
+      "type": "select",
+      "options": [
+        { "label": "Adapt to image", "value": "adapt" },
+        { "label": "950px", "value": "950px" },
+        { "label": "850px", "value": "850px" },
+        { "label": "750px", "value": "750px" },
+        { "label": "650px", "value": "650px" },
+        { "label": "550px", "value": "550px" },
+        { "label": "450px", "value": "450px" }
+      ],
+      "default": "adapt",
+      "id": "image_height_desktop"
+    },
+    {
+      "label": "Image Height (Mobile)",
+      "type": "select",
+      "options": [
+        { "label": "Adapt to image", "value": "adapt" },
+        { "label": "650px", "value": "650px" },
+        { "label": "550px", "value": "550px" },
+        { "label": "450px", "value": "450px" },
+        { "label": "350px", "value": "350px" }
+      ],
+      "default": "adapt",
+      "id": "image_height_mobile"
+    },
+    {
+			"content": "Layout",
+			"type": "header"
+		},
+    {
+		  "label": "Background",
+		  "type": "select",
+		  "options": [
+        { "label": "Black", "value": "black" },
+			  { "label": "White", "value": "white" }
+		  ],
+		  "default": "white",
+		  "id": "background"
+		},
+    {
+      "label": "Container",
+      "type": "select",
+      "options": [
+        { "label": "Static", "value": "container" },
+        { "label": "Fluid", "value": "container-fluid" },
+        { "label": "Full Width", "value": "full-width" }
+      ],
+      "default": "container",
+      "id": "container"
+    },
+    {
+			"content": "Padding",
+			"type": "header"
+		},
+		{
+			"label": "Top Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_top"
+		},
+		{
+			"label": "Bottom Padding",
+			"type": "range",
+			"min": 0,
+			"max": 120,
+			"step": 4,
+			"unit": "px",
+			"default": 36,
+      "id": "padding_bottom"
+		},
+    {
+			"content": "Anchor",
+			"type": "header"
+		},
+    {
+      "label": "Anchor ID",
+      "info": "Optionally include a unique ID so that sections within the page can be linked to. Anchor IDs must be all lowercase, unique and replaced empty spaces with hyphens. For example: my-great-section-anchor",
+      "type": "text",
+      "id": "anchor_id"
+    }
+  ]
+}
+{% endschema %}

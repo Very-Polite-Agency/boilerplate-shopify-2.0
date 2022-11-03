@@ -1,14 +1,24 @@
-{% comment %}
+{%- liquid
 
-  Use snippet like so...
+  comment
+    Accepts:
+    - item: {Anything} Liquid object or anything
+    - message: {String} Optionally include a message to be logged
+    Usage:
+      render 'debug-this',
+      item: article_object,
+      message: 'Debugging Article'
+  endcomment
 
-  {% render 'debug-this', item: shopify_object %}
+  assign item = item | default: 'Item not set!'
+  assign message = message | default: 'No Message'
 
-{% endcomment %}
+-%}
 
 <script>
   console.log({
+    message: {{ message }},
     item: {{ item | json }},
-    item_type: typeof {{ item | json }},
+    type: typeof {{ item | json }}
   });
 </script>

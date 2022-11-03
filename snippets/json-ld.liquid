@@ -1,4 +1,16 @@
+{%- liquid
+
+    comment
+      Accepts:
+        - type: {String} assign type of JSON/LD content
+    endcomment
+
+    assign type = type | default: 'product'
+
+  -%}
+
 <script type="application/ld+json">
+
   {% case type %}
     {% when 'article' %}
       {%- if article and article != empty -%}
@@ -88,4 +100,5 @@
         }
       {% endif %}
   {% endcase %}
+
 </script>

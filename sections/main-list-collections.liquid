@@ -1,17 +1,16 @@
 {%- liquid
 
   assign section_name = 'list-collections'
+  assign section_classes = section_name | append: ' section-' | append: section.id | append: '-padding'
   assign section_id = section_name | append: '--' | append: section.id
-  assign section_classes = section_name
 
   assign aos_id = section_id | append: '--aos'
   assign aos_delay = 250
   assign aos_delay_increment = 250
 
-  assign background_colour = section.settings.background | default: 'white'
   assign container = section.settings.container | default: 'container'
   assign grid_gutter = section.settings.grid_gutter | default: 20
-  assign grid_layout = section.settings.grid_layout | default: '2'
+  assign grid_layout = section.settings.grid_layout | default: 'two-column'
   assign title = section.settings.title | default: 'Collections'
 
   if section.settings.anchor_id != blank
@@ -31,50 +30,26 @@
 
 -%}
 
-{%- style -%}
-
-  {% if background_colour != blank %}
-    #shopify-section-{{ section.id }} {
-      background: rgba(var(--theme-colour-{{ background_colour }}), 1);
-      {% case background_colour %}
-        {% when 'white' %}
-          color: rgba(var(--theme-colour-black), 1);
-        {% else %}
-          color: rgba(var(--theme-colour-white), 1);
-      {% endcase %}
-    }
-  {% endif %}
-
-  .section-{{ section.id }}-padding {
-    padding-top: calc({{ section.settings.padding_top }}px * 0.75);
-    padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
-  }
-
-  @media screen and (min-width: 992px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
-  }
-
-{%- endstyle -%}
+{%
+  render 'section-styles',
+  background: section.settings.background,
+  id: section.id,
+  padding_bottom: section.settings.padding_bottom
+  padding_top: section.settings.padding_top,
+%}
 
 <div class="{{ section_classes }}" id="{{ section_id }}">
   {% render 'bs-container', state: 'open', col: 'col-12 col-lg-10 offset-lg-1', container: container %}
-
     <h1 class="{{ section_name }}__heading heading--1">{{ title | escape }}</h1>
-
-    <div class="{{ section_name }}__list grid grid--{{ grid_layout }}" id="{{ aos_id }}" data-grid-gutter="{{ grid_gutter }}" role="list">
+    <div class="{{ section_name }}__layout grid grid--{{ grid_layout }} grid--gap-{{ grid_gutter }}" id="{{ aos_id }}" role="list">
       {%- for item in collections -%}
-        <div class="{{ section_name }}__item grid__item" data-index="{{ forloop.index }}">
+        <div class="{{ section_name }}__item grid__item" data-index="{{ forloop.index }}" role="listitem">
           {% render 'card-collection', card_collection: item %}
         </div>
       {%- endfor -%}
     </div>
-
- {% render 'bs-container', state: 'closed', container: container %}
+  {% render 'bs-container', state: 'closed' %}
 </div>
-
 
 {% schema %}
 {
@@ -125,35 +100,14 @@
       "id": "sort"
     },
     {
-      "label": "Grid Layout",
-      "type": "select",
-      "options": [
-        { "label": "Two Column", "value": "2" },
-        { "label": "Three Column", "value": "3" }
-      ],
-      "default": "2",
-      "id": "grid_layout"
-    },
-    {
-      "label": "Grid Gutter",
-      "type": "range",
-      "min": 0,
-      "max": 50,
-      "step": 1,
-      "default": 20,
-      "id": "grid_gutter"
-    },
-    {
-      "content": "Settings",
-      "type": "header"
-    },
+			"content": "Layout",
+			"type": "header"
+		},
     {
 		  "label": "Background",
 		  "type": "select",
 		  "options": [
         { "label": "Black", "value": "black" },
-        { "label": "Silver", "value": "silver" },
-        { "label": "Light Silver", "value": "light-silver" },
 			  { "label": "White", "value": "white" }
 		  ],
 		  "default": "white",
@@ -170,6 +124,33 @@
       "default": "container",
       "id": "container"
     },
+    {
+			"content": "Grid",
+			"type": "header"
+		},
+    {
+      "label": "Grid Layout",
+      "type": "select",
+      "options": [
+        { "value": "two-column", "label": "Two Column" },
+        { "value": "three-column", "label": "Three Column" }
+      ],
+      "default": "two-column",
+      "id": "grid_layout"
+    },
+    {
+      "label": "Grid Gutter",
+			"type": "range",
+			"min": 0,
+			"max": 100,
+			"step": 2,
+			"default": 20,
+      "id": "grid_gutter"
+    },
+    {
+			"content": "Padding",
+			"type": "header"
+		},
 		{
 			"label": "Top Padding",
 			"type": "range",

@@ -1,0 +1,57 @@
+@mixin ui($style:'') {
+
+  transition:
+    background var(--theme-transition-duration),
+    border var(--theme-transition-duration),
+    color var(--theme-transition-duration),
+    opacity var(--theme-transition-duration);
+  line-height: 1;
+  text-decoration: none;
+  outline: none;
+  color: inherit;
+  opacity: 1;
+  background: transparent;
+  display: inline-flex;
+  width: auto;
+
+  svg {
+    fill: currentColor;
+  }
+
+  &:focus,
+  &:hover {
+    text-decoration: none;
+    outline: none;
+  }
+
+  &[data-colour-theme="blue"] {
+    background: rgba(var(--theme-colour-blue), 1);
+    color: rgba(var(--theme-colour-white), 1);
+    &:focus,
+    &:hover {
+      background: rgba(var(--theme-colour-black), 1);
+      color: rgba(var(--theme-colour-white), 1);
+    }
+  }
+
+  &[data-colour-theme="yellow"] {
+    background: rgba(var(--theme-colour-yellow), 1);
+    color: rgba(var(--theme-colour-black), 1);
+    &:focus,
+    &:hover {
+      background: rgba(var(--theme-colour-black), 1);
+      color: rgba(var(--theme-colour-white), 1);
+    }
+  }
+
+
+  @if $style == button {
+    border-width: var(--theme-border-width);
+    border-style: solid;
+    border-color: transparent;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+
+}

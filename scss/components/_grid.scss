@@ -1,0 +1,33 @@
+@use '../utils/mixins/general' as *;
+
+.grid {
+
+  display: grid;
+  width: 100%;
+
+  @for $i from 1 through 100 {
+    &--gap-#{$i} {
+      gap: $i * 1px;
+    }
+  }
+
+  @include breakpoint(lg) {
+
+    &--2,
+    &--two-column {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &--3,
+    &--three-column {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    &--4,
+    &--four-column {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+  }
+
+}

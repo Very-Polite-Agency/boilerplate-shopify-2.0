@@ -46,27 +46,28 @@
 
 {% endcomment %}
 
-{% comment %} ## Default Values ## {% endcomment %}
-{%- assign anchor = anchor | default: '' -%}
-{%- assign anchor_placement = anchor_placement | default: 'top-bottom' -%}
-{%- assign delay = delay | default: 0 -%}
-{%- assign duration = duration | default: 500 -%}
-{%- assign easing = easing | default: 'ease-in-out' -%}
-{%- assign offset = offset | default: 175 -%}
-{%- assign once = once | default: 'true' -%}
-{%- assign transition = transition | default: 'fade-up' -%}
+{%- liquid
 
-{% comment %} ## Build Attrs ## {% endcomment %}
-{%- assign html = 'data-aos="' | append: transition | append: '"' -%}
-{% if anchor != blank %}
-  {%- assign html = html | append: ' data-aos-anchor="#' | append: anchor | append: '"' -%}
-{% endif %}
-{%- assign html = html | append: ' data-aos-anchor-placement="' | append: anchor_placement | append: '"' -%}
-{%- assign html = html | append: ' data-aos-delay="' | append: delay | append: '"' -%}
-{%- assign html = html | append: ' data-aos-duration="' | append: duration | append: '"' -%}
-{%- assign html = html | append: ' data-aos-easing="' | append: easing | append: '"' -%}
-{%- assign html = html | append: ' data-aos-offset="' | append: offset | append: '"' -%}
-{%- assign html = html | append: ' data-aos-once="' | append: once | append: '"' -%}
+  assign anchor = anchor | default: ''
+  assign anchor_placement = anchor_placement | default: 'top-bottom'
+  assign delay = delay | default: 0
+  assign duration = duration | default: 650
+  assign easing = easing | default: 'ease-in-out'
+  assign offset = offset | default: 175
+  assign once = once | default: 'true'
+  assign transition = transition | default: 'fade-up'
 
-{% comment %} ## Return Attrs ## {% endcomment %}
+  assign html = 'data-aos="' | append: transition | append: '"'
+  if anchor != blank
+    assign html = html | append: ' data-aos-anchor="#' | append: anchor | append: '"'
+  endif
+  assign html = html | append: ' data-aos-anchor-placement="' | append: anchor_placement | append: '"'
+  assign html = html | append: ' data-aos-delay="' | append: delay | append: '"'
+  assign html = html | append: ' data-aos-duration="' | append: duration | append: '"'
+  assign html = html | append: ' data-aos-easing="' | append: easing | append: '"'
+  assign html = html | append: ' data-aos-offset="' | append: offset | append: '"'
+  assign html = html | append: ' data-aos-once="' | append: once | append: '"'
+
+-%}
+
 {{- html -}}

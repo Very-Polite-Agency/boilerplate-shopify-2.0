@@ -1,33 +1,12 @@
 {
-  "order": [
+	"name": "Page",
+	"order": [
     "main"
   ],
-  "sections": {
-    "main": {
-      "type": "text-feature",
-      "blocks": {
-        "71e83f34-9475-4d69-9c03-24df960f925e": {
-          "type": "heading",
-          "settings": {
-            "heading": "Sample Text Feature Heading",
-            "heading_size": "1"
-          }
-        },
-        "056d5dc6-c3dd-430c-aeef-c9a7c84578ed": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Nullam lacus purus, sollicitudin semper cursus eu, rutrum at libero. Proin a sapien nec enim vestibulum feugiat. In dui enim, pulvinar quis viverra eu, tempus sed ligula. Praesent vitae nunc ut sem rhoncus porta a nec quam. Cras id molestie nisi. Etiam purus justo, porttitor in fermentum quis, auctor at diam. Nunc quam augue, euismod eget posuere ac, tincidunt ut dolor. Ut tincidunt nibh ac sapien pellentesque consectetur. <\/p>"
-          }
-        }
-      },
-      "block_order": [
-        "71e83f34-9475-4d69-9c03-24df960f925e",
-        "056d5dc6-c3dd-430c-aeef-c9a7c84578ed"
-      ],
-      "settings": {
-        "anchor_id": "",
-        "width": "full"
-      }
-    }
-  }
+	"sections": {
+		"main": {
+			"type": "main-page",
+      "settings": {}
+		}
+	}
 }

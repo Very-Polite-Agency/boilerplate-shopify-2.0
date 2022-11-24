@@ -11,6 +11,8 @@ import Gliders from './modules/gliders';
 import Product from './modules/product';
 import Scrolling from './modules/scrolling';
 
+let throttled = false;
+
 Cart.init();
 Credits.init();
 Announcements.init();
@@ -29,3 +31,14 @@ window.addEventListener('load', function () {
   Gliders.init();
   AOS.refresh();
 });
+
+window.addEventListener( 'resize', function(e) {
+  if ( !throttled ) {
+    window.requestAnimationFrame(function() {
+      // do throttled stuff...
+      throttled = false;
+    });
+    throttled = true;
+  }
+});
+

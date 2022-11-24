@@ -1,0 +1,41 @@
+{% comment %}
+
+  Use snippet like so...
+
+  {%
+    render 'content--navigation-item',
+    classes: 'd-none d-lg-inline-flex',
+    title: 'About Us',
+    url: '/about-us',
+    active: false
+  %}
+
+{% endcomment %}
+
+{%- if navigation_title and navigation_title != blank and navigation_url and navigation_url != blank %}
+
+  {%- liquid
+
+    comment
+      Accepts:
+        - navigation_active: {Boolean} Conditionally active item
+        - navigation_url: {String} URL for the navigation item
+        - navigation_title: {String} Title for the navigation item
+    endcomment
+
+    assign snippet_name = 'navigation'
+    assign snippet_classes = snippet_name | append: '__item'
+
+    if classes and classes != blank
+       assign snippet_classes = snippet_classes | append: ' ' | append: classes
+    endif
+
+  -%}
+
+  <div class="{{ snippet_classes }}" role="listitem">
+    <a class="{{ snippet_name }}__link link{% if navigation_active %} active{% endif %}" href="{{ navigation_url }}" title="{{ navigation_title }}">
+      <span class="link__title">{{ navigation_title }}</span>
+    </a>
+  </div>
+
+{% endif %}

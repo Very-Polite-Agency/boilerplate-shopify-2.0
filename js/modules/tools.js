@@ -1,24 +1,3 @@
-const getLocalStorageValueByKey = ( $key ) => {
-  return localStorage.getItem( $key );
-}
-
-const setLocalStorage = ( $key, $value ) => {
-  localStorage.setItem( $key, $value );
-}
-
-const setHeaderHeightTotalCSSVariable = () => {
-  setCSSVariable( 'theme-header-total-height', getElementHeightByTag('header') + 'px' );
-};
-
-const getElementHeightByTag = ( $tag = '' ) => {
-  return document.getElementsByTagName( $tag )[0].offsetHeight || 0;
-};
-
-const getArrayOfElementsByTag = ( $elements = [ 'body', 'footer', 'header', 'main' ] ) => {
-  let filteredElements = $elements.filter( tag => { return document.getElementsByTagName( tag )[0] } ) || [];
-  return filteredElements.map( tag => document.getElementsByTagName( tag )[0] ) || [];
-};
-
 const addClass = ( $class = '', $elements = [] ) => {
   if ( $class && $elements.length ) {
     for( let i = 0; i < $elements.length; i++ ) {
@@ -28,6 +7,24 @@ const addClass = ( $class = '', $elements = [] ) => {
     }
   }
 };
+
+const getArrayOfElementsByTag = ( $elements = [ 'body', 'footer', 'header', 'main' ] ) => {
+  let filteredElements = $elements.filter( tag => { return document.getElementsByTagName( tag )[0] } ) || [];
+  return filteredElements.map( tag => document.getElementsByTagName( tag )[0] ) || [];
+};
+
+const getElementHeightByTag = ( $tag = '' ) => {
+  return document.getElementsByTagName( $tag )[0].offsetHeight || 0;
+};
+
+const getLocalStorageValueByKey = ( $key ) => {
+  return localStorage.getItem( $key );
+}
+
+const getTimeStamp = () => {
+  let d = new Date();
+  return d.getTime();
+}
 
 const removeClass = ( $class = '', $elements = [] ) => {
   if ( $class && $elements.length ) {
@@ -39,6 +36,20 @@ const removeClass = ( $class = '', $elements = [] ) => {
   }
 };
 
+const setCSSVariable = ( $id = '', $value = '' ) => {
+  if ( $id && $value ) {
+    document.documentElement.style.setProperty( '--' + $id, $value );
+  }
+};
+
+const setHeaderHeightTotalCSSVariable = () => {
+  setCSSVariable('theme-header-height-total', getElementHeightByTag('header') + 'px'  );
+};
+
+const setLocalStorage = ( $key, $value ) => {
+  localStorage.setItem( $key, $value );
+}
+
 const toggleClass = ( $class = '', $elements = [] ) => {
   if ( $class && $elements.length ) {
     for( let i = 0; i < $elements.length; i++ ) {
@@ -49,20 +60,15 @@ const toggleClass = ( $class = '', $elements = [] ) => {
   }
 };
 
-const setCSSVariable = ( $id = '', $value = '' ) => {
-  if ( $id && $value ) {
-    document.documentElement.style.setProperty( '--' + $id, $value );
-  }
-};
-
 export default {
   addClass,
-  getLocalStorageValueByKey,
-  getElementHeightByTag,
   getArrayOfElementsByTag,
+  getElementHeightByTag,
+  getLocalStorageValueByKey,
+  getTimeStamp,
   removeClass,
   setCSSVariable,
-  setLocalStorage,
   setHeaderHeightTotalCSSVariable,
+  setLocalStorage,
   toggleClass
 };

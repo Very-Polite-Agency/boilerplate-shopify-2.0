@@ -1,0 +1,41 @@
+{%- if link and link != blank and title and title != blank -%}
+
+  {%- liquid
+
+    comment
+
+      Accepts:
+        - classes: {String} Optionally include classes
+        - link: {String} URL
+        - style: {String} Style of link
+        - title: {String} Title of link
+
+      Usage:
+      render 'link', link: '/collections/all', title: 'Shop All'
+
+    endcomment
+
+    assign snippet_name = 'link'
+    assign snippet_class = snippet_name
+    assign target = "_self"
+    assign style = style | default: 'primary'
+
+    if style != blank
+      assign snippet_class = snippet_class | append: ' ' | append: snippet_name | append: '--' | append: style
+    endif
+
+    if classes != blank
+      assign snippet_class = snippet_class | prepend: ' ' | prepend: classes
+    endif
+
+    if link contains 'http'
+      assign target = "_blank"
+    endif
+
+  -%}
+
+  <a class="{{ snippet_class }}" href="{{ link }}" title="{{ title }}" target="{{ target }}">
+    <span class="{{ snippet_name }}__title">{{ title }}</span>
+  </a>
+
+{%- endif -%}

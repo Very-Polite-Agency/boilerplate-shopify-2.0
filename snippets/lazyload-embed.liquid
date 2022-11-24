@@ -1,0 +1,48 @@
+{%- liquid
+
+  assign snippet_name = 'embed'
+  assign snippet_classes = snippet_name
+  assign snippet_classes = snippet_classes | append: ' lazyload lazyload-item lazyload-item--embed'
+
+  assign background = background | default: false
+  assign delay = delay | default: 0
+  assign duration = duration | default: 250
+  assign embed_id = embed_id | defualt: ''
+  assign embed_source = ''
+  assign embed_type = embed_type | defualt: 'vimeo'
+  assign preload = preload | default: true
+
+  case embed_type
+    when 'vimeo'
+      assign embed_source = 'https://player.vimeo.com/video/' | append: embed_id
+      if background
+        assign embed_source = embed_source | append: '?controls=0&keyboard=0&background=1&loop=1'
+      else
+        assign embed_source = embed_source | append: '?controls=1&keyboard=1&background=0&loop=0'
+      endif
+    when 'youtube'
+      assign embed_source = 'https://www.youtube.com/embed/' | append: embed_id
+      if background
+        assign embed_source = embed_source | append: '?controls=0&disablekb=1&loop=1'
+      else
+        assign embed_source = embed_source | append: '?controls=1&disablekb=0&loop=0'
+      endif
+  endcase
+
+  if preload
+    assign snippet_classes = snippet_classes | append: ' lazypreload'
+  endif
+
+-%}
+
+{%- if embed_id != blank and embed_source != blank -%}
+  <iframe
+    class='{{ snippet_classes }}'
+    data-src='{{ embed_source }}'
+    data-transition-delay='{{ delay }}'
+    data-transition-duration='{{ duration }}'
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    webkitallowfullscreen mozallowfullscreen allowfullscreen
+  ></iframe>
+{%- endif -%}

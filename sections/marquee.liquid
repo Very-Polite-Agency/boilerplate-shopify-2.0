@@ -1,0 +1,177 @@
+{% assign marquee_id = 'marquee--' | append: section.id %}
+{%-
+  render 'marquee',
+    marquee_background: section.settings.background,
+    marquee_background_image: section.settings.background_image,
+    marquee_background_image_repeat: 'repeat',
+    marquee_background_image_size: 'auto',
+    marquee_border_bottom: section.settings.border_bottom,
+    marquee_border_top: section.settings.border_top,
+    marquee_duration: section.settings.duration,
+    marquee_font_size: section.settings.font_size,
+    marquee_gap: section.settings.gap,
+    marquee_id: marquee_id,
+    marquee_padding_bottom: section.settings.padding_bottom,
+    marquee_padding_top: section.settings.padding_top,
+    marquee_reverse: section.settings.reverse,
+    marquee_style: section.settings.style
+    marquee_text: section.settings.text,
+    marquee_text_colour: section.settings.text_colour
+-%}
+
+{% schema %}
+{
+  "name": "Marquee",
+  "tag": "section",
+  "class": "section section--marquee",
+  "settings": [
+    {
+      "content": "Content",
+      "type": "header"
+    },
+    {
+      "label": "Text",
+      "type": "richtext",
+      "id": "text"
+    },
+    {
+      "content": "Settings",
+      "type": "header"
+    },
+    {
+      "label": "Reverse",
+      "info": "If checked, marquee will run in reverse.",
+      "type": "checkbox",
+      "default": false,
+      "id": "reverse"
+    },
+    {
+      "label": "Font Size",
+      "type": "range",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "default": 20,
+      "id": "font_size"
+    },
+    {
+      "label": "Duration",
+      "info": "Duration, in seconds, that it takes for the marquee to complete a loop. The smaller the number, the faster it goes.",
+      "type": "range",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "default": 75,
+      "id": "duration"
+    },
+    {
+      "label": "Gap",
+      "info": "Gap between items, in pixels.",
+      "type": "range",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "default": 20,
+      "id": "gap"
+    },
+    {
+      "label": "Style",
+      "type": "select",
+      "options": [
+        {
+          "label": "Primary",
+          "value": "primary"
+        },
+        {
+          "label": "Secondary",
+          "value": "secondary"
+        },
+        {
+          "label": "Tertiary",
+          "value": "tertiary"
+        }
+      ],
+      "default": "primary",
+      "id": "style"
+    },
+    {
+      "content": "Border",
+      "type": "header"
+    },
+    {
+      "label": "Top Border",
+      "type": "checkbox",
+      "default": false,
+      "id": "border_top"
+    },
+    {
+      "label": "Bottom Border",
+      "type": "checkbox",
+      "default": false,
+      "id": "border_bottom"
+    },
+    {
+      "label": "Text Colour",
+      "type": "select",
+      "options": [
+        { "label": "Off-black", "value": "off-black" },
+        { "label": "Off-white", "value": "off-white" }
+      ],
+      "default": "off-black",
+      "id": "text_colour"
+    },
+    {
+      "content": "Background",
+      "type": "header"
+    },
+    {
+      "label": "Background",
+      "type": "select",
+      "options": [
+        { "label": "Image", "value": "image" },
+        { "label": "None", "value": "none" },
+        { "label": "Off-black", "value": "off-black" },
+        { "label": "Off-white", "value": "off-white" },
+        { "label": "Rosa", "value": "rosa" },
+        { "label": "Rosso", "value": "rosso" }
+      ],
+      "default": "none",
+      "id": "background"
+    },
+    {
+      "label": "Background Image",
+      "type": "image_picker",
+      "id": "background_image"
+    },
+    {
+      "content": "Padding",
+      "type": "header"
+    },
+    {
+      "label": "Top Padding",
+      "type": "range",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "id": "padding_top"
+    },
+    {
+      "label": "Bottom Padding",
+      "type": "range",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "id": "padding_bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee"
+    }
+  ]
+}
+{% endschema %}

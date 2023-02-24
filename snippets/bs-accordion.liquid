@@ -1,0 +1,44 @@
+{% if accordion_content and accordion_content != blank and accordion_id and accordion_id != blank and accordion_title and accordion_title != blank %}
+
+  {%- liquid
+
+    comment
+      Accepts:
+      - accordion_aos: {String} Optionally include AOS attributes
+      - accordion_classes: {String} Optionally include classes for customization
+      - accordion_content: {String} Content for accordion
+      - accordion_id: {String} Unique ID to connect button and body
+      - accordion_open: {Boolean} Optionally set state of accordion, default is false
+      - accordion_title: {String} Title for accordion
+      Usage:
+        render 'bs-accordion',
+          accordion_aos: aos_attrs,
+          accordion_classes: 'featured-wine__accordion',
+          accordion_content: accordion_content,
+          accordion_id: accordion_id,
+          accordion_open: accordion_open,
+          accordion_title: accordion_title
+    endcomment
+
+    assign accordion_classes = accordion_classes | default: ''
+    assign accordion_open = accordion_open | default: false
+    assign accordion_aria = 'false'
+
+    if accordion_open
+      assign accordion_aria = 'true'
+    endif
+
+  -%}
+
+  <div class="{% if accordion_classes %}{{ accordion_classes }} {% endif %}accordion" {{ accordion_aos }}>
+    <button class="accordion__button button{% unless accordion_open %} collapsed{% endunless %}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ accordion_id }}" aria-expanded="{{ accordion_aria }}" aria-controls="{{ accordion_id }}">
+      <span class="button__title">{{ accordion_title }}</span>
+      <span class="button__icon plus">{% render 'svg', type: 'icon.plus' %}</span>
+      <span class="button__icon minus">{% render 'svg', type: 'icon.minus' %}</span>
+    </button>
+    <div class="accordion__body collapse{% if accordion_open %} show{% endif %}" id="{{ accordion_id }}">
+      <div class="accordion__body-content body-copy--primary body-copy--md">{{ accordion_content }}</div>
+    </div>
+  </div>
+
+{% endif %}

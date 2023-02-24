@@ -1,0 +1,93 @@
+{%- liquid
+
+  comment
+    Accepts:
+      # TODO
+  endcomment
+
+  assign snippet_name = 'marquee'
+  assign snippet_classes = snippet_name
+
+  assign marquee_background = marquee_background | default: 'none'
+  assign marquee_background_image = marquee_background_image | default: false
+  assign marquee_background_image_repeat = marquee_background_image_repeat | default: 'no-repeat'
+  assign marquee_background_image_size = marquee_background_image_size | default: 'cover'
+
+  assign marquee_border_bottom = marquee_border_bottom | default: false
+  assign marquee_border_top = marquee_border_top | default: false
+
+  assign marquee_classes = marquee_classes | default: ''
+  assign marquee_duration = marquee_duration | default: 75
+  assign marquee_font_size = marquee_font_size | default: 20
+  assign marquee_gap = marquee_gap | default: 20
+  assign marquee_id = marquee_id | default: 'marquee'
+  assign marquee_padding_bottom = marquee_padding_bottom | default: 36
+  assign marquee_padding_top = marquee_padding_top | default: 36
+  assign marquee_reverse = marquee_reverse | default: false
+  assign marquee_style = marquee_style | default: 'primary'
+  assign marquee_text = marquee_text | default: ''
+  assign marquee_text_colour = marquee_text_colour | default: 'off-black'
+
+  if marquee_classes and marquee_classes != blank
+    assign snippet_classes = snippet_classes | prepend: ' ' | prepend: marquee_classes
+  endif
+
+  if marquee_style and marquee_style != blank
+    assign snippet_classes = snippet_classes | append: ' ' | append: snippet_name | append: '--' | append: marquee_style
+  endif
+
+  if marquee_reverse
+    assign snippet_classes = snippet_classes | append: ' ' | append: snippet_name | append: '--reverse'
+  endif
+
+-%}
+
+{%- style -%}
+
+  #{{ marquee_id }} {
+    --marquee-duration: {{ marquee_duration }}s;
+    --marquee-gap: {{ marquee_gap }}px;
+    font-size: {{ marquee_font_size }}px;
+  }
+
+  @media screen and (min-width: 992px) {
+    #{{ marquee_id }} {
+      font-size: calc({{ marquee_font_size }}px * 1.125);
+    }
+  }
+
+  {%
+    render 'element-styles',
+      element_background: marquee_background,
+      element_background_image: marquee_background_image,
+      element_background_image_repeat: marquee_background_image_repeat,
+      element_background_image_size: marquee_background_image_size,
+      element_border_bottom: marquee_border_bottom,
+      element_border_top: marquee_border_top,
+      element_id: marquee_id,
+      element_padding_bottom: marquee_padding_bottom,
+      element_padding_top: marquee_padding_top
+  %}
+
+{%- endstyle -%}
+
+<div class="{{ snippet_classes }}" id="{{ marquee_id }}">
+  <div class="{{ snippet_name }}__main text-colour--{{ marquee_text_colour }}">
+    {% if marquee_text != blank %}
+      <div class="{{ snippet_name }}__group">
+        {% for i in (1..20) %}
+          {% if i == 1 %}
+            <span>{{ marquee_text }}</span>
+          {% else %}
+            <span aria-hidden="true">{{ marquee_text }}</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="{{ snippet_name }}__group" aria-hidden="true">
+        {% for i in (1..20) %}
+          <span>{{ marquee_text }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

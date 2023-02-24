@@ -1,0 +1,18 @@
+{% if element_class and element_class != blank %}
+  class="{{ element_class }}"
+{% endif %}
+{% if element_id and element_id != blank %}
+  id="{{ element_id }}"
+{% endif %}
+{% if element_background and element_background != blank %}
+  data-background="{{ element_background }}"
+{% endif %}
+{% if element_height_desktop and element_height_desktop != blank %}
+  data-height-desktop="{{ element_height_desktop }}"
+{% endif %}
+{% if element_height_mobile and element_height_mobile != blank %}
+  data-height-mobile="{{ element_height_mobile }}"
+{% endif %}
+{% if element_extras and element_extras != blank %}
+  {{ element_extras }}
+{% endif %}

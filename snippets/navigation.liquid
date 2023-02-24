@@ -9,14 +9,14 @@
     {% assign snippet_classes = classes | append: ' ' | append: snippet_classes %}
   {% endif %}
   {% assign links = linklists[menu_handle].links | default: false %}
-  {% assign levels = linklists[menu_handle].levels | default: 0 %}
+  
 
   <nav class="{{ snippet_classes }}">
     {% for link in links %}
 
       {% assign active = link.active %}
       {% assign title = link.title %}
-      {% assign type = link.type %}
+      
       {% assign url = link.url %}
 
       <div class="{{ snippet_name }}__item">

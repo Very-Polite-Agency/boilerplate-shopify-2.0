@@ -1,9 +1,3 @@
-// importing default function, no object deconstruction required - can name as whatever!
-// import DEF from './modules/revealing'; // importing default function, no object deconstruction required - can name as whatever!
-// import { init as GHI, bar, brenden as bMoney } from './modules/alpha'; // importing named function(s), object deconstruction required - can alias function names
-
-import AOS from 'aos';
-
 import Announcements from './modules/announcements';
 import Cart from './modules/cart';
 import Credits from './modules/credits';
@@ -27,9 +21,18 @@ AOS.init({
   easing: 'ease-in-out',      // default easing for AOS animations
 });
 
-window.addEventListener('load', function () {
+window.addEventListener( 'load', function (e) {
   Gliders.init();
   AOS.refresh();
+});
+
+document.addEventListener( 'scroll', function(e) {
+  if ( !throttled ) {
+    window.requestAnimationFrame(function() {
+      throttled = false;
+    });
+    throttled = true;
+  }
 });
 
 window.addEventListener( 'resize', function(e) {

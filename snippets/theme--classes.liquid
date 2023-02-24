@@ -18,7 +18,7 @@
 
 	if template.directory != blank
 		assign theme_classes = theme_classes | append: ' template--' | append: template.directory
-		assign theme_classes = theme_classes | append:  ' ' | append: template.directory
+		assign theme_classes = theme_classes | append: ' ' | append: template.directory
 	endif
 
 	if customer
@@ -28,6 +28,8 @@
 	if settings.announcement--enable
 		assign theme_classes = theme_classes | append: ' announcement-enabled'
 	endif
+
+  assign theme_classes = theme_classes | append: ' ' | append: request.page_type
 
 -%}
 

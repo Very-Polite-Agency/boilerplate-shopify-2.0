@@ -1,0 +1,45 @@
+{%- if product and product != blank -%}
+
+  {%- liquid
+
+    assign template_name = 'product'
+    assign snippet_name = 'product-options'
+
+    assign product_available = product.available | default: false
+    assign product_has_no_options = product.has_only_default_variant | default: false
+    assign product_first_variant_available = true
+
+  -%}
+
+  <div class="{{ template_name }}__options {{ snippet_name }}{% if product_has_no_options %} d-none{% endif %}">
+
+    {% unless product_has_no_options %}
+      <strong class="{{ template_name }}__options-heading">Select a Size:</strong>
+    {% endunless %}
+
+    {% for variant in product.variants %}
+
+      <label class="{{ template_name }}__options-item">
+        <input
+          type="radio"
+          name="id"
+          class="{{ template_name }}__options-input"
+          value="{{ variant.id }}"
+          data-available="{{ variant.available }}"
+          data-compare-at-price="{{ variant.compare_at_price }}"
+          data-inventory-management="{{ variant.inventory_management }}"
+          data-price="{{ variant.price }}"
+          {% unless variant.available %}disabled{% endunless %}
+          {% if variant.available and product_first_variant_available %}
+            checked
+            {% assign product_first_variant_available = false %}
+          {% endif %}
+        />
+        <span>{{ variant.title }}</span>
+      </label>
+
+    {% endfor %}
+
+  </div>
+
+{%- endif -%}

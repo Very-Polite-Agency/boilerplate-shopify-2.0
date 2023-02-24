@@ -1,3 +1,5 @@
+const config = { debug: true, name: 'cookies.js', version: '1.0' };
+
 const set = ( name = '', value = '', expires = 1 ) => {
 
   const d = new Date();
@@ -26,7 +28,4 @@ const get = ( name = '' ) => {
 
 }
 
-export default {
-  get,
-  set
-};
+export default { get, set };

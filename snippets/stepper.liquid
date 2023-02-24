@@ -1,0 +1,22 @@
+{%- liquid
+
+  assign snippet_name = 'stepper'
+  assign snippet_classes = snippet_name
+
+  assign stepper_value = stepper_value | default: 1
+
+  if stepper_classes and stepper_classes != blank
+    assign snippet_classes = snippet_name | prepend: ' ' | prepend: stepper_classes
+  endif
+
+-%}
+
+<div class="{{ snippet_classes }}">
+  <button class="{{ snippet_name }}__button button button--stepper decrease js--stepper-button" type="button">
+    <span class="{{ snippet_name }}__button-icon button__icon minus">{% render 'svg', type: 'icon.minus' %}</span>
+  </button>
+  <input class="{{ snippet_name }}__input js--stepper-input" type="number" name="quantity" min="1" max="9999" value="{{ stepper_value }}" readonly>
+  <button class="{{ snippet_name }}__button button button--stepper increase js--stepper-button" type="button">
+    <span class="{{ snippet_name }}__button-icon button__icon plus">{% render 'svg', type: 'icon.plus' %}</span>
+  </button>
+</div>

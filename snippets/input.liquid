@@ -26,8 +26,8 @@
     assign type = type | default: 'text'
     assign value = value | default: ''
 
-    if classes
-      assign snippet_classes = snippet_classes | append: ' ' | append: classes | strip
+    if classes and classes != blank
+      assign snippet_classes = snippet_classes | prepend: ' ' | prepend: classes | strip
     endif
 
     if hidden

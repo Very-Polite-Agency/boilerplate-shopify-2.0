@@ -1,0 +1,7 @@
+{% if policy_title and policy_title != blank %}
+  <h1 class="policy__title heading heading--primary">{{ policy_title }}</h1>
+{% endif %}
+
+{% if policy_content and policy_content != blank %}
+  <div class="policy__body-copy body-copy--primary">{{ policy_content }}</div>
+{% endif %}

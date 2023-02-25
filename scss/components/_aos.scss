@@ -13,3 +13,9 @@
 [data-aos=fade-down] {
   transform: translate3d( 0, calc(-1.5 * var(--aos-travel)), 0 );
 }
+
+[data-aos] {
+  .lazyload-item {
+    opacity: 1;
+  }
+}

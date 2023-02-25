@@ -1,0 +1,27 @@
+@use '../utils/mixins/link' as *;
+@use '../utils/mixins/ui' as *;
+
+.link {
+
+  @extend %ui-transition;
+  @extend %ui-base;
+
+  display: inline-flex;
+  width: auto;
+  justify-content: center;
+  align-items: center;
+
+  &--1,
+  &--2 {
+    @extend .link;
+  }
+
+  &--1 {
+    @include link-style(1);
+  }
+
+  &--2 {
+    @include link-style(2);
+  }
+
+}

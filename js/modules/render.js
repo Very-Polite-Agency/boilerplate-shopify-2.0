@@ -1,3 +1,5 @@
+import anime from 'animejs/lib/anime.es.js';
+
 import Gliders from 'gliders';
 import Money from 'money';
 import Tools from 'tools';

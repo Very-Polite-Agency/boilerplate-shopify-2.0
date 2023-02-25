@@ -1,57 +1,54 @@
-@mixin ui($style:'') {
-
+%ui-transition {
   transition:
     background var(--theme-transition-duration),
     border var(--theme-transition-duration),
     color var(--theme-transition-duration),
-    opacity var(--theme-transition-duration);
+    opacity var(--theme-transition-duration),
+    transform var(--theme-transition-duration);
+}
+
+%ui-disabled {
+  &[disabled] {
+    cursor: no-drop;
+    opacity: 0.33;
+    &:focus,
+    &:hover {
+      background: initial;
+      color: initial;
+    }
+  }
+}
+
+%ui-base {
+  opacity: 1;
+  background: transparent;
   line-height: 1;
   text-decoration: none;
   outline: none;
   color: inherit;
-  opacity: 1;
-  background: transparent;
-  display: inline-flex;
-  width: auto;
-
+  border: none;
+  padding: 0;
+  margin: 0;
   svg {
     fill: currentColor;
   }
+}
 
-  &:focus,
-  &:hover {
-    text-decoration: none;
-    outline: none;
+%ui-input {
+  outline: none;
+  padding: 0;
+  margin: 0;
+  min-width: 100%;
+  border: none;
+  border-radius: 0;
+  &[type="search"] {
+    -webkit-appearance: none;
   }
+}
 
-  &[data-colour-theme="blue"] {
-    background: rgba(var(--theme-colour-blue), 1);
-    color: rgba(var(--theme-colour-white), 1);
-    &:focus,
-    &:hover {
-      background: rgba(var(--theme-colour-black), 1);
-      color: rgba(var(--theme-colour-white), 1);
-    }
-  }
-
-  &[data-colour-theme="yellow"] {
-    background: rgba(var(--theme-colour-yellow), 1);
-    color: rgba(var(--theme-colour-black), 1);
-    &:focus,
-    &:hover {
-      background: rgba(var(--theme-colour-black), 1);
-      color: rgba(var(--theme-colour-white), 1);
-    }
-  }
-
-
-  @if $style == button {
-    border-width: var(--theme-border-width);
-    border-style: solid;
-    border-color: transparent;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-  }
-
+@mixin placeholder {
+  &::-webkit-input-placeholder { @content }
+  &:-moz-placeholder           { @content }
+  &::-moz-placeholder          { @content }
+  &:-ms-input-placeholder      { @content }
 }

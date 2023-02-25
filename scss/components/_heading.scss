@@ -2,20 +2,26 @@
 
 .heading {
 
-  &--1 {
-    @include heading(1);
+  // ---------------------------------------- Sizes
+  $heading-sizes:( 'xl', 'lg', 'md', 'sm', 'xs' );
+
+  @each $size in $heading-sizes {
+    &--#{$size} {
+      @include heading-size( $size );
+    }
   }
 
-  &--2 {
-    @include heading(2);
+  // ---------------------------------------- Styles
+  &--primary {
+    @include heading-style( 'primary' );
   }
 
-  &--3 {
-    @include heading(3);
+  &--secondary {
+    @include heading-style( 'secondary' );
   }
 
-  &--page-title {
-    @include heading(1);
+  &--tertiary {
+    @include heading-style( 'tertiary' );
   }
 
 }

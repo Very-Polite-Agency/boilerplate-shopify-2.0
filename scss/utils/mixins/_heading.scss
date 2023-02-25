@@ -1,65 +1,91 @@
-@use "general" as *;
+@use '../variables' as *;
+@use 'sass:map';
+@use "breakpoint" as *;
+@use "font" as *;
 
-@mixin heading($style:1) {
+@mixin heading-style( $style: 1 ) {
 
-  font-family: 'Sorry Sans', sans-serif;
   display: block;
   font-style: normal;
   color: inherit;
   margin: 0;
   padding: 0;
-  text-transform: none;
 
-  // ---------------------------------------- Primary / 1
   @if $style == 1 {
-
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 1.05;
-
-    @include breakpoint(sm) {
-      font-size: 32px;
-    }
-
-    @include breakpoint(md) {
-      font-size: 40px;
-    }
-
-    @include breakpoint(lg) {
-      font-size: 21px;
-    }
-
-    @include breakpoint(xl) {
-      font-size: 25px;
-    }
-
-    @include breakpoint(xxl) {
-      font-size: 28px;
-    }
-
+    @include clarendon-wide(700);
+    text-transform: uppercase;
   }
 
-  // ---------------------------------------- Secondary / 2
   @if $style == 2 {
+    @include new-sprint(300);
+  }
 
-    font-family: 'PP Neue Montreal Bold', sans-serif;
-    font-size: 35px;
-    line-height: 1.1;
-    font-weight: 400;
-    letter-spacing: -.02em;
+  @if $style == 2 {
+    @include sarina(400);
+  }
 
-    @include breakpoint(md) {
-      font-size: 34px;
+}
+
+@mixin heading-size( $size: 'md' ) {
+
+  @if $size == 'xl' {
+    @each $name, $value in $theme-font-sizes-heading {
+      @if $name == 'base' {
+        font-size: $value * 1.2;
+      } @else {
+        @include breakpoint(#{$name}) {
+          font-size: $value * 1.5;
+        }
+      }
     }
+  }
 
-    @include breakpoint(lg) {
-      font-size: 40px;
+  @if $size == 'lg' {
+    @each $name, $value in $theme-font-sizes-heading {
+      @if $name == 'base' {
+        font-size: $value * 1.1;
+      } @else {
+        @include breakpoint(#{$name}) {
+          font-size: $value * 1.2;
+        }
+      }
     }
+  }
 
-    @include breakpoint(xl) {
-      font-size: 50px;
+  @if $size == 'md' {
+    @each $name, $value in $theme-font-sizes-heading {
+      @if $name == 'base' {
+        font-size: $value;
+      } @else {
+        @include breakpoint(#{$name}) {
+          font-size: $value;
+        }
+      }
     }
+  }
 
+  @if $size == 'sm' {
+    @each $name, $value in $theme-font-sizes-heading {
+      @if $name == 'base' {
+        font-size: $value * 0.95;
+      } @else {
+        @include breakpoint(#{$name}) {
+          font-size: $value * 0.75;
+        }
+      }
+    }
+  }
+
+  @if $size == 'xs' {
+    @each $name, $value in $theme-font-sizes-heading {
+      @if $name == 'base' {
+        font-size: $value * 0.9;
+      } @else {
+        @include breakpoint(#{$name}) {
+          font-size: $value * 0.7;
+        }
+      }
+    }
   }
 
 }

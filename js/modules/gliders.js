@@ -95,7 +95,7 @@ const getOptions = ( custom = {} ) => {
     animationTimingFunc: "ease-in-out",
     animationDuration: 350,
     autoHeight: true,
-    autoplay: 5000,
+    autoplay: 3250,
     dragThreshold: 35,
     hoverpause: false,
     perView: 1,
@@ -129,9 +129,4 @@ const init = () => {
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} complete ]`);
 };
 
-export default {
-  createGliderFromElement,
-  getOptions,
-  gliders,
-  init
-};
+export default { gliders, init };

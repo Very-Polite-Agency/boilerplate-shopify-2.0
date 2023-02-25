@@ -2,16 +2,26 @@
 
 .body-copy {
 
-  &--announcement {
-    @include body-copy(announcement);
+  // ---------------------------------------- Sizes
+  $body-copy-sizes:( 'xl', 'lg', 'md', 'sm', 'xs', 'xxs' );
+
+  @each $size in $body-copy-sizes {
+    &--#{$size} {
+      @include body-copy-size( $size );
+    }
   }
 
-  &--banner {
-    @include body-copy(banner);
-  }
-
+  // ---------------------------------------- Styles
   &--1 {
-    @include body-copy(1);
+    @include body-copy-style(1);
+  }
+
+  &--2 {
+    @include body-copy-style(2);
+  }
+
+  &--3 {
+    @include body-copy-style(3);
   }
 
 }

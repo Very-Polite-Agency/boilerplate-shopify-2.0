@@ -1,0 +1,29 @@
+@use '../utils/mixins/input' as *;
+@use '../utils/mixins/ui' as *;
+
+.input {
+
+  @extend %ui-transition;
+  @extend %ui-base;
+  @extend %ui-input;
+  @extend %ui-disabled;
+
+  display: inline-flex;
+  width: auto;
+  justify-content: center;
+  align-items: center;
+
+  &--1,
+  &--2 {
+    @extend .input;
+  }
+
+  &--1 {
+    @include input-style(1);
+  }
+
+  &--2 {
+    @include input-style(2);
+  }
+
+}

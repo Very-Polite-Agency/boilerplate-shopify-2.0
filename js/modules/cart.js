@@ -8,7 +8,6 @@ const elements = {
     checkout: document.querySelectorAll( 'button[name="checkout"]' ) || []
   }
 };
-const productForm = document.querySelectorAll( 'form[action="/cart/add"]' ) || [];
 
 const addToCart = ( id = 0, quantity = 1 ) => {
   if ( id ) {
@@ -218,22 +217,28 @@ const updateStepperButtonStates = ( quantity = 0, min = 0, max = 99999, stepper 
 const init = () => {
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} initialized ]`);
 
-  if ( Theme.cart.items.length ) {
-    Render.cartLineItems( Theme.cart.items );
-    toggleCheckoutButtonUsability( 'enable' );
-  } else {
-    Render.cartEmptyMessage();
-    toggleCheckoutButtonUsability( 'disable' );
-  }
+    if ( Theme.cart.items.length ) {
+      Render.cartLineItems( Theme.cart.items );
+      toggleCheckoutButtonUsability( 'enable' );
+    } else {
+      Render.cartEmptyMessage();
+      toggleCheckoutButtonUsability( 'disable' );
+    }
 
-  Render.cartLineItemsTotal( Theme.cart.item_count );
-  Render.cartSubtotal( Theme.cart.items_subtotal_price );
+    Render.cartLineItemsTotal( Theme.cart.item_count );
+    Render.cartSubtotal( Theme.cart.items_subtotal_price );
 
-  onClickAddProductToCart();
-  onClickRemoveCartLineItem();
-  onClickUpdateStepper();
+    onClickAddProductToCart();
+    onClickRemoveCartLineItem();
+    onClickUpdateStepper();
 
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} complete ]`);
 };
 
-export default { addToCart, emptyCart, getCart, init };
+export default {
+  addToCart,
+  emptyCart,
+  getCart,
+  init
+};
+

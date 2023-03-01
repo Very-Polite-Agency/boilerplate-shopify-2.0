@@ -1,5 +1,5 @@
 @use "../utils/variables" as *;
-@use "../utils/functions/general" as *;
+@use "../utils/mixins/tools" as *;
 
 :root {
 
@@ -7,7 +7,7 @@
   ////  Animate on Scroll (AOS)
   //////////////////////////////////////////////////////////
 
-  --aos-travel: 12px;
+  --aos-travel: #{ $aos-travel };
 
   //////////////////////////////////////////////////////////
   ////  Bootstrap
@@ -20,97 +20,20 @@
   // ---------------------------------------- Container Fluid Padding
   --bs-container-fluid-padding: 28px;
 
-  // ---------------------------------------- Container Breakpoints
-  --bs-container-breakpoint--sm: #{ map-get( $grid-breakpoints, sm ) };
-  --bs-container-breakpoint--md: #{ map-get( $grid-breakpoints, md ) };
-  --bs-container-breakpoint--lg: #{ map-get( $grid-breakpoints, lg ) };
-  --bs-container-breakpoint--xl: #{ map-get( $grid-breakpoints, xl ) };
-  --bs-container-breakpoint--xxl: #{ map-get( $grid-breakpoints, xxl ) };
+  @include scss-map-to-css-var( '--bs-container-breakpoint', $grid-breakpoints );
+  @include scss-map-to-css-var( '--bs-container-width', $container-max-widths );
 
-  // ---------------------------------------- Container Max Widths
-  --bs-container-width--sm: #{ map-get( $container-max-widths, sm ) };
-  --bs-container-width--md: #{ map-get( $container-max-widths, md ) };
-  --bs-container-width--lg: #{ map-get( $container-max-widths, lg ) };
-  --bs-container-width--xl: #{ map-get( $container-max-widths, xl ) };
-  --bs-container-width--xxl: #{ map-get( $container-max-widths, xxl ) };
-
-  //////////////////////////////////////////////////////////
-  ////  Theme
-  //////////////////////////////////////////////////////////
-
-  // ---------------------------------------- Body Copy
-  --theme-body-copy: #{ map-get( $theme-body-copy-sizes, 'base' ) };
-  --theme-body-copy--sm: #{ map-get( $theme-body-copy-sizes, 'sm' ) };
-  --theme-body-copy--md: #{ map-get( $theme-body-copy-sizes, 'md' ) };
-  --theme-body-copy--lg: #{ map-get( $theme-body-copy-sizes, 'lg' ) };
-  --theme-body-copy--xl: #{ map-get( $theme-body-copy-sizes, 'xl' ) };
-  --theme-body-copy--xxl: #{ map-get( $theme-body-copy-sizes, 'xxl' ) };
-
-  // ---------------------------------------- Border
-  --theme-border-radius: #{ map-get( $theme-border, 'radius' ) };
-  --theme-border-width: #{ map-get( $theme-border, 'width' ) };
-
-  // ---------------------------------------- Button | Font Size
-  --theme-button-font-size: #{ map-get( $theme-button-font-sizes, base ) };
-  --theme-button-font-size--sm: #{ map-get( $theme-button-font-sizes, sm ) };
-  --theme-button-font-size--md: #{ map-get( $theme-button-font-sizes, md ) };
-  --theme-button-font-size--lg: #{ map-get( $theme-button-font-sizes, lg ) };
-  --theme-button-font-size--xl: #{ map-get( $theme-button-font-sizes, xl ) };
-  --theme-button-font-size--xxl: #{ map-get( $theme-button-font-sizes, xxl ) };
-
-  // ---------------------------------------- Button | Height
-  --theme-button-min-height: #{ map-get( $theme-button-min-heights, base ) };
-  --theme-button-min-height--sm: #{ map-get( $theme-button-min-heights, sm ) };
-  --theme-button-min-height--md: #{ map-get( $theme-button-min-heights, md ) };
-  --theme-button-min-height--lg: #{ map-get( $theme-button-min-heights, lg ) };
-  --theme-button-min-height--xl: #{ map-get( $theme-button-min-heights, xl ) };
-  --theme-button-min-height--xxl: #{ map-get( $theme-button-min-heights, xxl ) };
-
-  // ---------------------------------------- Button | Height
-  --theme-button-min-width: #{ map-get( $theme-button-min-widths, base ) };
-  --theme-button-min-width--sm: #{ map-get( $theme-button-min-widths, sm ) };
-  --theme-button-min-width--md: #{ map-get( $theme-button-min-widths, md ) };
-  --theme-button-min-width--lg: #{ map-get( $theme-button-min-widths, lg ) };
-  --theme-button-min-width--xl: #{ map-get( $theme-button-min-widths, xl ) };
-  --theme-button-min-width--xxl: #{ map-get( $theme-button-min-widths, xxl ) };
-
-  // ---------------------------------------- Colours
-  --theme-colour-black: #{ hexToRGB( map-get( $theme-colours, 'black' ) ) };
-  --theme-colour-blue: #{ hexToRGB( map-get( $theme-colours, 'blue' ) ) };
-  --theme-colour-red: #{ hexToRGB( map-get( $theme-colours, 'red' ) ) };
-  --theme-colour-white: #{ hexToRGB( map-get( $theme-colours, 'white' ) ) };
-  --theme-colour-yellow: #{ hexToRGB( map-get( $theme-colours, 'yellow' ) ) };
-
-  // ---------------------------------------- Container
-  --theme-container--sm: #{ map-get( $container-max-widths, 'sm' ) };
-  --theme-container--md: #{ map-get( $container-max-widths, 'md' ) };
-  --theme-container--lg: #{ map-get( $container-max-widths, 'lg' ) };
-  --theme-container--xl: #{ map-get( $container-max-widths, 'xl' ) };
-  --theme-container--xxl: #{ map-get( $container-max-widths, 'xxl' ) };
-
-  // ---------------------------------------- Header
-  --theme-header-height: #{ map-get( $theme-header-heights, 'base' ) };
-  --theme-header-height--sm: #{ map-get( $theme-header-heights, 'sm' ) };
-  --theme-header-height--md: #{ map-get( $theme-header-heights, 'md' ) };
-  --theme-header-height--lg: #{ map-get( $theme-header-heights, 'lg' ) };
-  --theme-header-height--xl: #{ map-get( $theme-header-heights, 'xl' ) };
-  --theme-header-height--xxl: #{ map-get( $theme-header-heights, 'xxl' ) };
-
-  // ---------------------------------------- Font Families
-  --theme-font-family--sans-serif: sans-serif;
-  --theme-font-family--serif: sans-serif;
-  --theme-font-family--display: serif;
-
-  --theme-font-family--sans-serif--primary: rustica, sans-serif;
-  --theme-font-family--serif--primary: serif;
-
-  // ---------------------------------------- Radio
-  --theme-radio-size: 42px;
-  --theme-radio-size--lg: 52px;
-  --theme-radio-size--xxl: 62px;
-
-  // ---------------------------------------- Transitions
-  --theme-transition-duration: 280ms;
-  --theme-transition-opacity: 0.3333;
+  @include scss-map-to-css-var( '--theme-border', $theme-border-settings );
+  @include scss-map-to-css-var( '--theme-button-height', $theme-button-heights );
+  @include scss-map-to-css-var( '--theme-button-width', $theme-button-widths );
+  @include scss-map-to-css-var( '--theme-colour', $theme-colours );
+  @include scss-map-to-css-var( '--theme-container', $container-max-widths );
+  @include scss-map-to-css-var( '--theme-font-family', $theme-font-families );
+  @include scss-map-to-css-var( '--theme-font-size-body-copy', $theme-font-sizes-body-copy );
+  @include scss-map-to-css-var( '--theme-font-size-button', $theme-font-sizes-button );
+  @include scss-map-to-css-var( '--theme-font-size-heading', $theme-font-sizes-heading );
+  @include scss-map-to-css-var( '--theme-header-height', $theme-header-heights );
+  @include scss-map-to-css-var( '--theme-input-height', $theme-input-heights );
+  @include scss-map-to-css-var( '--theme-transition', $theme-transition-settings );
 
 }

@@ -1,4 +1,4 @@
-$theme-info: (
+$theme: (
   'theme-name': 'Boilerplate Shopify 2.0',
   'theme-uri': 'https://weareverypolite.com',
   'description': 'Boilerplate Shopify 2.0 Theme',
@@ -11,59 +11,49 @@ $theme-info: (
   'text-domain': 'boilerplate-shopify-2',
 );
 
-// ---------------------------------------- Typography | Body Copy
-$theme-body-copy-sizes: (
-  'base': 14px,
-  'sm': 14px,
-  'md': 16px,
-  'lg': 14px,
-  'xl': 14px,
-  'xxl': 16px
-);
-
-// ---------------------------------------- Border Radius
-$theme-border: (
+// ---------------------------------------- Border Settings
+$theme-border-settings: (
   'radius': 4px,
-  'width': 1px,
+  'width': 2px,
 );
 
-// ---------------------------------------- Button | Font Size
-$theme-button-font-sizes: (
-  'base': 13px,
-  'sm': 14px,
-  'md': 15px,
-  'lg': 13px,
-  'xl': 14px,
-  'xxl': 15px
-);
-
-// ---------------------------------------- Button | Height
-$theme-button-min-heights: (
+// ---------------------------------------- Button Heights
+$theme-button-heights: (
   'base': 40px,
-  'sm': 42px,
-  'md': 44px,
-  'lg': 40px,
-  'xl': 42px,
+  'sm': 40px,
+  'md': 40px,
+  'lg': 44px,
+  'xl': 44px,
   'xxl': 44px
 );
 
-// ---------------------------------------- Button | Height
-$theme-button-min-widths: (
-  'base': 136px,
-  'sm': 136px,
-  'md': 136px,
-  'lg': 116px,
-  'xl': 120px,
-  'xxl': 124px
+// ---------------------------------------- Button Widths
+$theme-button-widths: (
+  'base': 120px,
+  'sm': 120px,
+  'md': 120px,
+  'lg': 140px,
+  'xl': 140px,
+  'xxl': 140px
 );
 
 // ---------------------------------------- Colours
 $theme-colours: (
-  'black': #111111,
-  'blue': #0038f5,
-  'red': #dc4117,
-  'white': #ffffff,
-  'yellow': #ffc700,
+  'black' : #111111,
+  'blue' : #0038F5,
+  'green': #81F25C,
+  'grey' : #E0E0E0,
+  'red' : #DC4117,
+  'white' : #ffffff,
+  'yellow' : #ffc700,
+);
+
+// ---------------------------------------- Font Families
+$theme-font-families: (
+  'sans-serif': sans-serif,
+  'serif': serif,
+  'cursive': cursive,
+  'mono': monospace,
 );
 
 // ---------------------------------------- Font Sizes | Body Copy
@@ -76,6 +66,16 @@ $theme-font-sizes-body-copy: (
   'xxl': 18px
 );
 
+// ---------------------------------------- Font Sizes | Button
+$theme-font-sizes-button: (
+  'base': 13px,
+  'sm': 14px,
+  'md': 15px,
+  'lg': 13px,
+  'xl': 14px,
+  'xxl': 15px
+);
+
 // ---------------------------------------- Font Sizes | Heading
 $theme-font-sizes-heading: (
   'base': 32px,
@@ -86,34 +86,28 @@ $theme-font-sizes-heading: (
   'xxl': 52px
 );
 
-// ---------------------------------------- Header Height
+// ---------------------------------------- Header Heights
 $theme-header-heights: (
-  'base': 100px,
-  'sm': 110px,
-  'md': 120px,
-  'lg': 90px,
-  'xl': 100px,
-  'xxl': 110px
+  'base': 65px,
+  'sm': 75px,
+  'md': 85px,
+  'lg': 65px,
+  'xl': 75px,
+  'xxl': 85px
 );
 
-// ---------------------------------------- Bootstrap | Gutter
-$grid-gutter-width: 20px;
-
-// ---------------------------------------- Bootstrap | Breakpoints
-$grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px,
-  xxl: 1400px
+// ---------------------------------------- Input Heights
+$theme-input-heights: (
+  'base': 44px,
+  'sm': 46px,
+  'md': 48px,
+  'lg': 50px,
+  'xl': 52px,
+  'xxl': 54px
 );
 
-// ---------------------------------------- Bootstrap | Container Sizes
-$container-max-widths: (
-  sm: 540px,
-  md: 740px,
-  lg: 960px,
-  xl: 1160px,
-  xxl: 1360px
+// ---------------------------------------- Transition Settings
+$theme-transition-settings: (
+  'duration': 280ms,
+  'opacity': 0.3333
 );

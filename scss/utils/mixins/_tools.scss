@@ -1,0 +1,11 @@
+@mixin scss-map-to-css-var( $css-var-name: '', $map: () ) {
+
+  @each $name, $value in $map {
+    @if $name == 'base' {
+      #{$css-var-name}: #{$value};
+    } @else {
+      #{$css-var-name}--#{$name}: #{$value};
+    }
+  }
+
+}

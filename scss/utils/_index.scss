@@ -1,11 +1,2 @@
 @forward 'variables';
-
-@forward 'functions/general';
-
-@forward 'mixins/body-copy';
-@forward 'mixins/button';
-@forward 'mixins/colour-theme';
-@forward 'mixins/general';
-@forward 'mixins/heading';
-@forward 'mixins/link';
-@forward 'mixins/ui';
+@forward 'variable-overrides';

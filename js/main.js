@@ -5,7 +5,10 @@ import Gliders from './modules/gliders';
 import Product from './modules/product';
 import Scrolling from './modules/scrolling';
 
-let throttled = false;
+const throttled = {
+  resize: false,
+  scroll: false
+};
 
 Cart.init();
 Credits.init();
@@ -22,26 +25,34 @@ AOS.init({
 });
 
 window.addEventListener( 'load', function (e) {
+
   Gliders.init();
   AOS.refresh();
-});
 
-document.addEventListener( 'scroll', function(e) {
-  if ( !throttled ) {
-    window.requestAnimationFrame(function() {
-      throttled = false;
-    });
-    throttled = true;
-  }
 });
 
 window.addEventListener( 'resize', function(e) {
-  if ( !throttled ) {
+
+  if ( !throttled.resize ) {
     window.requestAnimationFrame(function() {
-      // do throttled stuff...
-      throttled = false;
+      // do throttled stuff on resize...
+      throttled.resize = false;
     });
-    throttled = true;
+    throttled.resize = true;
   }
+
 });
+
+window.addEventListener( 'scroll', function(e) {
+
+  if ( !throttled.scroll ) {
+    window.requestAnimationFrame(function() {
+      // do throttled stuff on scroll...
+      throttled.scroll = false;
+    });
+    throttled.scroll = true;
+  }
+
+});
+
 

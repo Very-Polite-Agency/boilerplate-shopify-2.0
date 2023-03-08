@@ -1,6 +1,7 @@
-@use '../variables' as *;
 @use 'sass:color';
 @use 'sass:map';
+
+@use '../variables' as *;
 @use "border" as *;
 @use "breakpoint" as *;
 @use "font" as *;

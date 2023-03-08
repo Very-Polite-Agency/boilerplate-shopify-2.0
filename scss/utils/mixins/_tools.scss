@@ -1,10 +1,12 @@
+@use "sass:meta";
+
 @mixin scss-map-to-css-var( $css-var-name: '', $map: () ) {
 
   @each $name, $value in $map {
     @if $name == 'base' {
-      #{$css-var-name}: #{$value};
+      #{$css-var-name}: #{meta.inspect($value)};
     } @else {
-      #{$css-var-name}--#{$name}: #{$value};
+      #{$css-var-name}--#{$name}: #{meta.inspect($value)};
     }
   }
 

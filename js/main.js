@@ -26,7 +26,7 @@ window.addEventListener( 'load', function (e) {
 });
 
 window.addEventListener( 'resize', Tools.debounce(() => {
-  // debounced reisze based functions here
+  // debounced resize based functions here
 }, 300));
 
 window.addEventListener( 'scroll', Tools.debounce(() => {

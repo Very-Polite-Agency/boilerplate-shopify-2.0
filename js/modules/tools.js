@@ -8,13 +8,15 @@ const addClass = ( $class = '', $elements = [] ) => {
   }
 };
 
-const debounce = (func, delay) => {
+const debounce = ( func = () => {}, delay = 300 ) => {
   let timer;
   return function() {
     const context = this;
     const args = arguments;
     clearTimeout(timer);
-    timer = setTimeout(() => func.apply(context, args), delay)
+    timer = setTimeout(() => {
+      func.apply(context, args)
+    }, delay );
   };
 };
 
@@ -72,6 +74,7 @@ const toggleClass = ( $class = '', $elements = [] ) => {
 
 export default {
   addClass,
+  debounce,
   getArrayOfElementsByTag,
   getElementHeightByTag,
   getLocalStorageValueByKey,

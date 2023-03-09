@@ -4,11 +4,7 @@ import Credits from './modules/credits';
 import Gliders from './modules/gliders';
 import Product from './modules/product';
 import Scrolling from './modules/scrolling';
-
-const throttled = {
-  resize: false,
-  scroll: false
-};
+import Tools from './modules/tools';
 
 Cart.init();
 Credits.init();
@@ -25,34 +21,14 @@ AOS.init({
 });
 
 window.addEventListener( 'load', function (e) {
-
   Gliders.init();
   AOS.refresh();
-
 });
 
-window.addEventListener( 'resize', function(e) {
+window.addEventListener( 'resize', Tools.debounce(() => {
+  // debounced reisze based functions here
+}, 300));
 
-  if ( !throttled.resize ) {
-    window.requestAnimationFrame(function() {
-      // do throttled stuff on resize...
-      throttled.resize = false;
-    });
-    throttled.resize = true;
-  }
-
-});
-
-window.addEventListener( 'scroll', function(e) {
-
-  if ( !throttled.scroll ) {
-    window.requestAnimationFrame(function() {
-      // do throttled stuff on scroll...
-      throttled.scroll = false;
-    });
-    throttled.scroll = true;
-  }
-
-});
-
-
+window.addEventListener( 'scroll', Tools.debounce(() => {
+  // debounced scroll based functions here
+}, 300));

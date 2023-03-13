@@ -26,9 +26,17 @@ window.addEventListener( 'load', function (e) {
 });
 
 window.addEventListener( 'resize', Tools.debounce(() => {
-  // debounced resize based functions here
+  console.log('resize debounced');
+}, 300));
+
+window.addEventListener( 'resize', Tools.throttle(() => {
+  console.log('resize throttled');
 }, 300));
 
 window.addEventListener( 'scroll', Tools.debounce(() => {
-  // debounced scroll based functions here
+  console.log('scroll debounced');
+}, 300));
+
+window.addEventListener( 'scroll', Tools.throttle(() => {
+  console.log('scroll throttled');
 }, 300));

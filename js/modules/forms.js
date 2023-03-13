@@ -239,9 +239,8 @@ const init = () => {
         event.preventDefault();
 
         let form = button.closest( 'form' );
-        let formIsValid = isFormValid( form );
 
-        if ( formIsValid ) {
+        if ( isFormValid( form ) ) {
           if ( reCaptcha.enable ) {
             reCaptchaV3( 'submit', form );
           } else {

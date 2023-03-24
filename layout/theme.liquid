@@ -111,5 +111,10 @@
 
     <script src="{{ 'main.min.js' | asset_url }}" defer></script>
 
+    {% case template %}
+      {% when 'article', 'product' %}
+        {% render 'json-ld' %}
+    {% endcase %}
+
   </body>
 </html>

@@ -10,7 +10,6 @@ Cart.init();
 Credits.init();
 Announcements.init();
 Product.init();
-RandomImage.init();
 Scrolling.init();
 
 AOS.init({

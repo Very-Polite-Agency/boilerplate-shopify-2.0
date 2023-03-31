@@ -1,35 +1,32 @@
-{%- if link and link != blank and title and title != blank -%}
+{%- if link_title and link_title != blank and link_url and link_url != blank -%}
+
+  {%- comment -%}
+      Renders a link element
+
+      Accepts:
+      - link_classes: {String} Optionally include custom classes for snippet
+      - link_content: {Mixed} Optionally include custom content for link, be it from a capture or otherwise
+      - link_title: {String} Title of link
+      - link_url: {String} URL of link
+
+      Usage:
+      {%- render 'link', link_title: 'Contact Us', link_url: '/pages/contact-us/' -%}
+  {%- endcomment -%}
 
   {%- liquid
 
-    comment
-
-      Accepts:
-        - classes: {String} Optionally include classes
-        - link: {String} URL
-        - title: {String} Title of link
-
-      Usage:
-      render 'link', link: '/collections/all', style: 'not-primary', title: 'Shop All'
-
-    endcomment
-
     assign snippet_name = 'link'
-    assign snippet_classes = snippet_name
-    assign target = "_self"
+    assign snippet_classes = link_classes | default: snippet_name
 
-    if classes and classes != blank
-      assign snippet_classes = snippet_classes | prepend: ' ' | prepend: classes
-    endif
+    assign link_content = link_content | default: link_title
+    assign link_target = '_self'
 
-    if link contains 'http'
-      assign target = "_blank"
+    if link_url contains 'http'
+      assign link_target = '_blank'
     endif
 
   -%}
 
-  <a class="{{- snippet_classes | strip_newlines -}}" href="{{- link -}}" title="{{- title -}}" target="{{- target -}}">
-    <span class="{{ snippet_name }}__title">{{- title -}}</span>
-  </a>
+  <a class="{{ snippet_classes }}" href="{{ link_url }}" target="{{ link_target }}" title="{{ link_title }}">{{ link_content }}</a>
 
 {%- endif -%}

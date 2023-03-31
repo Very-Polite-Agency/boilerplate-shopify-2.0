@@ -1,18 +1,20 @@
+{% comment %}
+
+  Accepts:
+    - classes: {String} Optionally include additional classes
+    - hidden: {Boolean} Conditionally hide input with css
+    - name: {String} Field name for input
+    - placeholder: {String} Placeholder text for input
+    - readonly: {Boolean} Conditionally assign readonly attribute
+    - required: {Boolean} Conditionally assign 'required' class
+    - type: {String} Optionally assign a type different than 'text'
+    - value: {String} Optionally prefill value attribute
+
+{% endcomment %}
+
 {% if name and name != blank %}
 
   {%- liquid
-
-    comment
-      Accepts:
-        - classes: {String} Optionally include additional classes
-        - hidden: {Boolean} Conditionally hide input with css
-        - name: {String} Field name for input
-        - placeholder: {String} Placeholder text for input
-        - readonly: {Boolean} Conditionally assign readonly attribute
-        - required: {Boolean} Conditionally assign 'required' class
-        - type: {String} Optionally assign a type different than 'text'
-        - value: {String} Optionally prefill value attribute
-    endcomment
 
     assign snippet_name = 'input'
     assign snippet_classes = snippet_name

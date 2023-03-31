@@ -1,55 +1,60 @@
-{%- if element_id and element_id != blank -%}
+{%- if id and id != blank -%}
+
+  {% comment %}
+
+    Accepts:
+      - background: {String} Optionally include a named colour value
+      - background_image: {Object} Optionally include a background image
+      - background_image_position_desktop: {String} Optionally include specific positioning for large screen sizes
+      - background_image_position_mobile: {String} Optionally include specific positioning for small screen sizes
+      - background_image_repeat: {String} Optionally include specific repeat arguments for small screen sizes
+      - background_image_size: {String} Optionally include specific size arguments for small screen sizes
+      - border_bottom: {Boolean} Optionally include bottom border
+      - border_top: {Boolean} Optionally include top border
+      - height_desktop: {String} Optionally include specific height for large screen sizes
+      - height_mobile: {String} Optionally include specific height for small screen sizes
+      - id: {String} Element ID
+      - padding_bottom: {Integer} Optionally include an integer value for bottom padding
+      - padding_top: {Integer} Optionally include an integer value for top padding
+
+    Usage:
+      {%
+        render 'element-styles',
+          background: 'off-white',
+          background_image: false,
+          background_image_position_desktop: 'center center',
+          background_image_position_mobile: 'center left',
+          background_image_repeat: 'no-repeat',
+          background_image_size: 'cover',
+          border_bottom: false,
+          border_top: true,
+          height_desktop: section.settings.height_desktop,
+          height_mobile: section.settings.height_mobile,
+          id: 'some-unique-identifier',
+          padding_bottom: 32,
+          padding_top: 64
+      %}
+
+  {% endcomment %}
 
   {%- liquid
 
-    comment
-      Accepts:
-        - element_background: {String} Optionally include a named colour value
-        - element_background_image: {Object} Optionally include a background image
-        - element_background_image_position_desktop: {String} Optionally include specific positioning for large screen sizes
-        - element_background_image_position_mobile: {String} Optionally include specific positioning for small screen sizes
-        - element_background_image_repeat: {String} Optionally include specific repeat arguments for small screen sizes
-        - element_background_image_size: {String} Optionally include specific size arguments for small screen sizes
-        - element_border_bottom: {Boolean} Optionally include bottom border
-        - element_border_top: {Boolean} Optionally include top border
-        - element_height_desktop: {String} Optionally include specific height for large screen sizes
-        - element_height_mobile: {String} Optionally include specific height for small screen sizes
-        - element_id: {String} Section ID
-        - element_padding_bottom: {Integer} Optionally include an integer value for bottom padding
-        - element_padding_top: {Integer} Optionally include an integer value for top padding
-      Usage:
-        render 'element-styles',
-          element_background: 'off-white',
-          element_background_image: false,
-          element_background_image_position_desktop: 'center center',
-          element_background_image_position_mobile: 'center left',
-          element_background_image_repeat: 'no-repeat',
-          element_background_image_size: 'cover',
-          element_border_bottom: false,
-          element_border_top: true,
-          element_height_desktop: section.settings.height_desktop,
-          element_height_mobile: section.settings.height_mobile,
-          element_id: 'some-unique-identifier',
-          element_padding_bottom: 32
-          element_padding_top: 64,
-    endcomment
-
-    assign background = element_background | default: 'none'
-    assign background_image = element_background_image | default: false
+    assign background = background | default: 'none'
+    assign background_image = background_image | default: false
     assign background_image_active = false
-    assign background_image_position_desktop = element_background_image_position_desktop | default: 'center center'
-    assign background_image_position_mobile = element_background_image_position_mobile | default: 'center center'
-    assign background_image_repeat = element_background_image_repeat | default: 'no-repeat'
-    assign background_image_size = element_background_image_size | default: 'cover'
+    assign background_image_position_desktop = background_image_position_desktop | default: 'center center'
+    assign background_image_position_mobile = background_image_position_mobile | default: 'center center'
+    assign background_image_repeat = background_image_repeat | default: 'no-repeat'
+    assign background_image_size = background_image_size | default: 'cover'
 
-    assign border_bottom = element_border_bottom | default: false
-    assign border_top = element_border_top | default: false
+    assign border_bottom = border_bottom | default: false
+    assign border_top = border_top | default: false
 
-    assign height_desktop = element_height_desktop | default: 'auto'
-    assign height_mobile = element_height_mobile | default: 'auto'
+    assign height_desktop = height_desktop | default: 'auto'
+    assign height_mobile = height_mobile | default: 'auto'
 
-    assign padding_bottom = element_padding_bottom | default: 0
-    assign padding_top = element_padding_top | default: 0
+    assign padding_bottom = padding_bottom | default: 0
+    assign padding_top = padding_top | default: 0
 
     if background == 'image' and background_image
       assign background_image_active = true
@@ -57,9 +62,9 @@
 
   -%}
 
-  #{{ element_id }} {
+  #{{ id }} {
 
-    {% if height_mobile != blank %}
+    {%- if height_mobile != blank -%}
       height: {{ height_mobile }};
     {%- endif -%}
 
@@ -69,30 +74,30 @@
       background-position: {{ background_image_position_mobile }};
       background-size: {{ background_image_size }};
     {%- else -%}
-      {%- unless background == 'none' %}
-        background: rgba(var(--theme-colour-{{ background }}), 1);
-      {%- endunless %}
+      {%- unless background == 'none' -%}
+        background: var(--theme-colour--{{ background }});
+      {%- endunless -%}
     {%- endif -%}
 
     {%- if border_bottom -%}
-      border-bottom-color: rgba(var(--theme-colour-off-black), 1);
-      border-bottom-width: var(--theme-border-width);
+      border-bottom-color: var(--theme-colour--black);
+      border-bottom-width: var(--theme-border--width);
       border-bottom-style: solid;
     {%- endif -%}
 
     {%- if border_top -%}
-      border-top-color: rgba(var(--theme-colour-off-black), 1);
-      border-top-width: var(--theme-border-width);
+      border-top-color: var(--theme-colour--black);
+      border-top-width: var(--theme-border--width);
       border-top-style: solid;
     {%- endif -%}
 
     {%- if colour and colour != blank -%}
-      {% case colour %}
-        {% when 'dark' %}
-          color: rgba(var(--theme-colour-off-black), 1);
-        {% when 'light' %}
-          color: rgba(var(--theme-colour-off-white), 1);
-      {% endcase %}
+      {%- case colour -%}
+        {%- when 'dark' -%}
+          color: var(--theme-colour--black);
+        {%- when 'light' -%}
+          color: var(--theme-colour--white);
+      {%- endcase -%}
     {%- endif -%}
 
     {%- if padding_top > 0 -%}
@@ -107,9 +112,9 @@
 
   @media screen and (min-width: 992px) {
 
-    #{{ element_id }} {
+    #{{ id }} {
 
-      {% if height_desktop != blank %}
+      {%- if height_desktop != blank -%}
         height: {{ height_desktop }};
       {%- endif -%}
 

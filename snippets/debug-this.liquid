@@ -1,18 +1,21 @@
-{%- liquid
+{% comment %}
+  Renders a JavaScript console.log of item
 
-  comment
-    Accepts:
-    - item: {Anything} Liquid object or anything
-    - message: {String} Optionally include a message to be logged
-    Usage:
-      render 'debug-this',
-      item: article_object,
+  Accepts:
+  - item: {Object} Shopify object or item to debug
+  - message: {String} Optionally include a message
+
+  Usage:
+  {%-
+    render 'debug-this',
+      item: block.settings,
       message: 'Debugging Article'
-  endcomment
+  -%}
+{% endcomment %}
 
-  assign item = item | default: 'Item not set!'
-  assign message = message | default: 'No Message'
-
+{%- liquid
+  assign item = item | default: 'Item not assigned to snippet!'
+  assign message = message | default: 'Message not assigned to snippet!'
 -%}
 
 <script>

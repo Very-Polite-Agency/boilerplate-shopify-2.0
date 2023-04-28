@@ -1,29 +1,13 @@
-@use '../utils/mixins/textarea' as *;
 @use '../utils/mixins/ui' as *;
 
 .textarea {
 
-  @extend %ui-transition;
   @extend %ui-base;
   @extend %ui-input;
-  @extend %ui-disabled;
 
-  display: inline-flex;
-  width: auto;
-  justify-content: center;
-  align-items: center;
-
-  &--1,
-  &--2 {
-    @extend .textarea;
-  }
-
-  &--1 {
-    @include textarea-style(1);
-  }
-
-  &--2 {
-    @include textarea-style(2);
+  &[disabled],
+  &.disabled {
+    @extend %ui-disabled;
   }
 
 }

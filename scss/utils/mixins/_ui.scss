@@ -11,6 +11,9 @@
   svg {
     fill: currentColor;
   }
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 %ui-disabled {
@@ -25,10 +28,6 @@
 }
 
 %ui-input {
-  outline: none;
-  padding: 0;
-  margin: 0;
-  min-width: 100%;
   border: none;
   border-radius: 0;
   &[type="search"] {
@@ -38,11 +37,11 @@
 
 %ui-transition {
   transition:
-    background var(--theme-transition-duration),
-    border var(--theme-transition-duration),
-    color var(--theme-transition-duration),
-    opacity var(--theme-transition-duration),
-    transform var(--theme-transition-duration);
+    background var(--theme-transition--duration),
+    border var(--theme-transition--duration),
+    color var(--theme-transition--duration),
+    opacity var(--theme-transition--duration),
+    transform var(--theme-transition--duration);
 }
 
 @mixin placeholder {

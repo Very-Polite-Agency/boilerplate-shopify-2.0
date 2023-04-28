@@ -4,9 +4,9 @@
   assign section_classes = section_name
   assign section_id = section_name | append: '--' | append: section.id
 
-  assign aos_id = section_id
   assign aos_delay = 250
   assign aos_delay_increment = 250
+  assign aos_id = section_id
 
   assign section_app_blocks = section.blocks | where: 'type', 'award'
   assign section_app_blocks_size = section_award_blocks.size | default: 0
@@ -64,10 +64,13 @@
       "label": "Background",
       "type": "select",
       "options": [
-        { "label": "Black", "value": "black" },
         { "label": "Image", "value": "image" },
-        { "label": "White", "value": "white" },
-        { "label": "None", "value": "none" }
+        { "label": "Lemon", "value": "lemon" },
+        { "label": "Lime", "value": "lime" },
+        { "label": "Mango", "value": "mango" },
+        { "label": "None", "value": "none" },
+        { "label": "Orange", "value": "orange" },
+        { "label": "Strawberry", "value": "strawberry" }
       ],
       "default": "none",
       "id": "background"
@@ -187,7 +190,7 @@
     {
       "name": "Apps",
       "blocks": [
-        "type": "@app"
+        { "type": "@app" }
       ]
     }
   ]

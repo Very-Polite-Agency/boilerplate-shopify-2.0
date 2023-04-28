@@ -6,24 +6,37 @@
   @extend %ui-transition;
   @extend %ui-base;
   @extend %ui-input;
-  @extend %ui-disabled;
 
   display: inline-flex;
   width: auto;
   justify-content: center;
   align-items: center;
 
-  &--1,
-  &--2 {
+  &--primary,
+  &--secondary {
     @extend .input;
   }
 
-  &--1 {
-    @include input-style(1);
+  &--primary {
+    @include placeholder {
+      text-transform: uppercase;
+    }
   }
 
-  &--2 {
-    @include input-style(2);
+  &--secondary {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    &[type=number] {
+      -moz-appearance: textfield;
+    }
+  }
+
+  &[disabled],
+  &.disabled {
+    @extend %ui-disabled;
   }
 
 }

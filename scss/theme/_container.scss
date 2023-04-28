@@ -1,11 +1,13 @@
+@use '../utils/mixins/breakpoint' as *;
+
 .container {
 
-  padding-left: var(--bs-container-fluid-padding);
-  padding-right: var(--bs-container-fluid-padding);
+  padding-left: var(--theme-layout--container-padding);
+  padding-right: var(--theme-layout--container-padding);
 
   &-fluid {
-    padding-left: var(--bs-container-fluid-padding);
-    padding-right: var(--bs-container-fluid-padding);
+    padding-left: var(--theme-layout--container-padding);
+    padding-right: var(--theme-layout--container-padding);
   }
 
   @include breakpoint(sm) {
@@ -14,10 +16,10 @@
     padding-right: calc( 0.5 * var(--bs-gutter-x) );
 
     &-fluid {
-      padding-left: var(--bs-container-fluid-padding);
-      padding-right: var(--bs-container-fluid-padding);
+      padding-left: var(--theme-layout--container-padding);
+      padding-right: var(--theme-layout--container-padding);
     }
 
-  } // min width sm
+  }
 
 }

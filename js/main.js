@@ -1,17 +1,19 @@
-import Announcements from './modules/announcements';
-import Cart from './modules/cart';
 import Credits from './modules/credits';
+import Cart from './modules/cart';
+import Drawers from './modules/drawers';
+import Forms from './modules/forms';
 import Gliders from './modules/gliders';
-import Product from './modules/product';
 import Scrolling from './modules/scrolling';
 import Tools from './modules/tools';
 
+// ---------------------------------------- Modules
 Cart.init();
 Credits.init();
-Announcements.init();
-Product.init();
+Drawers.init();
+Forms.init();
 Scrolling.init();
 
+// ---------------------------------------- Animate on Scroll
 AOS.init({
   offset: 150,                // offset (in px) from the original trigger point
   delay: 0,                   // values from 0 to 3000, with step 50ms
@@ -19,23 +21,23 @@ AOS.init({
   easing: 'ease-in-out',      // default easing for AOS animations
 });
 
+// ---------------------------------------- On Load
 window.addEventListener( 'load', function (e) {
-  Gliders.init();
   AOS.refresh();
+  Gliders.init();
+  Scrolling.init();
 });
 
-window.addEventListener( 'resize', Tools.debounce(() => {
-  console.log('resize debounced');
-}, 300));
+// ---------------------------------------- On Resize
+window.addEventListener( 'resize', Tools.debounce(() => {}, 300));
 
 window.addEventListener( 'resize', Tools.throttle(() => {
-  console.log('resize throttled');
+  Scrolling.init();
 }, 300));
 
-window.addEventListener( 'scroll', Tools.debounce(() => {
-  console.log('scroll debounced');
-}, 300));
+// ---------------------------------------- On Scroll
+window.addEventListener( 'scroll', Tools.debounce(() => {}, 300));
 
 window.addEventListener( 'scroll', Tools.throttle(() => {
-  console.log('scroll throttled');
+  Scrolling.init();
 }, 300));

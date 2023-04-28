@@ -1,38 +1,21 @@
-{%- comment -%}
-
-    Accepts:
-    - classes: {String} Any combination of words
-    - product: {Object} Product Liquid object,
-    - show_symbol: {Boolean} Conditionally show the currency symbol
-
-    Usage:
-    {%- render 'price', classes: 'my-great-class another-class',  product: product -%}
-
-{%- endcomment -%}
-
 {%- if product and product != blank -%}
 
-  {% assign snippet_name = 'price' %}
-  {% assign snippet_classes = snippet_name %}
+  {%- liquid
 
-  {% if classes and classes != empty %}
-    {% assign snippet_classes = snippet_classes | prepend: ' ' | prepend: classes %}
-  {% endif %}
+    assign snippet_name = 'price'
+    assign snippet_classes = classes | default: snippet_name | append: ' body-copy--primary'
 
-  {%- assign price = product.price -%}
-  {%- assign price_compare = product.compare_at_price -%}
-  {%- assign show_symbol = show_symbol | default: false -%}
-  {%- assign symbol = shop.currency.symbol | default: '$' -%}
+    assign aos_attrs = aos_attrs | default: ''
+    assign price = product.price
+    assign price_compare_at = product.compare_at_price
 
-  <div class="{{ snippet_classes }}{% if show_symbol %} with-currency-symbol{% endif %}">
-    <span class="{{ snippet_name }}__amount">
-      {% if show_symbol %}<span class="{{ snippet_name }}__currency-symbol">{{- symbol -}}</span>{% endif %}
-      {{- price | money_without_currency -}}
-    </span>
-    {%- if price_compare -%}
-      <span class="{{ snippet_name }}__amount compare-at-price">
-        {% if show_symbol %}<span class="{{ snippet_name }}__currency-symbol">{{- symbol -}}</span>{% endif %}
-        {{- price_compare | money_without_currency -}}
+  -%}
+
+  <div class="{{ snippet_classes }}"{% if aos_attrs != blank %}{{ aos_attrs }}{% endif %}>
+    <span class="{{ snippet_name }}__value">{{- price | money -}}</span>
+    {%- if price_compare_at and price_compare_at != blank -%}
+      <span class="{{ snippet_name }}__value sale-price">
+        {{- price_compare_at | money -}}
       </span>
     {%- endif -%}
   </div>

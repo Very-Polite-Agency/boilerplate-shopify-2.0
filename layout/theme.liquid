@@ -42,8 +42,7 @@
   		<meta name="robots" content="noindex, nofollow">
     {% endif %}
 
-    <link rel="stylesheet" href="{{ 'style.css' | asset_url }}" media="print" onload="this.media='all'">
-    <noscript>{{ 'style.css' | asset_url | stylesheet_tag }}</noscript>
+    <link rel="stylesheet" href="{{ 'style.css' | asset_url }}" media="all" type="text/css">
 
     <script>
       document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
@@ -56,6 +55,11 @@
   </head>
 
   <body class="{% render 'theme--classes' %}">
+
+    {% section 'drawer-mobile-menu' %}
+    {% unless request.path == '/cart' %}
+      {% section 'drawer-cart' %}
+    {% endunless %}
 
     {% section 'header' %}
 
@@ -77,9 +81,6 @@
     </main>
 
     {% section 'footer' %}
-    {% section 'popup' %}
-    {% section 'cookie-banner' %}
-    {% section 'notification-cart' %}
 
     <script>
       var Theme = Theme || {};
@@ -98,6 +99,13 @@
         cart_update_url: '{{ routes.cart_update_url }}',
         predictive_search_url: '{{ routes.predictive_search_url }}'
       };
+      Theme.settings = {{ settings | json }} || {};
+      Theme.svg = {
+        icon: {
+          cart: `{% render 'svg-icon', type: 'cart' %}`,
+          trash: `{% render 'svg-icon', type: 'trash' %}`
+        }
+      }
       Theme.tools = {
         imgURLFilter: function(src, size) {
           return src

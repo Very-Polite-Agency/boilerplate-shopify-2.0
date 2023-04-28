@@ -3,25 +3,11 @@
 
 .link {
 
-  @extend %ui-transition;
   @extend %ui-base;
+  @extend %ui-transition;
 
-  display: inline-flex;
-  width: auto;
-  justify-content: center;
-  align-items: center;
-
-  &--1,
-  &--2 {
-    @extend .link;
-  }
-
-  &--1 {
-    @include link-style(1);
-  }
-
-  &--2 {
-    @include link-style(2);
+  &-disabled {
+    @extend %ui-disabled;
   }
 
 }

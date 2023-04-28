@@ -117,12 +117,12 @@ const onFormFocus = ( form = false ) => {
   if ( form ) {
 
     form.addEventListener( 'focusin', (e) => {
-      let field = e.target.closest('.field') || false;
+      let field = e.target.closest('.form-field') || false;
       if ( field ) field.classList.add('in-focus');
     });
 
     form.addEventListener( 'focusout', (e) => {
-      let field = e.target.closest('.field') || false;
+      let field = e.target.closest('.form-field') || false;
       if ( field && !e.target.value ) {
         isFieldValid( field );
         field.classList.remove('in-focus');
@@ -151,7 +151,7 @@ const submitForm = ( form = false ) => {
 
   if ( form ) {
 
-    let redirectUrl = form.dataset.redirectUrl || '';
+    let redirectUrl = form.dataset.redirectUrl || '/';
     let type = form.dataset.formType || 'default';
     let action = form.action || '';
     let data = new FormData( form );
@@ -159,36 +159,25 @@ const submitForm = ( form = false ) => {
 	  let dataJSONString = JSON.stringify( dataObject );
 
     document.body.classList.add('form-posting');
+    form.classList.add('form-posting');
 
     axios.post( action, data )
     .then( data => {
       if ( 200 === data.status ) {
-
         switch ( type ) {
-          case 'brand-me': {
-            if ( redirectUrl ) window.location.replace( redirectUrl );
-            break;
-          }
-          case 'lead-generation': {
-            setTimeout(() => {
-              alert(`Thanks ${dataObject['firstName']}!`);
-              form.reset();
-            }, 750 );
-            break;
-          }
-          default: {
+          case 'contact-us': {
+            window.location.replace( redirectUrl );
             break;
           }
         }
-
-        document.body.classList.remove('form-posting');
-
       }
     })
     .catch( data => {
       console.log('[ submitForm() Error ]', data );
     }).finally( data => {
-      console.log('[ submitForm() Finally ]', data );
+      form.reset();
+      document.body.classList.remove('form-posting');
+      form.classList.remove('form-posting');
     });
 
   }
@@ -212,7 +201,7 @@ const testText = ( value = '' ) => {
 // ---------------------------------------- Update Field State
 const updateFieldState = ( input = {}, valid = false ) => {
 
-  let field = input.closest('.field') || false;
+  let field = input.closest('.form-field') || false;
 
   if ( field ) {
     if ( valid ) {

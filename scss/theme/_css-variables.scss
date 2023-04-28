@@ -1,39 +1,20 @@
+@use "sass:map";
+@use "sass:meta";
 @use "../utils/variables" as *;
 @use "../utils/mixins/tools" as *;
 
 :root {
 
-  //////////////////////////////////////////////////////////
-  ////  Animate on Scroll (AOS)
-  //////////////////////////////////////////////////////////
-
-  --aos-travel: #{ $aos-travel };
-
-  //////////////////////////////////////////////////////////
-  ////  Bootstrap
-  //////////////////////////////////////////////////////////
-
-  // ---------------------------------------- Gutter Width
-  --bs-gutter-width: #{ $grid-gutter-width };
-  --bs-gutter-x: #{ $grid-gutter-width };
-
-  // ---------------------------------------- Container Fluid Padding
-  --bs-container-fluid-padding: 28px;
-
-  @include scss-map-to-css-var( '--bs-container-breakpoint', $grid-breakpoints );
-  @include scss-map-to-css-var( '--bs-container-width', $container-max-widths );
-
+  @include scss-map-to-css-var( '--theme-aos', $theme-aos-settings );
   @include scss-map-to-css-var( '--theme-border', $theme-border-settings );
   @include scss-map-to-css-var( '--theme-button-height', $theme-button-heights );
-  @include scss-map-to-css-var( '--theme-button-width', $theme-button-widths );
   @include scss-map-to-css-var( '--theme-colour', $theme-colours );
-  @include scss-map-to-css-var( '--theme-container', $container-max-widths );
+  @include scss-map-to-css-var( '--theme-container', map.get( $theme-layout-settings, 'containers' ) );
   @include scss-map-to-css-var( '--theme-font-family', $theme-font-families );
-  @include scss-map-to-css-var( '--theme-font-size-body-copy', $theme-font-sizes-body-copy );
-  @include scss-map-to-css-var( '--theme-font-size-button', $theme-font-sizes-button );
-  @include scss-map-to-css-var( '--theme-font-size-heading', $theme-font-sizes-heading );
-  @include scss-map-to-css-var( '--theme-header-height', $theme-header-heights );
-  @include scss-map-to-css-var( '--theme-input-height', $theme-input-heights );
+  @include scss-map-to-css-var( '--theme-radio-size', $theme-radio-sizes );
   @include scss-map-to-css-var( '--theme-transition', $theme-transition-settings );
+
+  --theme-layout--container-padding: #{meta.inspect(map.get( $theme-layout-settings, 'container-padding' ))};
+  --theme-layout--gutter: #{meta.inspect(map.get( $theme-layout-settings, 'gutter' ))};
 
 }

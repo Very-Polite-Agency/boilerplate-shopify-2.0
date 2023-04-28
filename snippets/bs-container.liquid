@@ -1,21 +1,24 @@
-{%- liquid
+{% comment %}
+  Renders Bootstrap container, row and column elements
 
-  comment
-    Accepts:
-    - col: {String} Optionally set column sizes using Bootstrap's column system
-    - container: {String} Optionally set container to fluid using Bootstrap's container system
-    - state: {String} Declare container state, whether it's open or closed
-    Usage:
-      render 'bs-container',
+  Accepts:
+  - col: {String} Optionally include column classes
+  - container: {String} Optionally include container classes
+  - state: {String} Open or closed
+
+  Usage:
+  {%-
+    render 'bs-container',
+      col: 'col-12'
+      container: 'container-fluid',
       state: 'open',
-      col: 'col-12 col-lg-8 offset-lg-2',
-      container: 'container-fluid'
-  endcomment
+  -%}
+{% endcomment %}
 
-  assign state = state | default: 'open'
-  assign container = container | default: 'container'
+{%- liquid
   assign col = col | default: 'col-12'
-
+  assign container = container | default: 'container'
+  assign state = state | default: 'open'
 -%}
 
 {%- unless 'full-width' == container -%}

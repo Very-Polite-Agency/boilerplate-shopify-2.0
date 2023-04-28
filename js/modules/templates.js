@@ -1,21 +1,7 @@
 import Money from 'money';
+import Regions from 'regions';
 
-const config = { debug: true, name: 'templates.js', version: '1.0' };
-
-const cartEmptyMessage = ( data = {} ) => {
-
-  let {
-    block_name = 'cart-empty-message',
-    message = Theme.settings.cart?.empty_message || '',
-  } = data;
-
-  return `
-    <div class="${block_name}">
-      <div class="${block_name}__content body-copy--secondary">${message}</div>
-    </div>
-  `;
-
-};
+const config = { debug: false, name: 'templates.js', version: '1.0' };
 
 const cartLineItem = ( line_item = {} ) => {
 
@@ -34,7 +20,7 @@ const cartLineItem = ( line_item = {} ) => {
     variant_title
   } = line_item;
 
-  let icon_trash = Theme.icons.dark?.trash ?? '';
+  let icon_trash = Theme.svg.icon?.trash ?? '';
   let image = {
     classes: 'lazyload lazyload-item lazyload-item--image lazypreload lazyload-item--inline inline',
     src: Theme.tools?.imgURLFilter ? Theme.tools.imgURLFilter( featured_image.url, 'small' ) : featured_image.url,
@@ -48,10 +34,10 @@ const cartLineItem = ( line_item = {} ) => {
           <img class="${image.classes}" src="${image.src}" alt="${featured_image.alt}" width="${featured_image.width}" height="${featured_image.height}" />
         </a>
       </div>
-      <div class="${block_name}__content">
+      <div class="${block_name}__content text--uppercase">
         <div class="${block_name}__info">
           <strong class="${block_name}__product-title">
-            <a class="${block_name}__title-link link" href="${url}" title="${product_title}" target="_self">${product_title}</a>
+            <a class="${block_name}__product-title-link link" href="${url}" title="${product_title}" target="_self">${product_title}</a>
           </strong>
           ${ variant_title ? `<span class="${block_name}__variant-title">${variant_title}</span>` : '' }
         </div>
@@ -59,13 +45,19 @@ const cartLineItem = ( line_item = {} ) => {
         <div class="${block_name}__stepper">${stepper({ quantity })}</div>
         <div class="${block_name}__action">
           <button class="${block_name}__button-remove button button--remove-cart-line-item js--remove-cart-line-item" type="button">
-            ${ icon_trash ? `<img src="${icon_trash}" alt="Remove" width="20" height="20" />` : 'Remove' }
+            ${ icon_trash ?? 'Remove' }
           </button>
         </div>
       </div>
     </div>
   `;
 
+};
+
+const cartLineItemsTotal = ( line_items_total = 0 ) => {
+  ( document.querySelectorAll( '.js--cart-line-items-total' ) || [] ).forEach( element => {
+    element.innerHTML = `${line_items_total}`;
+  });
 };
 
 const cartNotification = ( data = {} ) => {
@@ -118,8 +110,6 @@ const instagramFeedItems = ( feed = {} ) => {
     items = [],
   } = feed;
 
-  return `${items.map( (item) => `${instagramFeedItem( item )}` ).join('')}`;
-
   function instagramFeedItem( item = {} ) {
 
     let {
@@ -148,6 +138,8 @@ const instagramFeedItems = ( feed = {} ) => {
 
   }
 
+  return `${items.map( (item) => `${instagramFeedItem( item )}` ).join('')}`;
+
 };
 
 const stepper = ( data = {} ) => {
@@ -157,32 +149,98 @@ const stepper = ( data = {} ) => {
     quantity,
   } = data;
 
-  let icons = {
-    minus: Theme.icons.dark?.minus ?? '',
-    plus: Theme.icons.dark?.plus ?? ''
+  let button = {
+    decrease: Theme.svg.button.stepper?.decrease ?? '-',
+    increase: Theme.svg.button.stepper?.increase ?? '+'
   };
 
   return `
     <div class="${block_name}">
-      <button class="${block_name}__button button button--stepper decrease js--stepper-button" type="button">
-        <span class="${block_name}__button-icon button__icon minus">
-          ${ icons.minus ? `<img src="${icons.minus}" alt="Minus" width="20" height="20" />` : '-' }
-        </span>
+      <button class="${block_name}__button button button--stepper button--svg decrease js--stepper-button" type="button">
+        <span class="${block_name}__button-icon button__icon">${button.decrease}</span>
       </button>
-      <input class="${block_name}__input js--stepper-input" type="number" name="quantity" min="1" max="9999" value="${quantity}" readonly>
-      <button class="${block_name}__button button button--stepper increase js--stepper-button" type="button">
-        <span class="${block_name}__button-icon button__icon plus">
-          ${ icons.plus ? `<img src="${icons.plus}" alt="Plus" width="20" height="20" />` : '+' }
-        </span>
+      <input class="${block_name}__input input--secondary js--stepper-input" type="number" name="quantity" min="1" max="9999" value="${quantity}" readonly>
+      <button class="${block_name}__button button button--stepper button--svg increase js--stepper-button" type="button">
+        <span class="${block_name}__button-icon button__icon">${button.increase}</span>
       </button>
     </div>
   `;
 
 };
 
+const stockistAddress = ( location = {} ) => {
+
+  // Lat & Long API
+  // https://positionstack.com/documentation
+
+  let {
+    block_name = 'stockists',
+    address = '',
+    address2 = '',
+    city = '',
+    country = '',
+    name = '',
+    postal = '',
+    region = ''
+  } = location;
+
+  address += address2 ? `, ${address2}` : ``;
+  city += region ? `, ${Regions.getCodeFromName(region)}` : ``;
+  city += postal ? ` ${postal}` : ``;
+
+  return address || city ?
+    `
+      <div class="${block_name}__location-address text--secondary">
+        <a class="${block_name}__location-address-link link" href="${stockistDirectionsLink( location )}" target="_blank" title="Directions to ${name}">
+          ${ address ? `<span>${address}</span>` : `` }
+          ${ city ? `<span>${city}</span>` : `` }
+        </a>
+      </div>
+    ` : ``;
+};
+
+const stockistDirectionsLink = ( location = {} ) => {
+
+  let {
+    block_name = 'stockists',
+    address = '',
+    address2 = '',
+    city = '',
+    country = '',
+    query = '',
+    name = '',
+    postal = '',
+    region = ''
+  } = location;
+
+  query += address ?? ``;
+  query += city ? `, ${city}` : ``;
+  query += region ? `, ${region}` : ``;
+  query += postal ? `, ${postal}` : ``;
+  query += country ? `, ${country}` : ``;
+  query += name ? `, ${name}` : ``;
+
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query.trim())}`
+
+};
+
+const stockistLocation = ( location = {} ) => {
+
+  let {
+    block_name = 'stockists',
+    name = ''
+  } = location;
+
+  return `
+    <div class="${block_name}__location">
+      ${ name ? `<strong class="${block_name}__location-name">${name}</strong>` : '' }
+      ${stockistAddress( location )}
+    </div>
+  `;
+
+};
+
 export default {
-  cartEmptyMessage,
   cartLineItem,
-  cartNotification,
-  instagramFeedItems
+  stockistLocation
 };

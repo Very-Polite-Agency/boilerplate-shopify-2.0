@@ -77,13 +77,73 @@ $theme-font-sizes-button: (
 );
 
 // ---------------------------------------- Font Sizes | Heading
+$theme-font-sizes-body-copy: (
+  '1': (
+    'base': 18px,
+    'sm': 18px,
+    'md': 20px,
+    'lg': 22px,
+    'xl': 24px,
+    'xxl': 26px
+  ),
+  '2': (
+    'base': 14px,
+    'sm': 14px,
+    'md': 16px,
+    'lg': 18px,
+    'xl': 20px,
+    'xxl': 22px
+  ),
+  '3': (
+    'base': 14px,
+    'sm': 14px,
+    'md': 14px,
+    'lg': 16px,
+    'xl': 18px,
+    'xxl': 20px
+  ),
+  '4': (
+    'base': 14px,
+    'sm': 14px,
+    'md': 14px,
+    'lg': 14px,
+    'xl': 16px,
+    'xxl': 18px
+  )
+);
+
+// ---------------------------------------- Font Sizes | Heading
 $theme-font-sizes-heading: (
-  'base': 32px,
-  'sm': 42px,
-  'md': 52px,
-  'lg': 32px,
-  'xl': 42px,
-  'xxl': 52px
+  '1': (
+    'base': 48px,
+    'sm': 58px,
+    'md': 70px,
+    'lg': 82px,
+    'xl': 100px,
+    'xxl': 115px
+  ),
+  '2': (
+    'base': 32px,
+    'sm': 38px,
+    'md': 46px,
+    'lg': 55px,
+    'xl': 66px,
+    'xxl': 80px
+  ),
+  '3': (
+    'base': 28px,
+    'sm': 34px,
+    'md': 40px,
+    'lg': 48px,
+    'xl': 58px,
+    'xxl': 70px
+  ),
+  'base': 36px,
+  'sm': 36px,
+  'md': 46px,
+  'lg': 52px,
+  'xl': 62px,
+  'xxl': 72px
 );
 
 // ---------------------------------------- Header Heights
@@ -105,6 +165,27 @@ $theme-input-heights: (
   'xl': 52px,
   'xxl': 54px
 );
+
+$theme-layout-settings: (
+  'gutter': 24px,
+  'container-padding': 24px,
+  'breakpoints': (
+    'xs': 0,
+    'sm': 576px,
+    'md': 768px,
+    'lg': 992px,
+    'xl': 1200px,
+    'xxl': 1400px
+  ),
+  'containers': (
+    'sm': 540px,
+    'md': 740px,
+    'lg': 960px,
+    'xl': 1160px,
+    'xxl': 1360px
+  )
+);
+
 
 // ---------------------------------------- Transition Settings
 $theme-transition-settings: (

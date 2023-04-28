@@ -1,27 +1,53 @@
+@use '../utils/mixins/breakpoint' as *;
 @use '../utils/mixins/heading' as *;
 
 .heading {
 
-  // ---------------------------------------- Sizes
-  $heading-sizes:( 'xl', 'lg', 'md', 'sm', 'xs' );
-
-  @each $size in $heading-sizes {
-    &--#{$size} {
-      @include heading-size( $size );
-    }
-  }
-
-  // ---------------------------------------- Styles
   &--primary {
-    @include heading-style( 'primary' );
+    @include heading-style('1');
   }
 
-  &--secondary {
-    @include heading-style( 'secondary' );
+  &--1,
+  &--lg {
+    @include heading-size('1');
   }
 
-  &--tertiary {
-    @include heading-style( 'tertiary' );
+  &--2,
+  &--md {
+    @include heading-size('2');
+  }
+
+  &--3,
+  &--sm {
+    @include heading-size('3');
+  }
+
+  &--lg-fluid {
+    font-size: min(115px, 16.15vw);
+  }
+
+  &--md-fluid {
+    font-size: min(100px, 10.75vw);
+  }
+
+  &--sm-fluid {
+    font-size: min(90px, 8.75vw);
+  }
+
+  @include breakpoint(lg) {
+
+    &--lg-fluid {
+      font-size: min(115px, 9.25vw);
+    }
+
+    &--md-fluid {
+      font-size: min(100px, 5.25vw);
+    }
+
+    &--sm-fluid {
+      font-size: min(90px, 4.25vw);
+    }
+
   }
 
 }

@@ -1,37 +1,68 @@
 import Cookies from 'cookies';
 
-//////////////////////////////////////////////////////////
-////  Vars
-//////////////////////////////////////////////////////////
-
-const config = { debug: true, name: 'ageGate.js', version: '1.0' };
+const config = { debug: false, name: 'ageGate.js', version: '1.0' };
 const modal = {
   element: document.getElementById('age-gate') || false,
   instance: false
 };
 const cookie = {
-	name: 'viavino--age-gate',
+	name: 'age-gate',
 	value: 'of-age',
   delay: function() {
-    if ( element.main ) {
-      return parseInt(element.main.dataset.delay || 4000);
-    }
-    return 4000;
+    return parseInt( modal.element.dataset?.delay ?? 4000 );
   },
   duration: function() {
-    if ( modal.element ) {
-      return parseInt(modal.element.dataset.cookieDuration || 30);
-    }
-    return 35;
+    return parseInt( modal.element.dataset?.cookieDuration ?? 30 );
   },
   expired: function() {
     return Cookies.get( this.name ) ? false : true;
+  },
+  redirect: function() {
+    return modal.element.dataset?.redirectUrl ?? 'https://www.pbs.org';
   }
 };
 
-//////////////////////////////////////////////////////////
-////  Private Methods
-//////////////////////////////////////////////////////////
+const enableGateKeeper = () => {
+
+  showAgeGate( modal.instance, cookie.delay() );
+
+  ( modal.element.querySelectorAll( 'button' ) || [] ).forEach( button => {
+    button.addEventListener( 'click', event => {
+
+      let choice = button.dataset.ofAge || '';
+      let ofAge = {
+        'yes': function() {
+
+          let successElement = document.getElementById('age-gate--success-message') || false;
+          if ( successElement ) {
+            anime.timeline({
+              targets: successElement,
+              easing: 'easeOutExpo',
+              begin: function(anim) {},
+              complete: function(anim) {
+                modal.instance.hide();
+              }
+            }).add({
+              delay: 500,
+              duration: 700,
+              endDelay: 700,
+              top: 0,
+              opacity: 1,
+            }).play;
+          }
+
+        },
+        'no': function() {
+          document.location.replace( cookie.redirect() );
+        },
+        'default': function () {}
+      };
+
+      ( ofAge[choice] || ofAge['default'] )();
+
+    });
+  });
+};
 
 const showAgeGate = ( modal = false, delay = 0 ) => {
   if ( modal ) {
@@ -41,18 +72,14 @@ const showAgeGate = ( modal = false, delay = 0 ) => {
   }
 };
 
-//////////////////////////////////////////////////////////
-////  Public Methods
-//////////////////////////////////////////////////////////
-
 const init = () => {
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} initialized ]`);
-  if ( cookie.expired() && modal.element ) {
+  if ( modal.element && cookie.expired() ) {
     modal.instance = new bootstrap.Modal(modal.element, {}) || false;
-    showAgeGate( modal.instance, cookie.delay );
-    modal.element.addEventListener('hide.bs.modal', function (event) {
+    modal.element.addEventListener( 'hide.bs.modal', function (event) {
       Cookies.set( cookie.name, cookie.value, cookie.duration() );
     });
+    enableGateKeeper();
   }
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} complete ]`);
 };

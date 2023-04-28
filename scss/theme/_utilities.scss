@@ -1,9 +1,50 @@
+@use "sass:map";
+@use '../utils/variables' as *;
+@use '../utils/mixins/font' as *;
+
 .text {
 
+  // ---------------------------------------- Alignment
+  &--align-left {
+    text-align: left;
+  }
+
+  &--align-center {
+    text-align: center;
+  }
+
+  &--align-right {
+    text-align: right;
+  }
+
+  // ---------------------------------------- Case
   &--uppercase {
     text-transform: uppercase;
   }
 
+  // ---------------------------------------- Colour
+  @each $name, $value in $theme-colours {
+    &--#{$name} {
+      color: var(--theme-colour--#{$name});
+    }
+  }
+  &--dark {
+    color: var(--theme-colour--black);
+  }
+  &--light {
+    color: var(--theme-colour--lemon);
+  }
+
+  // ---------------------------------------- Style
+  &--primary {
+    //@include hobeaux( 700 );
+  }
+
+  &--secondary {
+   // @include sorry-sans( 700 );
+  }
+
+  // ---------------------------------------- Weight
   @for $i from 1 through 9 {
     $weight: $i * 100;
     &--#{$weight} {

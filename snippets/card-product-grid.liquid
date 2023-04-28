@@ -12,7 +12,7 @@
     {%-
       render 'card-product-grid',
         card_aria_role: 'listitem',
-        card_background: 'black'
+        card_background: 'mango'
         card_product: block.settings.product
     -%}
   {% endcomment %}
@@ -121,7 +121,8 @@
           -%}
           <div class="{{ snippet_name }}__cta" {{ aos_attrs }}>
             <a class="{{ snippet_name }}__cta-link link{% unless snippet_available %}-disabled{% endunless %}" href="{{ snippet_url }}" target="_self" snippet_title="Shop {{ snippet_title }}">
-              Shop {{ snippet_title }}
+              <div class="button--svg d-lg-none">{% render 'svg', type: 'button.shop-now.sm' %}</div>
+              <div class="button--svg d-none d-lg-block">{% render 'svg', type: 'button.shop-now' %}</div>
             </a>
           </div>
         {% endif %}

@@ -12,7 +12,7 @@
       opacity: 1;
     }
 
-    @while $count < 3500 {
+    @while $count < 4000 {
       &[data-transition-duration="#{$count}"] {
         transition-duration: $count + ms;
       }

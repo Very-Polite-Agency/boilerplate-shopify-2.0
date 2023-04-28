@@ -1,18 +1,38 @@
-.body {
+@use '../utils/mixins/breakpoint' as *;
+@use '../utils/mixins/font' as *;
 
+html, body {
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+
+  background: var(--theme-colour--white);
+  color: var(--theme-colour--black);
   display: flex;
   flex-direction: column;
+  line-height: 1.2;
 
   main {
+    padding-top: var(--theme-header-height--mobile);
     flex: 1 0 auto;
+    overflow: hidden;
   }
 
   footer {
     flex-shrink: 0;
   }
 
-  .scroll-position--scrolled & {}
-
-  .mobile-menu--active & {}
+  @include breakpoint(lg) {
+    main {
+      padding-top: var(--theme-header-height--desktop);
+    }
+  }
 
 }

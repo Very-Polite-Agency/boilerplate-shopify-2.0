@@ -1,58 +1,27 @@
-@font-face {
-  font-family: 'Akkurat Mono';
-  src: url('AkkuratMonoLLTT-Bold.eot');
-  src: local('AkkuratMonoLLTT-Bold'),
-    url('AkkuratMonoLLTT-Bold.eot?#iefix') format('embedded-opentype'),
-    url('AkkuratMonoLLTT-Bold.woff2') format('woff2'),
-    url('AkkuratMonoLLTT-Bold.ttf') format('truetype'),
-    url('AkkuratMonoLLTT-Bold.svg#AkkuratMonoLLTT-Bold') format('svg');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-// ---------------------------------------- Akkurat | Regular
-
-@font-face {
-  font-family: 'Akkurat Mono';
-  src: url('AkkuratMonoLLWeb-Regular.eot');
-  src: local('Akkurat Mono Regular'),
-    url('AkkuratMonoLLWeb-Regular.eot?#iefix') format('embedded-opentype'),
-    url('AkkuratMonoLLWeb-Regular.woff2') format('woff2'),
-    url('AkkuratMonoLLWeb-Regular.woff') format('woff'),
-    url('AkkuratMonoLLWeb-Regular.ttf') format('truetype'),
-    url('AkkuratMonoLLWeb-Regular.svg#AkkuratMonoLLWeb-Regular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 // ---------------------------------------- Not Sorry Serif | Normal
-
 @font-face {
   font-family: 'Not Sorry Serif';
-  src: url('NotSorrySerif-Bold.eot');
-  src: local('Not Sorry Serif Bold'), local('NotSorrySerif-Bold'),
-    url('NotSorrySerif-Bold.eot?#iefix') format('embedded-opentype'),
-    url('NotSorrySerif-Bold.woff2') format('woff2'),
-    url('NotSorrySerif-Bold.ttf') format('truetype'),
-    url('NotSorrySerif-Bold.svg#NotSorrySerif-Bold') format('svg');
+  src: url('./NotSorrySerif-Bold.eot');
+  src: url('./NotSorrySerif-Bold.eot?#iefix') format('embedded-opentype'),
+      url('./NotSorrySerif-Bold.woff2') format('woff2'),
+      url('./NotSorrySerif-Bold.woff') format('woff'),
+      url('./NotSorrySerif-Bold.ttf') format('truetype'),
+      url('./NotSorrySerif-Bold.svg#NotSorrySerif-Bold') format('svg');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
 }
 
 // ---------------------------------------- Sorry Sans | Bold Extended
-
 @font-face {
   font-family: 'Sorry Sans';
-  src: url('SorrySans-BoldExtended.eot');
-  src: local('Sorry Sans Bold Extended'), local('SorrySans-BoldExtended'),
-    url('SorrySans-BoldExtended.eot?#iefix') format('embedded-opentype'),
-    url('SorrySans-BoldExtended.woff2') format('woff2'),
-    url('SorrySans-BoldExtended.ttf') format('truetype'),
-    url('SorrySans-BoldExtended.svg#SorrySans-BoldExtended') format('svg');
-  font-weight: bold;
+  src: url('./SorrySans-BoldExtended.eot');
+  src: url('./SorrySans-BoldExtended.eot?#iefix') format('embedded-opentype'),
+    url('./SorrySans-BoldExtended.ttf') format('truetype'),
+    url('./SorrySans-BoldExtended.woff2') format('woff2'),
+    url('./SorrySans-BoldExtended.woff') format('woff'),
+    url('./SorrySans-BoldExtended.svg#NotSorrySerif-Bold') format('svg');
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }

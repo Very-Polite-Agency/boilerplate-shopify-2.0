@@ -5,27 +5,20 @@
 
   @extend %ui-transition;
   @extend %ui-base;
-  @extend %ui-disabled;
+
+  path {
+    transition: fill var(--theme-transition--duration);
+  }
 
   &--1,
   &--2 {
     @extend .button;
   }
 
-  &--1 {
-    @include button-style(1);
+  &[disabled],
+  &.disabled {
+    @extend %ui-disabled;
   }
 
-  &--2 {
-    @include button-style(2);
-  }
-
-  &--dark {
-    @include button-colour-text( 'dark' );
-  }
-
-  &--light {
-    @include button-colour-text( 'light' );
-  }
 
 }

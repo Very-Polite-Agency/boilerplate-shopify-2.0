@@ -1,32 +1,23 @@
-@use '../utils/mixins/breakpoint' as *;
+@use "../utils/mixins/breakpoint" as *;
 
 .grid {
 
   display: grid;
   width: 100%;
+  grid-template-columns: repeat( 1, 1fr );
 
-  &__item {
-    img, svg, video {
-      width: 100%;
-      display: block;
-      object-fit: contain;
+  @for $i from 2 through 4 {
+    &--#{$i} {
+      @extend .grid;
     }
   }
 
-  @for $i from 1 through 50 {
-    &[data-grid-gutter="#{$i}"] {
-      gap: $i * 1px;
-    }
-  }
+  @include breakpoint(lg) {
 
-  @include breakpoint(md) {
-
-    &--2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    &--3 {
-      grid-template-columns: repeat(3, 1fr);
+    @for $i from 2 through 4 {
+      &--#{$i} {
+        grid-template-columns: repeat( #{$i}, 1fr );
+      }
     }
 
   }

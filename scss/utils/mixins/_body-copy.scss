@@ -1,12 +1,25 @@
 @use 'sass:map';
-
 @use '../variables' as *;
 @use "border" as *;
 @use "breakpoint" as *;
 @use "font" as *;
-@use "heading" as *;
 
-@mixin body-copy-style( $style: 1 ) {
+@mixin body-copy-style( $style: '1' ) {
+
+  @if $style == '1' {
+    @include sorry-sans( 700 );
+    line-height: 1.214;
+    letter-spacing: 0;
+  }
+
+  @if $style == '2' {
+    @include hobeaux( 700 );
+    line-height: 1.29;
+    letter-spacing: 0.01em;
+  }
+
+  display: block;
+  color: inherit;
 
   thead, tbody, tfoot, tr, td, th {
     border-color: inherit;
@@ -71,7 +84,7 @@
     a {
 
       @include border-solid( 2px, 'inherit', 'bottom' );
-      transition: border var(--theme-transition-duration);
+      transition: border var(--theme-transition--duration);
       color: inherit;
       display: inline-block;
       width: auto;
@@ -94,102 +107,18 @@
     margin-bottom: 0;
   }
 
-  @if $style == 1 {
-    @include new-sprint(300);
-    h1, h2, h3, h4, h5, h6 {}
-    a {
-      line-height: 1.1;
-    }
-  }
-
-  @if $style == 2 {
-    @include clarendon-wide(700);
-    h1, h2, h3, h4, h5, h6 {}
-    a {
-      line-height: 0.85;
-    }
-  }
-
-  @if $style == 3 {
-    @include sarina(400);
-    h1, h2, h3, h4, h5, h6 {}
-    a {
-      line-height: 0.85;
-    }
-  }
-
 }
 
-@mixin body-copy-size( $size: 'md' ) {
+@mixin body-copy-size( $size: '1' ) {
 
-  @if $size == 'xl' {
-    @each $name, $value in $theme-font-sizes-body-copy {
-      @if $name == 'base' {
-        font-size: $value * 1.25;
-      } @else {
-        @include breakpoint(#{$name}) {
-          font-size: $value * 1.5;
-        }
-      }
-    }
-  }
+  $set: map.get( $theme-font-sizes-body-copy, $size );
 
-  @if $size == 'lg' {
-    @each $name, $value in $theme-font-sizes-body-copy {
-      @if $name == 'base' {
-        font-size: $value * 1.15;
-      } @else {
-        @include breakpoint(#{$name}) {
-          font-size: $value * 1.3;
-        }
-      }
-    }
-  }
-
-  @if $size == 'md' {
-    @each $name, $value in $theme-font-sizes-body-copy {
-      @if $name == 'base' {
+  @each $name, $value in $set {
+    @if $name == 'base' {
+      font-size: $value;
+    } @else {
+      @include breakpoint(#{$name}) {
         font-size: $value;
-      } @else {
-        @include breakpoint(#{$name}) {
-          font-size: $value;
-        }
-      }
-    }
-  }
-
-  @if $size == 'sm' {
-    @each $name, $value in $theme-font-sizes-body-copy {
-      @if $name == 'base' {
-        font-size: $value * 0.95;
-      } @else {
-        @include breakpoint(#{$name}) {
-          font-size: $value * 0.85;
-        }
-      }
-    }
-  }
-
-  @if $size == 'xs' {
-    @each $name, $value in $theme-font-sizes-body-copy {
-      @if $name == 'base' {
-        font-size: $value * 0.9;
-      } @else {
-        @include breakpoint(#{$name}) {
-          font-size: $value * 0.8;
-        }
-      }
-    }
-  }
-
-  @if $size == 'xxs' {
-    @each $name, $value in $theme-font-sizes-body-copy {
-      @if $name == 'base' {
-        font-size: $value * 0.75;
-      } @else {
-        @include breakpoint(#{$name}) {
-          font-size: $value * 0.6;
-        }
       }
     }
   }

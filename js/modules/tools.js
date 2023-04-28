@@ -35,14 +35,28 @@ const getElementHeightByTag = ( $tag = '' ) => {
   return document.getElementsByTagName( $tag )[0].offsetHeight || 0;
 };
 
-const getLocalStorageValueByKey = ( $key ) => {
-  return localStorage.getItem( $key );
-}
-
 const getTimeStamp = () => {
   let d = new Date();
   return d.getTime();
 }
+
+const localStorageAvailable = () => {
+  if (typeof(Storage) !== "undefined") {
+    return true;
+  }
+  return false;
+}
+
+const localStorageExpiredByMinutes = ( storage_date = 0, max_minutes = 300  ) => {
+  let date_difference_minutes = ( ( Date.now() - storage_date) / 60000 ).toFixed(2);
+  if ( storage_date ) {
+    if ( date_difference_minutes > max_minutes ) {
+      return true;
+    }
+    return false;
+  }
+  return true;
+};
 
 const removeClass = ( $class = '', $elements = [] ) => {
   if ( $class && $elements.length ) {
@@ -70,10 +84,6 @@ const setCSSVariable = ( $id = '', $value = '' ) => {
 
 const setHeaderHeightTotalCSSVariable = () => {
   setCSSVariable('theme-header-height-total', getElementHeightByTag('header') + 'px'  );
-};
-
-const setLocalStorage = ( $key, $value ) => {
-  localStorage.setItem( $key, $value );
 };
 
 const throttle = (func, limit) => {
@@ -113,13 +123,13 @@ export default {
   debounce,
   getArrayOfElementsByTag,
   getElementHeightByTag,
-  getLocalStorageValueByKey,
   getTimeStamp,
+  localStorageAvailable,
+  localStorageExpiredByMinutes,
   removeClass,
   removeClassesFromElements,
   setCSSVariable,
   setHeaderHeightTotalCSSVariable,
-  setLocalStorage,
   toggleClass,
   throttle
 };

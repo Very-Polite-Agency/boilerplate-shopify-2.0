@@ -1,47 +1,68 @@
-import anime from 'animejs/lib/anime.es.js';
-
-import Gliders from 'gliders';
 import Money from 'money';
-import Tools from 'tools';
 import Templates from 'templates';
+import Tools from 'tools';
 
-const config = { debug: true, name: 'render.js', version: '1.0' };
+const config = { debug: false, name: 'render.js', version: '1.0' };
 const elements = {
-  cart: document.querySelectorAll( '.js--cart' ) || [],
-  cart_drawer: document.getElementById("drawer-cart__cart-line-items") || false
-};
-
-const cartDrawerLineItems = ( line_items = [] ) => {
-  if ( elements.cart_drawer && line_items.length ) {
-    let template = '';
-    for ( let i = 0; i < line_items.length; i++ ) {
-      template += Templates.cartLineItem( line_items[i] );
-    }
-    elements.cart_drawer.innerHTML = template;
-  }
+  cart: document.querySelectorAll('.js--cart') || [],
 };
 
 const cartEmptyMessage = () => {
+  let message = Theme.settings?.cart_empty_message ?? '<p>Oops! Nothing added to your cart yet :(</p>';
   elements.cart.forEach( element => {
-    element.innerHTML = Templates.cartEmptyMessage();
+    element.innerHTML = `
+      <div class="cart-empty-message body-copy--primary body-copy--2">${message}</div>
+    `;
   });
 };
 
-const cartLineItems = ( line_items = [] ) => {
-  elements.cart.forEach( element => {
-    let template = '';
-    for ( let i = 0; i < line_items.length; i++ ) {
-      template += Templates.cartLineItem( line_items[i] );
-    }
-    element.innerHTML = template;
-  });
+const cartLineItemErrorMessage = ( key = '', message = 'Something went wrong!' ) => {
+
+  let element = document.createElement("div");
+  let parent = document.querySelector(`.cart-line-item[data-key="${key}"]`) || false;
+
+  if ( parent ) {
+    element.classList.add( 'cart-line-item__error-message', 'body-copy--primary', 'body-copy--3' );
+    element.innerHTML = `<p>${message}</p>`;
+    parent.appendChild(element);
+    anime.timeline({
+      targets: element,
+      complete: function(anim) {
+        element.remove();
+      }
+    }).add({
+      delay: 0,
+      duration: 750,
+      opacity: 1,
+      translateX: [200, 0]
+    }).add({
+      delay: 3200,
+      duration: 550,
+      opacity: 0,
+      translateX: [0, 200]
+    }).play
+  }
+
 };
 
-const cartSubtotal = ( subtotal = 0 ) => {
-  ( document.querySelectorAll( '.js--cart-subtotal' ) || [] ).forEach( element => {
-    element.innerHTML = Money.format( subtotal );
-  });
-};
+const cartLineItemRemoveByKey = ( key = '' ) => {
+  let element = document.getElementById(`cart-line-item--${key}`) || false;
+  if ( element ) {
+    anime.timeline({
+      targets: element,
+      easing: 'easeOutElastic(1, .8)',
+      complete: function(anim) {
+        element.remove();
+      }
+    }).add({
+      delay: 500,
+      duration: 700,
+      endDelay: 700,
+      translateX: 250,
+      opacity: 0,
+    }).play
+  }
+}
 
 const cartLineItemsLinePrice = ( key = '', line_items = [] ) => {
   if ( line_items.length ) {
@@ -53,7 +74,7 @@ const cartLineItemsLinePrice = ( key = '', line_items = [] ) => {
       }
     }
   }
-}
+};
 
 const cartLineItemsQuantity = ( key = '', quantity = 1, line_items = [] ) => {
   if ( line_items.length ) {
@@ -71,78 +92,98 @@ const cartLineItemsQuantity = ( key = '', quantity = 1, line_items = [] ) => {
   }
 };
 
-const cartLineItemsTotal = ( line_items_total = 0 ) => {
-  ( document.querySelectorAll( '.js--cart-line-items-total' ) || [] ).forEach( element => {
-    element.innerHTML = `(${line_items_total})`;
+const cartLineItemsToElement = ( line_items = [], elements = [] ) => {
+  elements.forEach( element => {
+    let template = '';
+    for ( let i = 0; i < line_items.length; i++ ) {
+      template += Templates.cartLineItem( line_items[i] );
+    }
+    element.innerHTML = template;
   });
 };
 
-const cartNotification = ( data = {} ) => {
-
-  let {
-    block_name = 'cart-notification',
-    div = document.createElement("div"),
-    id = 'not-set',
-    image_height = 150,
-    featured_image = {},
-    final_price: price = 0,
-    product_title: title = '',
-    variant_title = '',
-  } = data.items?.[0];
-
-  div.className = `${block_name}`;
-  div.id = `${block_name}--${id}--${Tools.getTimeStamp()}`;
-  div.innerHTML = Templates.cartNotification({ block_name, id, image_height, featured_image, price, title, variant_title });
-  document.body.appendChild(div);
-
-  anime.timeline({
-    targets: div,
-    easing: 'easeOutExpo',
-    duration: 3200,
-  })
-  .add({
-    translateY: 70,
-    opacity: 1
-  })
-  .add({
-    delay: 850,
-    duration: 350,
-    translateY: -35,
-    opacity: 0,
-    complete: function(anim) {
-      setTimeout(() => {
-        div.remove();
-      }, 500);
-    }
+const cartLineItemsTotal = ( line_items_total = 0 ) => {
+  ( document.querySelectorAll( '.js--cart-line-items-total' ) || [] ).forEach( element => {
+    element.innerHTML = `${line_items_total}`;
   });
+};
 
-}
+const cartSubtotal = ( subtotal = 0 ) => {
+  ( document.querySelectorAll( '.js--cart-subtotal' ) || [] ).forEach( element => {
+    element.innerHTML = Money.format( subtotal );
+  });
+};
 
-const instagramFeed = ( feed = {} ) => {
+const stockistCountryPopulationGraph = ( element = false, name = '', population = 0 ) => {
 
-  let feed_slides = document.querySelector( '#' + feed.id +  ' .glide__slides' ) ?? false;
-  let feed_glide = document.getElementById(feed.id) || false;
-  if ( feed_glide && feed_slides ) {
-    feed_slides.innerHTML = Templates.instagramFeedItems( feed );
-    // Gliders.createGliderFromElement( feed_glide );
+  let countryPopulation = population * 1000;
+  let regionID = element.id || 'not-set';
+  let region = element.dataset.region || '';
+  let regionPopulation = parseInt(element.dataset.regionPopulation || 0);
+  let regionPopulationPercent = (regionPopulation/countryPopulation).toFixed(2)
+  let regionScaleElement = document.getElementById(`${regionID}--scale`) || false;
+  let scaleLimit = 13;
+  let scalePercent = Math.ceil(scaleLimit * regionPopulationPercent);
+  let template = '';
+
+  for ( let i = 0; i < scaleLimit; i++ ) {
+    template += `<div class="stockists__region-stats-scale-item${ i < scalePercent ? " active" : "" }"></div>`;
+  }
+
+  regionScaleElement.innerHTML = template;
+
+  if ( regionScaleElement ) {
+    console.log({ region, regionPopulation, regionPopulationPercent, countryPopulation, scaleLimit, scalePercent });
   }
 
 };
 
-const removeCartLineItem = ( key = '' ) => {
-  let element = document.getElementById(`cart-line-item--${key}`) || false;
-  if ( element ) element.remove();
-}
+const stockistLocationByRegion = ( element = false, locations = [] ) => {
+
+  if ( element && locations.length ) {
+
+    let cities = [...new Set(locations.map(({ city }) => city))].sort();
+    let template = '';
+
+    if ( cities.length ) {
+      cities.forEach( city => {
+
+        let locations_by_city = locations.filter( location => ( location.city === city ) );
+        let locations_by_city_sorted = locations_by_city.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+
+        template += `<h3 class="stockists__city">${city}</h3>`;
+
+        if ( locations_by_city_sorted.length ) {
+          template += `<div class="stockists__listing">`;
+            for ( let j = 0; j < locations_by_city_sorted.length; j++ ) {
+              template += Templates.stockistLocation( locations_by_city_sorted[j] );
+            }
+          template += `</div>`;
+        }
+
+      });
+    } else {
+      template = `
+        <div class="stockists__error text--align-center body-copy--primary body-copy--2">
+          <p>No stockists for this region yet. Checkback soon!</p>
+        </div>
+      `;
+    }
+
+    element.innerHTML = template;
+
+  }
+};
 
 export default {
-  cartDrawerLineItems,
   cartEmptyMessage,
-  cartLineItems,
+  cartLineItemErrorMessage,
+  cartLineItemRemoveByKey,
   cartLineItemsLinePrice,
   cartLineItemsQuantity,
+  cartLineItemsToElement,
   cartLineItemsTotal,
-  cartNotification,
   cartSubtotal,
-  instagramFeed,
-  removeCartLineItem
+  stockistCountryPopulationGraph,
+  stockistLocationByRegion
 };

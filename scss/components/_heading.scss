@@ -4,22 +4,26 @@
 .heading {
 
   &--primary {
-    @include heading-style('1');
+    @include body-copy-style('primary');
+  }
+
+  &--secondary {
+    @include body-copy-style('secondary');
   }
 
   &--1,
   &--lg {
-    @include heading-size('1');
+    @include body-copy-size('1');
   }
 
   &--2,
   &--md {
-    @include heading-size('2');
+    @include body-copy-size('2');
   }
 
   &--3,
   &--sm {
-    @include heading-size('3');
+    @include body-copy-size('3');
   }
 
   &--lg-fluid {

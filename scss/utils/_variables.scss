@@ -11,139 +11,134 @@ $theme: (
   'text-domain': 'boilerplate-shopify-2',
 );
 
+
+// ---------------------------------------- AOS Settings
+$theme-aos-settings: (
+  'travel': 10px,
+);
+
+// ---------------------------------------- Body Copy
+$theme-body-copy-font-sizes: (
+  '1': (
+    'base': 18px,
+    'sm': 18px,
+    'md': 20px,
+    'lg': 16px,
+    'xl': 17px,
+    'xxl': 18px
+  ),
+  '2': (
+    'base': 16px,
+    'sm': 16px,
+    'md': 18px,
+    'lg': 15px,
+    'xl': 16px,
+    'xxl': 17px
+  ),
+  '3': (
+    'base': 14px,
+    'sm': 14px,
+    'md': 16px,
+    'lg': 14px,
+    'xl': 15px,
+    'xxl': 16px
+  ),
+  'banner': (
+    'base': 10px,
+    'sm': 12px,
+    'md': 14px,
+    'lg': 14px,
+    'xl': 14px,
+    'xxl': 16px
+  )
+);
+
 // ---------------------------------------- Border Settings
 $theme-border-settings: (
-  'radius': 4px,
-  'width': 2px,
+  'radius': 10px,
+  'width': 3px,
 );
 
 // ---------------------------------------- Button Heights
-$theme-button-heights: (
-  'base': 40px,
-  'sm': 40px,
-  'md': 40px,
-  'lg': 44px,
-  'xl': 44px,
-  'xxl': 44px
+$theme-button-settings: (
+  'font-sizes': (
+    'base': 12px,
+    'sm': 12px,
+    'md': 14px,
+    'lg': 14px,
+    'xl': 14px,
+    'xxl': 16px
+  ),
+  'heights': (
+    'base': 38px,
+    'sm': 40px,
+    'md': 42px,
+    'lg': 40px,
+    'xl': 42px,
+    'xxl': 44px
+  ),
+  'widths': (
+    'base': 150px,
+    'sm': 150px,
+    'md': 180px,
+    'lg': 360px,
+    'xl': 360px,
+    'xxl': 400px
+  )
 );
 
-// ---------------------------------------- Button Widths
-$theme-button-widths: (
-  'base': 120px,
-  'sm': 120px,
-  'md': 120px,
-  'lg': 140px,
-  'xl': 140px,
-  'xxl': 140px
+// ---------------------------------------- Theme Button Font Size
+$theme-burger-settings: (
+  'width': 30px,
+  'height': 14px
 );
 
 // ---------------------------------------- Colours
 $theme-colours: (
-  'black' : #111111,
-  'blue' : #0038F5,
-  'green': #81F25C,
-  'grey' : #E0E0E0,
-  'red' : #DC4117,
-  'white' : #ffffff,
-  'yellow' : #ffc700,
+  'black': #111111,
+  'blue': #0038f5,
+  'red': #dc4117,
+  'white': #ffffff,
+  'yellow': #ffc700,
+);
+
+$theme-colours-rgb: (
+  'black': #111111,
+  'blue': #0038f5,
+  'red': #dc4117,
+  'white': #ffffff,
+  'yellow': #ffc700,
+);
+
+// ---------------------------------------- Drawers
+$theme-drawer-settings: (
+  'link-font-sizes': (
+    'base': 36px,
+    'sm': 40px,
+    'md': 55px,
+    'lg': 32px,
+    'xl': 36px,
+    'xxl': 40px
+  ),
+  'widths': (
+    'base': 100%,
+    'sm': 100%,
+    'md': 100%,
+    'lg': 50%,
+    'xl': 50%,
+    'xxl': 40%
+  )
 );
 
 // ---------------------------------------- Font Families
 $theme-font-families: (
   'sans-serif': sans-serif,
+  'sans-serif-sorry-sans': '"Sorry Sans", sans-serif',
   'serif': serif,
+  'serif-not-sorry-serif': '"Not Sorry Serif", serif',
   'cursive': cursive,
   'mono': monospace,
-);
-
-// ---------------------------------------- Font Sizes | Body Copy
-$theme-font-sizes-body-copy: (
-  'base': 15px,
-  'sm': 16px,
-  'md': 17px,
-  'lg': 16px,
-  'xl': 17px,
-  'xxl': 18px
-);
-
-// ---------------------------------------- Font Sizes | Button
-$theme-font-sizes-button: (
-  'base': 13px,
-  'sm': 14px,
-  'md': 15px,
-  'lg': 13px,
-  'xl': 14px,
-  'xxl': 15px
-);
-
-// ---------------------------------------- Font Sizes | Heading
-$theme-font-sizes-body-copy: (
-  '1': (
-    'base': 18px,
-    'sm': 18px,
-    'md': 20px,
-    'lg': 22px,
-    'xl': 24px,
-    'xxl': 26px
-  ),
-  '2': (
-    'base': 14px,
-    'sm': 14px,
-    'md': 16px,
-    'lg': 18px,
-    'xl': 20px,
-    'xxl': 22px
-  ),
-  '3': (
-    'base': 14px,
-    'sm': 14px,
-    'md': 14px,
-    'lg': 16px,
-    'xl': 18px,
-    'xxl': 20px
-  ),
-  '4': (
-    'base': 14px,
-    'sm': 14px,
-    'md': 14px,
-    'lg': 14px,
-    'xl': 16px,
-    'xxl': 18px
-  )
-);
-
-// ---------------------------------------- Font Sizes | Heading
-$theme-font-sizes-heading: (
-  '1': (
-    'base': 48px,
-    'sm': 58px,
-    'md': 70px,
-    'lg': 82px,
-    'xl': 100px,
-    'xxl': 115px
-  ),
-  '2': (
-    'base': 32px,
-    'sm': 38px,
-    'md': 46px,
-    'lg': 55px,
-    'xl': 66px,
-    'xxl': 80px
-  ),
-  '3': (
-    'base': 28px,
-    'sm': 34px,
-    'md': 40px,
-    'lg': 48px,
-    'xl': 58px,
-    'xxl': 70px
-  ),
-  'base': 36px,
-  'sm': 36px,
-  'md': 46px,
-  'lg': 52px,
-  'xl': 62px,
-  'xxl': 72px
+  'mono-akkurat-mono': '"Akkurat Mono LL", monospace'
 );
 
 // ---------------------------------------- Header Heights
@@ -153,24 +148,62 @@ $theme-header-heights: (
   'md': 85px,
   'lg': 65px,
   'xl': 75px,
-  'xxl': 85px
+  'xxl': 85px,
+  'total': auto
+);
+
+// ---------------------------------------- Heading
+$theme-heading-font-sizes: (
+  '1': (
+    'base': 28px,
+    'sm': 34px,
+    'md': 40px,
+    'lg': 48px,
+    'xl': 58px,
+    'xxl': 70px
+  ),
+  '2': (
+    'base': 26px,
+    'sm': 32px,
+    'md': 438px,
+    'lg': 44px,
+    'xl': 54px,
+    'xxl': 66px
+  ),
+  '3': (
+    'base': 22px,
+    'sm': 32px,
+    'md': 40px,
+    'lg': 21px,
+    'xl': 25px,
+    'xxl': 28px
+  ),
+  'title': (
+    'base': 28px,
+    'sm': 34px,
+    'md': 40px,
+    'lg': 48px,
+    'xl': 58px,
+    'xxl': 70px
+  )
 );
 
 // ---------------------------------------- Input Heights
 $theme-input-heights: (
-  'base': 44px,
-  'sm': 46px,
-  'md': 48px,
+  'base': 48px,
+  'sm': 48px,
+  'md': 50px,
   'lg': 50px,
   'xl': 52px,
   'xxl': 54px
 );
 
+// ---------------------------------------- AOS Settings
 $theme-layout-settings: (
-  'gutter': 24px,
-  'container-padding': 24px,
+  'gutter': 20px,
+  'container-padding': 20px,
   'breakpoints': (
-    'xs': 0,
+    'base': 0,
     'sm': 576px,
     'md': 768px,
     'lg': 992px,
@@ -178,6 +211,7 @@ $theme-layout-settings: (
     'xxl': 1400px
   ),
   'containers': (
+    'base': 100%,
     'sm': 540px,
     'md': 740px,
     'lg': 960px,
@@ -186,6 +220,17 @@ $theme-layout-settings: (
   )
 );
 
+// ---------------------------------------- Media Height Sizes
+$theme-media-height-sizes: (
+  'adapt',
+  '950px',
+  '850px',
+  '750px',
+  '650px',
+  '550px',
+  '450px',
+  '350px'
+);
 
 // ---------------------------------------- Transition Settings
 $theme-transition-settings: (

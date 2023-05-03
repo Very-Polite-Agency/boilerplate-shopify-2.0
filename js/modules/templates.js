@@ -1,5 +1,4 @@
 import Money from 'money';
-import Regions from 'regions';
 
 const config = { debug: false, name: 'templates.js', version: '1.0' };
 
@@ -59,6 +58,70 @@ const cartLineItemsTotal = ( line_items_total = 0 ) => {
     element.innerHTML = `${line_items_total}`;
   });
 };
+
+const cartNotificationError = ( data = {} ) => {
+
+  let {
+    block_name = 'cart-notification',
+    description,
+    triangle = Theme.icons?.triangle ?? '',
+  } = data;
+
+  return `
+    ${ triangle ? `<div class="${block_name}__triangle">${triangle}</div>` : '' }
+    <div class="${block_name}__main">
+      <span class="${block_name}__notice">Oops!</span>
+      <strong class="${block_name}__heading heading--primary">${description}</strong>
+    </div>
+  `;
+
+}
+
+const cartNotificationSuccess = ( data = {} ) => {
+
+  let {
+    block_name = 'cart-notification',
+    featured_image,
+    options_with_values = [],
+    product_title,
+    product_type,
+    triangle = Theme.icons?.triangle ?? '',
+    url,
+    variant_title
+  } = data;
+
+  let image = {
+    classes: 'lazyload lazyload-item lazyload-item--image lazypreload',
+    src: Theme.tools?.imgURLFilter ? Theme.tools.imgURLFilter( featured_image.url, 'medium' ) : featured_image.url,
+  };
+
+  let options = options_with_values.map((option) => {
+    return `
+      <div class="${block_name}__option">
+        <span class="${block_name}__option-name">${option.name}</span>
+        <span class="${block_name}__option-value">${option.value}</span>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    ${ triangle ? `<div class="${block_name}__triangle">${triangle}</div>` : '' }
+    <div class="${block_name}__main">
+      <span class="${block_name}__notice">1 Item Added to Cart!</span>
+        <div class="${block_name}__image">
+          <a class="${block_name}__image-link link" href="${url}" title="${product_title}" target="_self">
+            <img class="${image.classes}" src="${image.src}" alt="${featured_image.alt}" width="${featured_image.width}" height="${featured_image.height}" />
+          </a>
+        </div>
+      <strong class="${block_name}__heading heading--primary">${product_title}</strong>
+      ${ options ? `<span class="${block_name}__options">${options}</span>` : '' }
+      <div class="${block_name}__cta">
+        <a class="${block_name}__cta-link link" href="/checkout" title="Checkout" target="_self" />Checkout</a>
+      </div>
+    </div>
+  `;
+
+}
 
 const cartNotification = ( data = {} ) => {
 
@@ -168,79 +231,4 @@ const stepper = ( data = {} ) => {
 
 };
 
-const stockistAddress = ( location = {} ) => {
-
-  // Lat & Long API
-  // https://positionstack.com/documentation
-
-  let {
-    block_name = 'stockists',
-    address = '',
-    address2 = '',
-    city = '',
-    country = '',
-    name = '',
-    postal = '',
-    region = ''
-  } = location;
-
-  address += address2 ? `, ${address2}` : ``;
-  city += region ? `, ${Regions.getCodeFromName(region)}` : ``;
-  city += postal ? ` ${postal}` : ``;
-
-  return address || city ?
-    `
-      <div class="${block_name}__location-address text--secondary">
-        <a class="${block_name}__location-address-link link" href="${stockistDirectionsLink( location )}" target="_blank" title="Directions to ${name}">
-          ${ address ? `<span>${address}</span>` : `` }
-          ${ city ? `<span>${city}</span>` : `` }
-        </a>
-      </div>
-    ` : ``;
-};
-
-const stockistDirectionsLink = ( location = {} ) => {
-
-  let {
-    block_name = 'stockists',
-    address = '',
-    address2 = '',
-    city = '',
-    country = '',
-    query = '',
-    name = '',
-    postal = '',
-    region = ''
-  } = location;
-
-  query += address ?? ``;
-  query += city ? `, ${city}` : ``;
-  query += region ? `, ${region}` : ``;
-  query += postal ? `, ${postal}` : ``;
-  query += country ? `, ${country}` : ``;
-  query += name ? `, ${name}` : ``;
-
-  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query.trim())}`
-
-};
-
-const stockistLocation = ( location = {} ) => {
-
-  let {
-    block_name = 'stockists',
-    name = ''
-  } = location;
-
-  return `
-    <div class="${block_name}__location">
-      ${ name ? `<strong class="${block_name}__location-name">${name}</strong>` : '' }
-      ${stockistAddress( location )}
-    </div>
-  `;
-
-};
-
-export default {
-  cartLineItem,
-  stockistLocation
-};
+export default { cartLineItem, cartNotificationError, cartNotificationSuccess };

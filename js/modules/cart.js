@@ -1,12 +1,11 @@
-import Drawers from 'drawers';
 import Render from 'render';
 import Tools from 'tools';
 
 const config = { debug: true, name: 'cart.js', version: '1.0' };
+
 const elements = {
   cart: document.querySelectorAll('form.js--cart') || []
 };
-const DRAWER_CART_CLOSE_DELAY = Theme.settings?.cart_drawer_delay_close ?? 3000;
 
 const addToCart = ( id = 0, quantity = 1 ) => {
 
@@ -24,16 +23,19 @@ const addToCart = ( id = 0, quantity = 1 ) => {
       return response.json();
     })
     .then( data => {
-      getCart().then( cart => {
 
-        toggleCheckoutButtonUsability( 'enable' );
-        Render.cartLineItemsTotal( cart.item_count );
-        Render.cartLineItemsToElement( cart.items, elements.cart );
-        Render.cartSubtotal( cart.items_subtotal_price );
-        Drawers.openDrawerByID( 'shopify-section-drawer-cart', 250 );
-        Drawers.closeDrawerByID( 'shopify-section-drawer-cart', DRAWER_CART_CLOSE_DELAY );
+      if ( 422 == data.status ) {
+        Render.cartNotification( 'error', data );
+      } else {
+        Render.cartNotification( 'success', data.items?.[0] );
+        getCart().then( cart => {
+          toggleCheckoutButtonUsability( 'enable' );
+          Render.cartLineItemsTotal( cart.item_count );
+          Render.cartLineItemsToElement( cart.items, elements.cart );
+          Render.cartSubtotal( cart.items_subtotal_price );
+        });
+      }
 
-      });
     })
     .catch( error => {
       console.log('[ addToCart() ] :: Error', error );
@@ -62,8 +64,9 @@ const getCart = async () => {
   });
 };
 
+
 const onClickAddProductToCart = () => {
-  ( document.querySelectorAll( '.js--add-to-cart-product, .js--add-to-cart-product-card' ) || [] ).forEach( button => {
+  ( document.querySelectorAll( '.js--add-to-cart, .js--add-to-cart-from-collection' ) || [] ).forEach( button => {
     button.addEventListener( 'click', event => {
 
       event.preventDefault();
@@ -166,7 +169,7 @@ const toggleCheckoutButtonUsability = ( state = 'enable' ) => {
 };
 
 const updateCartLineItemByKey = ( key = '', quantity = 0, stepper = false ) => {
-  console.log( '[ updateCartLineItemByKey() ] :: Initialized' );
+
   if ( key ) {
     fetch('/cart/change.js', {
       method: 'POST',
@@ -251,4 +254,9 @@ const init = () => {
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} complete ]`);
 };
 
-export default { addToCart, emptyCart, getCart, init };
+export default {
+  addToCart,
+  emptyCart,
+  getCart,
+  init
+};

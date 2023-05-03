@@ -1,24 +1,71 @@
-@use '../utils/mixins/button' as *;
-@use '../utils/mixins/ui' as *;
+@use 'sass:math';
+@use "../utils/mixins/button" as *;
+@use "../utils/mixins/ui" as *;
 
 .button {
 
-  @extend %ui-transition;
   @extend %ui-base;
+  @extend %ui-transition;
 
-  path {
-    transition: fill var(--theme-transition--duration);
+  &--primary,
+  &--secondary,
+  &--open,
+  &--close {
+    @extend .button;
   }
 
-  &--1,
-  &--2 {
-    @extend .button;
+  &--open,
+  &--close {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    position: relative;
+    &:after,
+    &:before {
+      background: currentcolor;
+      height: var(--theme-border--width);
+      content: '';
+      display: block;
+      position: absolute;
+    }
+  }
+
+  &--primary {
+    @include button-style( 'primary' );
+  }
+
+  &--secondary {
+    @include button-style( 'secondary' );
+  }
+
+  &--open {
+    &:after,
+    &:before {
+      width: 100%;
+    }
+    &:after {
+      transform: rotate(90deg);
+    }
+  }
+
+  &--close {
+    &:after,
+    &:before {
+      width: math.hypot(24px, 24px);
+    }
+    &:after {
+      transform: rotate(45deg);
+    }
+    &:before {
+      transform: rotate(-45deg);
+    }
   }
 
   &[disabled],
   &.disabled {
     @extend %ui-disabled;
   }
-
 
 }

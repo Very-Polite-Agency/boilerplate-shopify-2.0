@@ -4,11 +4,11 @@
 .body-copy {
 
   &--primary {
-    @include body-copy-style('1');
+    @include body-copy-style('primary');
   }
 
   &--secondary {
-    @include body-copy-style('2');
+    @include body-copy-style('secondary');
   }
 
   &--1 {

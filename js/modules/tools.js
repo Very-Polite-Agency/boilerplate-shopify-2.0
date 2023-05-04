@@ -125,6 +125,7 @@ const toggleClass = ( $class = '', $elements = [] ) => {
 
 export default {
   addClass,
+  addClassesToElements,
   debounce,
   filterObjectFromArrayByID,
   getArrayOfElementsByTag,
@@ -132,6 +133,7 @@ export default {
   getLocalStorageValueByKey,
   getTimeStamp,
   removeClass,
+  removeClassesFromElements,
   setCSSVariable,
   setElementsHeightToCSSVariable,
   setLocalStorage,

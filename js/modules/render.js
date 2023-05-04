@@ -11,7 +11,7 @@ const cartEmptyMessage = () => {
   let message = Theme.settings?.cart_empty_message ?? '<p>Oops! Nothing added to your cart yet :(</p>';
   elements.cart.forEach( element => {
     element.innerHTML = `
-      <div class="cart-empty-message body-copy--primary body-copy--2">${message}</div>
+      <div class="cart-empty-message body-copy--primary body-copy--1">${message}</div>
     `;
   });
 };
@@ -22,8 +22,8 @@ const cartLineItemErrorMessage = ( key = '', message = 'Something went wrong!' )
   let parent = document.querySelector(`.cart-line-item[data-key="${key}"]`) || false;
 
   if ( parent ) {
-    element.classList.add( 'cart-line-item__error-message', 'body-copy--primary', 'body-copy--3' );
-    element.innerHTML = `<p>${message}</p>`;
+    element.classList.add( 'cart-line-item__error-message' );
+    element.innerHTML = `<strong class="heading--primary heading--3">${message}</strong>`;
     parent.appendChild(element);
     anime.timeline({
       targets: element,
@@ -46,6 +46,7 @@ const cartLineItemErrorMessage = ( key = '', message = 'Something went wrong!' )
 };
 
 const cartLineItemRemoveByKey = ( key = '' ) => {
+  console.log( 'cartLineItemRemoveByKey :: ', key );
   let element = document.getElementById(`cart-line-item--${key}`) || false;
   if ( element ) {
     anime.timeline({

@@ -4,7 +4,8 @@ import Tools from 'tools';
 const config = { debug: true, name: 'cart.js', version: '1.0' };
 
 const elements = {
-  cart: document.querySelectorAll('form.js--cart') || []
+  cart: document.querySelectorAll('form.js--cart') || [],
+  cart_footer_note: document.querySelectorAll('.cart-footer__note') || []
 };
 
 const addToCart = ( id = 0, quantity = 1 ) => {
@@ -30,8 +31,9 @@ const addToCart = ( id = 0, quantity = 1 ) => {
         Render.cartNotification( 'success', data.items?.[0] );
         getCart().then( cart => {
           toggleCheckoutButtonUsability( 'enable' );
+          toggleCartNoteUsability( 'enable' );
           Render.cartLineItemsTotal( cart.item_count );
-          Render.cartLineItemsToElement( cart.items, elements.cart );
+          //Render.cartLineItemsToElement( cart.items, elements.cart );
           Render.cartSubtotal( cart.items_subtotal_price );
         });
       }
@@ -63,7 +65,6 @@ const getCart = async () => {
     return response.json();
   });
 };
-
 
 const onClickAddProductToCart = () => {
   ( document.querySelectorAll( '.js--add-to-cart, .js--add-to-cart-from-collection' ) || [] ).forEach( button => {
@@ -168,7 +169,24 @@ const toggleCheckoutButtonUsability = ( state = 'enable' ) => {
   });
 };
 
+const toggleCartNoteUsability = ( state = 'enable' ) => {
+  elements.cart_footer_note.forEach( element => {
+    switch ( state ) {
+      case 'enable': {
+        element.classList.remove('d-none');
+        break;
+      }
+      case 'disable': {
+        element.classList.add('d-none');
+        break;
+      }
+    }
+  });
+};
+
 const updateCartLineItemByKey = ( key = '', quantity = 0, stepper = false ) => {
+
+  console.log( 'updateCartLineItemByKey :: ', key, quantity );
 
   if ( key ) {
     fetch('/cart/change.js', {
@@ -190,11 +208,13 @@ const updateCartLineItemByKey = ( key = '', quantity = 0, stepper = false ) => {
 
         if ( cart.item_count > 0 ) {
           toggleCheckoutButtonUsability( 'enable' );
+          toggleCartNoteUsability( 'enable' );
           Render.cartLineItemsLinePrice( key, cart.items );
           Render.cartLineItemsQuantity( key, quantity, cart.items );
           updateStepperInputQuantity( quantity, stepper );
         } else {
           toggleCheckoutButtonUsability( 'disable' );
+          toggleCartNoteUsability( 'disable' );
           Render.cartEmptyMessage();
         }
 
@@ -237,11 +257,13 @@ const init = () => {
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} initialized ]`);
 
   if ( Theme.cart.items.length ) {
-    Render.cartLineItemsToElement( Theme.cart.items, elements.cart );
+    //Render.cartLineItemsToElement( Theme.cart.items, elements.cart );
     toggleCheckoutButtonUsability( 'enable' );
+    toggleCartNoteUsability( 'enable' );
   } else {
     Render.cartEmptyMessage();
     toggleCheckoutButtonUsability( 'disable' );
+    toggleCartNoteUsability( 'disable' );
   }
 
   Render.cartLineItemsTotal( Theme.cart.item_count );

@@ -1,29 +1,25 @@
-@use '../utils/mixins/input' as *;
-@use '../utils/mixins/ui' as *;
+@use 'sass:math';
+@use "../utils/mixins/breakpoint" as *;
+@use "../utils/mixins/button" as *;
+@use "../utils/mixins/ui" as *;
 
 .input {
 
-  @extend %ui-transition;
   @extend %ui-base;
-  @extend %ui-input;
-
-  display: inline-flex;
-  width: auto;
-  justify-content: center;
-  align-items: center;
+  @extend %ui-transition;
 
   &--primary,
-  &--secondary {
+  &--secondary,
+  &--stepper {
     @extend .input;
   }
 
-  &--primary {
-    @include placeholder {
-      text-transform: uppercase;
-    }
-  }
-
-  &--secondary {
+  &--stepper {
+    font-size: 12px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 3px;
     &::-webkit-outer-spin-button,
     &::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -37,6 +33,28 @@
   &[disabled],
   &.disabled {
     @extend %ui-disabled;
+  }
+
+  @include breakpoint(sm) {}
+
+  @include breakpoint(md) {}
+
+  @include breakpoint(lg) {
+
+    &--stepper {
+      font-size: 14px;
+    }
+
+  }
+
+  @include breakpoint(xl) {}
+
+  @include breakpoint(xxl) {
+
+    &--stepper {
+      font-size: 16px;
+    }
+
   }
 
 }

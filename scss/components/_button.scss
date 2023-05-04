@@ -1,4 +1,5 @@
 @use 'sass:math';
+@use "../utils/mixins/breakpoint" as *;
 @use "../utils/mixins/button" as *;
 @use "../utils/mixins/ui" as *;
 
@@ -9,26 +10,43 @@
 
   &--primary,
   &--secondary,
+  &--stepper,
   &--open,
-  &--close {
+  &--close,
+  &--remove-cart-line-item {
     @extend .button;
   }
 
   &--open,
-  &--close {
+  &--close,
+  &--remove-cart-line-item {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24px;
-    height: 24px;
     position: relative;
     &:after,
     &:before {
       background: currentcolor;
-      height: var(--theme-border--width);
+      height: 2px;
       content: '';
       display: block;
       position: absolute;
+    }
+  }
+
+  &--open,
+  &--close {
+    width: 24px;
+    height: 24px;
+  }
+
+  &--close,
+  &--remove-cart-line-item {
+    &:after {
+      transform: rotate(45deg);
+    }
+    &:before {
+      transform: rotate(-45deg);
     }
   }
 
@@ -38,6 +56,24 @@
 
   &--secondary {
     @include button-style( 'secondary' );
+  }
+
+  &--stepper {
+    .button__icon {
+      height: 8px;
+      width: auto;
+      img, svg {
+        display: block;
+        height: 100%;
+        width: auto;
+      }
+    }
+    &.decrease {
+      transform: rotate(180deg);
+    }
+    &:hover {
+      opacity: 0.5;
+    }
   }
 
   &--open {
@@ -55,17 +91,36 @@
     &:before {
       width: math.hypot(24px, 24px);
     }
-    &:after {
-      transform: rotate(45deg);
-    }
+  }
+
+  &--remove-cart-line-item {
+    opacity: 0.3333;
+    width: 12px;
+    height: 12px;
+    &:after,
     &:before {
-      transform: rotate(-45deg);
+      width: math.hypot(12px, 12px);
+    }
+    &:hover {
+      opacity: 1;
     }
   }
 
   &[disabled],
   &.disabled {
     @extend %ui-disabled;
+  }
+
+  @include breakpoint(lg) {
+    &--remove-cart-line-item {
+      opacity: 0.2;
+      width: 15px;
+      height: 15px;
+      &:after,
+      &:before {
+        width: math.hypot(15px, 15px);
+      }
+    }
   }
 
 }

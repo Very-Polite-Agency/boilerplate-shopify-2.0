@@ -1,0 +1,97 @@
+@use 'sass:math';
+@use "../utils/variables" as *;
+@use "../utils/mixins/border" as *;
+@use "../utils/mixins/breakpoint" as *;
+@use "../utils/mixins/font" as *;
+
+.radio {
+
+  &__input {
+    display: none;
+    &:checked {
+      & + .radio__item {
+        background: var(--theme-colour--yellow);
+        .radio__title {
+          color: var(--theme-colour--black);
+        }
+      }
+    }
+    &[disabled] {
+      & + .radio__item {
+        cursor: not-allowed;
+        opacity: .3333;
+        &:after {
+          opacity: 1;
+        }
+      }
+    }
+    &:not([disabled]) {
+      & + .radio__item {
+        cursor: pointer;
+        &:hover {
+          background: var(--theme-colour--yellow);
+          .radio__title {
+            color: var(--theme-colour--black);
+          }
+        }
+      }
+    }
+  }
+
+  &__item {
+    @include border-solid( var(--theme-border--width), 'inherit' );
+    @each $name, $value in $theme-input-heights {
+      @if $name == 'base' {
+        height: $value;
+        width: $value;
+        &:after {
+          width: math.hypot($value, $value);
+        }
+      } @else {
+        @include breakpoint(#{$name}) {
+          height: $value;
+          width: $value;
+          &:after {
+            width: math.hypot($value, $value);
+          }
+        }
+      }
+    }
+    color: currentcolor;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    &:after {
+      height: var(--theme-border--width);
+      opacity: 0;
+      content: '';
+      background: currentcolor;
+      position: absolute;
+      transform: rotate(-45deg);
+    }
+  }
+
+  &__title {
+    font-size: 15px;
+    display: block;
+  }
+
+  @include breakpoint(lg) {
+
+    &__title {
+      font-size: 17px;
+    }
+
+  }
+
+  @include breakpoint(xxl) {
+
+    &__title {
+      font-size: 19px;
+    }
+
+  }
+
+}

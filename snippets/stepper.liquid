@@ -1,29 +1,24 @@
 {%- liquid
 
   assign snippet_name = 'stepper'
-  assign snippet_classes = classes | default: snippet_name
-
+  assign snippet_classes = stepper_classes | default: snippet_name
   assign stepper_value = stepper_value | default: 1
-
-  if stepper_classes and stepper_classes != blank
-    assign snippet_classes = snippet_name | prepend: ' ' | prepend: stepper_classes
-  endif
 
 -%}
 
 <div class="{{ snippet_classes }}">
 
-  <button class="{{ snippet_name }}__button button button--stepper button--svg decrease js--stepper-button" type="button">
+  <button class="{{ snippet_name }}__button button--stepper decrease js--stepper-button" aria-label="Decrease" type="button">
     <span class="{{ snippet_name }}__button-icon button__icon">
-      {% render 'svg-button', type: 'stepper.decrease' %}
+      {% render 'svg-icon', type: 'chevron' %}
     </span>
   </button>
 
-  <input class="{{ snippet_name }}__input input--secondary js--stepper-input" type="number" name="quantity" min="1" max="9999" value="{{ stepper_value }}" readonly>
+  <input class="{{ snippet_name }}__input input--stepper js--stepper-input" type="number" name="quantity" min="1" max="9999" value="{{ stepper_value }}" readonly>
 
-  <button class="{{ snippet_name }}__button button button--stepper button--svg increase js--stepper-button" type="button">
+  <button class="{{ snippet_name }}__button button--stepper increase js--stepper-button" aria-label="Increase" type="button">
     <span class="{{ snippet_name }}__button-icon button__icon">
-      {% render 'svg-button', type: 'stepper.increase' %}
+      {% render 'svg-icon', type: 'chevron' %}
     </span>
   </button>
 

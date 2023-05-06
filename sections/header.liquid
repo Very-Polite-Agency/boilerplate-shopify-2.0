@@ -1,119 +1,56 @@
 {%- liquid
 
   assign section_name = 'header'
-  assign section_id = section_name | append: '--' | append: section.id
+  assign section_id = 'shopify-section-' | append: section.id
 
-  assign aos_id = section_id | append: '--aos'
   assign aos_delay = 250
   assign aos_delay_increment = 250
+  assign aos_id = section_id
 
-  assign announcements = section.blocks | where: 'type', 'announcement' | default: false
-  assign announcements_enabled = section.settings.announcements_enabled | default: false
-  assign announcements_homepage_only = section.settings.announcements_homepage_only | default: false
-  assign announcements_glider_id = section_id | append: '--announcements-glider'
-  assign is_glider = false
-
-  if announcements_enabled
-    if announcements_homepage_only and 'index' != template.name
-      assign announcements_enabled = false
-    endif
-  endif
+  assign section_container = section.settings.container
 
 -%}
 
-{% if announcements_enabled and announcements %}
+{% render 'bs-container', state: 'open', col: 'col-12', container: section_container %}
+  <div class="{{ section_name }}__main">
 
-  {% if announcements.size > 1 %}
-    {% assign is_glider = true %}
-  {% endif %}
-
-  <div class="{{ section_name }}__announcements">
-    <div class="{{ section_name }}__container">
-
-      {% if is_glider %}
-        <div class="glide js--glider" id="{{ glider_id }}" data-glide-style="{{ section_name }}-announcements">
-          <div class="glide__track" data-glide-el="track">
-            <ul class="glide__slides">
-              {% endif %}
-
-                {% for item in announcements %}
-
-                  {% assign message = item.settings.title | default: '' %}
-
-                  {% if message != blank %}
-                    {% if is_glider %}<li class="glide__slide">{% endif %}
-                      <div class="{{ section_name }}__announcements-item body-copy--announcement">{{ message }}</div>
-                    {% if is_glider %}</li>{% endif %}
-                  {% endif %}
-
-                {% endfor %}
-
-              {% if is_glider %}
-            </ul>
-          </div>
-        </div>
-      {% endif %}
-
-      <button class="{{ section_name }}__announcements-button-close button js-hide-announcements" type="button" title="Hide Announcements">
-        {% render 'svg-icon', type: 'close' %}
-      </button>
-
-    </div>
+      <div class="{{ section_name }}__brand">
+        <a class="{{ section_name }}__brand-link link gift-shop" href="/" target="_self" title="Very Polite Gift Shop">
+          {% render 'svg-gift-shop-logo' %}
+        </a>
+        <a class="{{ section_name }}__brand-link link very-polite" href="https://weareverypolite.com" target="_blank" title="Very Polite Agency">
+          {% render 'svg-very-polite-logo' %}
+        </a>
+      </div>
   </div>
-
-{% endif %}
-
-<div class="{{ section_name }}__main">
-  <div class="{{ section_name }}__container">
-
-    <div class="{{ section_name }}__brand">
-      <a class="{{ section_name }}__brand-link link gift-shop" href="/" target="_self" title="Very Polite Gift Shop">
-        {% render 'svg-gift-shop-logo' %}
-      </a>
-      <a class="{{ section_name }}__brand-link link very-polite" href="https://weareverypolite.com" target="_blank" title="Very Polite Agency">
-        {% render 'svg-very-polite-logo' %}
-      </a>
-    </div>
-
-  </div>
-</div>
+{% render 'bs-container', state: 'closed', col: 'col-12', container: section_container %}
 
 {% schema %}
   {
     "name": "Header",
     "tag": "header",
-    "class": "header header--sticky",
+    "class": "header position--fixed z-index--200",
     "settings": [
       {
-        "content": "Announcements",
-        "type": "header"
-      },
+			  "content": "Settings",
+			  "type": "header"
+		  },
       {
-        "label": "Show announcements",
-      	"type": "checkbox",
-        "default": true,
-        "id": "announcements_enabled"
-      },
+			  "content": "Container",
+			  "type": "header"
+		  },
       {
-        "label": "Homepage only",
-      	"type": "checkbox",
-        "default": false,
-        "id": "announcements_homepage_only"
+        "label": "Container",
+        "type": "select",
+        "options": [
+          { "label": "Static", "value": "container" },
+          { "label": "Fluid", "value": "container-fluid" },
+          { "label": "Full Width", "value": "full-width" }
+        ],
+        "default": "container",
+        "id": "container"
       }
     ],
-    "blocks": [
-      {
-        "name": "Announcement",
-        "type": "announcement",
-        "limit": 5,
-        "settings": [
-          {
-            "label": "Message",
-            "type": "richtext",
-            "id": "title"
-          }
-        ]
-      }
-    ]
+    "blocks": []
   }
 {% endschema %}

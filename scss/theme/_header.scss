@@ -4,4 +4,8 @@
 
   .mobile-menu--active & {}
 
+  &.position--fixed {
+    top: var(--theme-announcement-height--total);
+  }
+
 }

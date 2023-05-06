@@ -65,7 +65,7 @@ const cartLineItemRemoveByKey = ( key = '' ) => {
   }
 }
 
-const cartLineItemsLinePrice = ( key = '', line_items = [] ) => {
+const cartLineItemPrice = ( key = '', line_items = [] ) => {
   if ( line_items.length ) {
     for ( let i = 0; i < line_items.length; i++ ) {
       if ( key === line_items[i].key ) {
@@ -103,7 +103,7 @@ const cartLineItemsToElement = ( line_items = [], elements = [] ) => {
   });
 };
 
-const cartLineItemsTotal = ( line_items_total = 0 ) => {
+const cartLineItemsCount = ( line_items_total = 0 ) => {
   ( document.querySelectorAll( '.js--cart-line-items-total' ) || [] ).forEach( element => {
     element.innerHTML = `${line_items_total}`;
   });
@@ -160,10 +160,10 @@ export default {
   cartEmptyMessage,
   cartLineItemErrorMessage,
   cartLineItemRemoveByKey,
-  cartLineItemsLinePrice,
+  cartLineItemPrice,
   cartLineItemsQuantity,
   cartLineItemsToElement,
-  cartLineItemsTotal,
+  cartLineItemsCount,
   cartNotification,
   cartSubtotal
 };

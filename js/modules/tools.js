@@ -77,10 +77,12 @@ const setCSSVariable = ( id = '', value = '' ) => {
 
 const setElementsHeightToCSSVariable = () => {
 
-  [
+  let elements = [
     { var_id: 'theme-header-height--total', element_id: 'shopify-section-header' },
-    { var_id: 'theme-announcement-height--total', element_id: 'header__announcements' }
-  ].forEach( item => {
+    { var_id: 'theme-announcement-height--total', element_id: 'shopify-section-announcements' }
+  ];
+
+  elements.forEach( item => {
     let { var_id, element_id } = item;
     let value = document.getElementById( element_id ) ? document.getElementById( element_id ).offsetHeight : 0;
     document.documentElement.style.setProperty( `--${var_id}`, `${value}px` );

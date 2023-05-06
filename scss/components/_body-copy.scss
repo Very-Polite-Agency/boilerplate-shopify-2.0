@@ -11,24 +11,24 @@
     @include body-copy-style('secondary');
   }
 
-  &--1 {
+  &--1,
+  &--lg {
     @include body-copy-size('1');
-    line-height: 1.1818;
   }
 
-  &--2 {
+  &--2,
+  &--md {
     @include body-copy-size('2');
-    line-height: 1.2222;
   }
 
-  &--3 {
+  &--3,
+  &--sm {
     @include body-copy-size('3');
-    line-height: 1.1875;
   }
 
-  &--4 {
+  &--4,
+  &--xs {
     @include body-copy-size('4');
-    line-height: 1.4343;
   }
 
   &--lg-fluid { // 18px;

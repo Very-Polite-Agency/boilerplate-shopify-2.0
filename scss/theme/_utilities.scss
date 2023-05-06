@@ -2,6 +2,13 @@
 @use '../utils/variables' as *;
 @use '../utils/mixins/font' as *;
 
+.position {
+  &--fixed {
+    position: fixed;
+    width: 100%;
+  }
+}
+
 .text {
 
   // ---------------------------------------- Alignment
@@ -32,7 +39,7 @@
     color: var(--theme-colour--black);
   }
   &--light {
-    color: var(--theme-colour--lemon);
+    color: var(--theme-colour--white);
   }
 
   // ---------------------------------------- Style
@@ -41,7 +48,7 @@
   }
 
   &--secondary {
-   // @include sorry-sans( 700 );
+    //@include sorry-sans( 700 );
   }
 
   // ---------------------------------------- Weight
@@ -50,6 +57,20 @@
     &--#{$weight} {
      font-weight: $weight;
     }
+  }
+
+}
+
+.z-index {
+
+  $base: 0;
+	$step: 50;
+
+  @while $base < 1000 {
+    &--#{$base} {
+      z-index: $base;
+    }
+    $base: $base + $step;
   }
 
 }

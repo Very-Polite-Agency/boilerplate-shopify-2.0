@@ -31,4 +31,37 @@
 //     s.parentNode.insertBefore(wf, s);
 //  })(document);
 
+  var Theme = Theme || {};
+  Theme.cart = {{ cart | json }};
+  Theme.collection = {{ collection | json }} || {};
+  Theme.currency = {{ shop.currency | json }};
+  Theme.customer = {{ customer | json }} || {};
+  Theme.moneyFormat = {{ shop.money_format | json }};
+  Theme.orders = [];
+  Theme.product = {{ product | json }} || {};
+  Theme.routes = {
+    root_url: '{{ routes.root_url }}',
+    cart_url: '{{ routes.cart_url }}',
+    cart_add_url: '{{ routes.cart_add_url }}',
+    cart_change_url: '{{ routes.cart_change_url }}',
+    cart_update_url: '{{ routes.cart_update_url }}',
+    predictive_search_url: '{{ routes.predictive_search_url }}'
+  };
+  Theme.settings = {{ settings | json }} || {};
+  Theme.svg = {
+    icon: {
+      cart: `{% render 'svg-icon', type: 'cart' %}`,
+      trash: `{% render 'svg-icon', type: 'trash' %}`
+    }
+  }
+  Theme.tools = {
+    imgURLFilter: function(src, size) {
+      return src
+        .replace(/_(pico|icon|thumb|small|compact|medium|large|grande|original|1024x1024|2048x2048|master)+\./g, '.')
+        .replace(/\.jpg|\.png|\.gif|\.jpeg/g, function(match) {
+          return '_'+size+match;
+        });
+    }
+  };
+
 </script>

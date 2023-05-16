@@ -83,6 +83,7 @@ const cartNotificationSuccess = ( data = {} ) => {
     block_name = 'cart-notification',
     featured_image,
     options_with_values = [],
+    product_has_only_default_variant,
     product_title,
     product_type,
     triangle = Theme.icons?.triangle ?? '',
@@ -114,7 +115,7 @@ const cartNotificationSuccess = ( data = {} ) => {
           </a>
         </div>
       <strong class="${block_name}__heading heading--primary">${product_title}</strong>
-      ${ options ? `<span class="${block_name}__options">${options}</span>` : '' }
+      ${ !product_has_only_default_variant && options ? `<span class="${block_name}__options">${options}</span>` : '' }
       <div class="${block_name}__cta">
         <a class="${block_name}__cta-link link" href="/checkout" title="Checkout" target="_self" />Checkout</a>
       </div>

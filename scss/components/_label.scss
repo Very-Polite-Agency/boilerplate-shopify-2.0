@@ -1,21 +1,13 @@
-@use '../utils/mixins/label' as *;
+@use '../mixins/label' as *;
 
 .label {
 
   display: inline-flex;
   width: 100%;
 
-  &--1,
-  &--2 {
+  &--primary,
+  &--secondary {
     @extend .label;
-  }
-
-  &--1 {
-    @include label-style(1);
-  }
-
-  &--2 {
-    @include label-style(2);
   }
 
 }

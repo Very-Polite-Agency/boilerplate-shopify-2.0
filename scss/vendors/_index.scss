@@ -1,5 +1,5 @@
 @use "sass:map";
-@use '../utils/variables' as *;
+@use '../variables' as *;
 @import "../node_modules/aos/dist/aos";
 @import "../node_modules/@glidejs/glide/dist/css/glide.core.min";
 
@@ -12,6 +12,7 @@ $grid-gutter-width: map.get( $theme-layout-settings, 'gutter' );
 
 // 3. Include remainder of required Bootstrap stylesheets
 @import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/variables-dark";
 
 // 4. Include any default map overrides here
 $container-max-widths: map.get( $theme-layout-settings, 'containers' );

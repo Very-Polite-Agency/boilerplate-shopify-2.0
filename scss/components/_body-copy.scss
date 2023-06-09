@@ -1,5 +1,5 @@
-@use '../utils/mixins/body-copy' as *;
-@use '../utils/mixins/breakpoint' as *;
+@use '../mixins/body-copy' as *;
+@use '../mixins/breakpoint' as *;
 
 .body-copy {
 
@@ -11,35 +11,31 @@
     @include body-copy-style('secondary');
   }
 
-  &--1,
   &--lg {
     @include body-copy-size('1');
   }
 
-  &--2,
   &--md {
     @include body-copy-size('2');
   }
 
-  &--3,
   &--sm {
     @include body-copy-size('3');
   }
 
-  &--4,
   &--xs {
     @include body-copy-size('4');
   }
 
-  &--lg-fluid { // 18px;
+  &--lg-fluid {
     font-size: min(28px, 4.85vw);
   }
 
-  &--md-fluid { // 16px
+  &--md-fluid {
     font-size: min(24px, 4.25vw);
   }
 
-  &--sm-fluid { // 14px
+  &--sm-fluid {
     font-size: min(20px, 3.75vw);
   }
 

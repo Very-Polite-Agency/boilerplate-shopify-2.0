@@ -1,22 +1,13 @@
-@use "../utils/mixins/ui" as *;
+@use '../mixins/ui' as *;
 
 .link {
 
-  @extend %ui-base;
   @extend %ui-transition;
+  @extend %ui-base;
 
-  &--button {
-    &-primary,
-    &-secondary {
-      .link__title {
-        margin-bottom: -3px;
-      }
-    }
-  }
-
-  &__content {
-    width: 100%;
-    height: auto;
+  &--primary,
+  &--secondary {
+    @extend .link;
   }
 
   &[disabled],

@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "sass:meta";
-@use "../utils/variables" as *;
-@use "../utils/mixins/tools" as *;
+@use "../variables" as *;
+@use "../mixins/tools" as *;
 
 :root {
 

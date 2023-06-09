@@ -1,8 +1,8 @@
 @use 'sass:map';
-@use '../utils/variables' as *;
-@use '../utils/mixins/border' as *;
-@use '../utils/mixins/breakpoint' as *;
-@use '../utils/mixins/font' as *;
+@use '../variables' as *;
+@use '../mixins/border' as *;
+@use '../mixins/breakpoint' as *;
+@use '../mixins/font' as *;
 
 .drawer {
 

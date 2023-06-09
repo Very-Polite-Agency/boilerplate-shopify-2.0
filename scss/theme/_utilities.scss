@@ -1,6 +1,6 @@
 @use "sass:map";
-@use '../utils/variables' as *;
-@use '../utils/mixins/font' as *;
+@use '../variables' as *;
+@use '../mixins/font' as *;
 
 .position {
   &--fixed {

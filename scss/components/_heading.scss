@@ -1,5 +1,5 @@
-@use '../utils/mixins/breakpoint' as *;
-@use '../utils/mixins/heading' as *;
+@use '../mixins/breakpoint' as *;
+@use '../mixins/heading' as *;
 
 .heading {
 
@@ -11,17 +11,14 @@
     @include body-copy-style('secondary');
   }
 
-  &--1,
   &--lg {
     @include body-copy-size('1');
   }
 
-  &--2,
   &--md {
     @include body-copy-size('2');
   }
 
-  &--3,
   &--sm {
     @include body-copy-size('3');
   }

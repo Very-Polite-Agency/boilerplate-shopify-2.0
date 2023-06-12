@@ -46,12 +46,19 @@ const getElementHeightByTag = ( $tag = '' ) => {
 
 const getLocalStorageValueByKey = ( $key ) => {
   return localStorage.getItem( $key );
-}
+};
 
 const getTimeStamp = () => {
   let d = new Date();
   return d.getTime();
-}
+};
+
+const isMobileDevice = () => {
+  if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+    return true;
+  }
+  return false;
+};
 
 const removeClass = ( $class = '', $elements = [] ) => {
   if ( $class && $elements.length ) {

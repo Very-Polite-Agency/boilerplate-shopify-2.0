@@ -1,98 +1,82 @@
 import Render from 'render';
-import Tools from 'tools';
+
+const config = { debug: false, name: 'instagramFeed.js', version: '1.0' };
 
 const MAX_MINUTES = 300;
-const config = { debug: true, name: 'instagramFeed.js', version: '1.0' };
-const feed = {
-  account: '',
-  block_name: 'instagram-feed',
-  element: false,
-  glider_id: '',
-  glider: {},
-  item_count: 0,
-  items: [],
-  interval: null,
-  limit: 0,
-  local_storage: {
-    data: {},
-    data: 0,
-    name: 'very-polite-instagram-feed',
-  },
-};
+const elements = document.querySelectorAll( '.js--instagram-feed' ) || [];
 
 const asyncGetMedia = async ( token = '' ) => {
-
   return await fetch( `https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink&access_token=${token}`, { method: 'GET' } )
-  .then((response) => {
-    return response.json();
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 const asyncGetToken = async ( account = '' ) => {
-
   return await fetch( `https://very-polite-instagram-feed.herokuapp.com/token?userAccount=${account}`, { method: 'GET' } )
-  .then((response) => {
-    return response.json();
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
-const localStorageNotExpired = ( data = '' ) => {
+const isLocalStorageExpired = ( localStorageDate = 0 ) => {
 
-  let local_storage_data = JSON.parse( data );
-  let local_storage_date = local_storage_data?.date || 0;
-  let time_difference_milliseconds = Date.now() - local_storage_date;
-  let time_difference_minutes = ( time_difference_milliseconds / 60000 ).toFixed(2);
+  let todaysDate = Date.now();
+  let timeDifferenceMilliseconds = todaysDate - localStorageDate;
+  let timeDifferenceMinutes = ( timeDifferenceMilliseconds / 60000 ).toFixed(2);
 
-  if ( time_difference_minutes > MAX_MINUTES ) {
-    return false;
+  if ( config.debug ) console.log(`[ ${config.name}.isLocalStorageExpired() ] Time Difference ::`, timeDifferenceMinutes);
+
+  if ( timeDifferenceMinutes > MAX_MINUTES ) {
+    return true;
   }
 
-  return true;
+  return false;
 
 }
 
 const init = () => {
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} initialized ]`);
+    elements.forEach( element => {
 
-    ( document.querySelectorAll( '.js--instagram-feed' ) || [] ).forEach( element => {
+      let feed = {
+        account: element.dataset?.instagramFeedAccount || "instagram-feed-account-not-set",
+        localStorage: {
+          name: "very-polite-instagram-feed",
+          data: "",
+        },
+      };
 
-      feed.account = element.dataset?.feedAccount || '';
-      feed.element = element;
-      feed.id = element?.id || '';
-      feed.limit = element.dataset?.feedLimit || 3;
-      feed.local_storage.name += `--${feed.account}`;
-      feed.local_storage.data = Tools.getLocalStorageDataByKey( feed.local_storage.name ) || false;
+      feed.localStorage.name += `--${feed.account}`;
+      feed.localStorage.data = JSON.parse( localStorage.getItem( feed.localStorage.name ) || false );
+      feed.localStorage.expired = isLocalStorageExpired( feed.localStorage.data.date );
 
-      if ( feed.account ) {
-        if ( feed.local_storage.data && localStorageNotExpired( feed.local_storage.data ) ) {
+      if ( feed.localStorage.expired ) {
+        asyncGetToken( feed.account ).then( data => {
+          asyncGetMedia( data.token ).then( result => {
 
-          let data = JSON.parse( feed.local_storage.data );
-          feed.items = data.items;
-          Render.instagramFeed( feed );
+            let fetchedFeedData = {
+              account: feed.account,
+              date: Date.now(),
+              items: result.data || [],
+            };
 
-        } else {
-          asyncGetToken( feed.account ).then( data => {
-            asyncGetMedia( data.token ).then( result => {
+            localStorage.setItem( feed.localStorage.name, JSON.stringify(fetchedFeedData) );
+            Render.instagramFeed( feed.account, fetchedFeedData.items );
 
-              feed.items = result.data;
-              Tools.setLocalStorageDataByKey( feed.local_storage.name, JSON.stringify({ account: feed.account, date: Date.now(), items: feed.items }) );
-              Render.instagramFeed( feed );
-
-            });
           });
-        }
+        });
+      } else {
+        Render.instagramFeed( feed.account, feed.localStorage.data.items );
       }
 
     });
-
   if ( config.debug ) console.log(`[ ${config.name} v.${config.version} complete ]`);
 };
 

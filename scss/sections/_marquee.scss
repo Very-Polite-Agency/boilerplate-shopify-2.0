@@ -9,12 +9,6 @@
     }
   }
 
-  gap: var(--marquee-gap);
-  display: grid;
-  align-content: center;
-  overflow: hidden;
-  width: 100%;
-
   p, span {
     color: currentcolor;
     margin: 0;
@@ -26,27 +20,27 @@
     display: block;
   }
 
+  &__main,
   &__group {
     gap: var(--marquee-gap);
+  }
+
+  &__group {
     animation-duration: var(--marquee-duration);
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-name: scroll;
     flex-shrink: 0;
     display: flex;
+    justify-content: space-around;
     align-items: center;
     min-width: 100%;
   }
 
-  &__item {
-    text-transform: uppercase;
-  }
-
   &__main {
-    gap: var(--marquee-gap);
     display: flex;
-    user-select: none;
     overflow: hidden;
+    user-select: none;
   }
 
   &--ltr {
